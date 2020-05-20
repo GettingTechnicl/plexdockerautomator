@@ -4,7 +4,7 @@
 
 
 ##need variable to connect to nzbget, right now only connects ip, but what about other systems?
-sudo docker run -d --name sonarr-sma \
+docker run -d --name sonarr-sma \
     --restart=unless-stopped \
     --cap-add SYS_ADMIN \
     -e PUID=1000 \
