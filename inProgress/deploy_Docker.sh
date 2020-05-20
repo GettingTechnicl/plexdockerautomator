@@ -120,3 +120,45 @@ docker run -d --name sonarr \
     -v /DATA/tmp/Downloads:/downloads \
     --restart unless-stopped \
     linuxserver/qbittorrent
+
+
+
+
+    ###############################################################################################
+
+    docker run -d --name rclone \
+    --restart=unless-stopped \
+    --cap-add SYS_ADMIN \
+    --device /dev/fuse \
+    --security-opt apparmor:unconfined \
+    -v /docker_exchange_host:/docker_exchange:shared \
+    rclone/rclone mount gdrive:Cloud /docker_exchange/gdrive --config /docker_exchange/config/rclone/rclone.conf --allow-other --allow-non-empty --fast-list --buffer-size 256M --drive-chunk-size 32M --dir-cache-time 96h --log-level DEBUG --timeout 1h --tpslimit 4 --umask 002 --rc --vfs-cache-mode writes --vfs-read-chunk-size 128M --vfs-read-chunk-size-limit off --cache-dir /docker_exchange/cache
+
+
+##need variable to connect to nzbget, right now only connects ip, but what about other systems?
+sudo docker run -d --name sonarr-sma \
+    --restart=unless-stopped \
+    --cap-add SYS_ADMIN \
+    -e PUID=1000 \
+    -e PGID=1000 \
+    -e TZ=America/Chicago \
+    -p 8989:8989 \
+    -v /docker_exchange_host/config/sonarr:/config \
+    -v /docker_exchange_host/config/sma:/usr/local/sma/config \
+    -v /docker_exchange_host/gdrive/Tv_Shows:/tv \
+    -v /docker_exchange_host/Downloads/sonarr:/downloads \
+    mdhiggins/sonarr-sma:preview
+
+
+
+
+
+docker run -d --name nzbget \
+  -e PUID=1000 \
+  -e PGID=1000 \
+  -e TZ=America/Chicago \
+  -p 6789:6789 \
+  -v /docker_exchange_host/config:/config \
+  -v /docker_exchange_host/Downloads:/downloads \
+  --restart unless-stopped \
+  linuxserver/nzbget
