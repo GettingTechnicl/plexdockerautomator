@@ -1,0 +1,12 @@
+[Unit]
+Description=mylar Container
+Requires=rclonecache.service
+After=rclonecache.service
+
+[Service]
+Restart=always
+ExecStart=/usr/bin/docker start -a mylar
+ExecStop=/usr/bin/docker stop -t 2 mylar
+
+[Install]
+WantedBy=local.target

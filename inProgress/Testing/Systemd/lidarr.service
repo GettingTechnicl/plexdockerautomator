@@ -1,0 +1,12 @@
+[Unit]
+Description=lidarr Container
+Requires=rclonecache.service
+After=rclonecache.service
+
+[Service]
+Restart=always
+ExecStart=/usr/bin/docker start -a lidarr
+ExecStop=/usr/bin/docker stop -t 2 lidarr
+
+[Install]
+WantedBy=local.target

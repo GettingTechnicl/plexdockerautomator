@@ -1,0 +1,12 @@
+[Unit]
+Description=nzbget Container
+Requires=rclonecache.service
+After=rclonecache.service
+
+[Service]
+Restart=always
+ExecStart=/usr/bin/docker start -a nzbget
+ExecStop=/usr/bin/docker stop -t 2 nzbget
+
+[Install]
+WantedBy=local.target

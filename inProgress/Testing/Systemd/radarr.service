@@ -1,0 +1,12 @@
+[Unit]
+Description=radarr Container
+Requires=rclonecache.service
+After=rclonecache.service
+
+[Service]
+Restart=always
+ExecStart=/usr/bin/docker start -a radarr
+ExecStop=/usr/bin/docker stop -t 2 radarr
+
+[Install]
+WantedBy=local.target
