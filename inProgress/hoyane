@@ -34,8 +34,6 @@ rclone/rclone mount gdrive:Cloud /docker_exchange/gdrive \
 --vfs-read-chunk-size 128M \
 --vfs-read-chunk-size-limit off \
 --cache-dir /docker_exchange/cache \
---cache-tmp-upload-path /docker_exchange/cache-tmp-upload \
---cache-tmp-wait-time 5m
 
 
 
