@@ -1,0 +1,12 @@
+[Unit]
+Description=rclonecache Container
+Requires=docker.service
+After=docker.service
+
+[Service]
+Restart=always
+ExecStart=/usr/bin/docker start -a rclone-cache
+ExecStop=/usr/bin/docker stop -t 2 rclone-cache
+
+[Install]
+WantedBy=local.target

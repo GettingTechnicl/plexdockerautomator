@@ -5,7 +5,7 @@
 
 docker pull rclone/rclone:latest
 
-docker run -d --name rclone \
+docker run -d --name rclone-vfs \
 --restart=unless-stopped \
 --cap-add SYS_ADMIN \
 --device /dev/fuse \

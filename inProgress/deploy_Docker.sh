@@ -16,7 +16,7 @@ docker pull mumiehub/rclone-mount
 docker pull rclone/rclone:latest
 
 # Rclone-mount config
-docker run -d --name rclone \
+docker run -d --name rclone-vfs \
 --restart=unless-stopped \
 --cap-add SYS_ADMIN \
 --device /dev/fuse \
