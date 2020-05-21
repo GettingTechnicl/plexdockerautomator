@@ -4,8 +4,8 @@ docker run -d --name radarr \
   -e TZ=America/Chicago \
   -e UMASK_SET=022 `#optional` \
   -p 7878:7878 \
-  -v /docker_exchange_host/config:/config \
+  -v /docker_exchange_host/config/radarr:/config \
   -v /docker_exchange_host/gdrive/Movies:/movies \
-  -v /docker_exchange_host/Downloads:/downloads \
+  -v /docker_exchange_host/downloads:/downloads \
   --restart unless-stopped \
   linuxserver/radarr
