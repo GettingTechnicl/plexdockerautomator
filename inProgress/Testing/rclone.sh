@@ -28,4 +28,4 @@ rclone/rclone mount gdrive:Cloud /data \
 --vfs-cache-mode writes \
 --vfs-read-chunk-size 128M \
 --vfs-read-chunk-size-limit off \
---cache-dir /DATA/cache \
+--cache-dir /data/cache \

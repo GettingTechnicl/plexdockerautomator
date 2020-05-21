@@ -12,8 +12,8 @@ docker run -d --name sonarr-sma \
 -e PGID=1000 \
 -e TZ=America/Chicago \
 -p 8989:8989 \
--v /docker_exchange_host/config/sonarr:/config \
--v /docker_exchange_host/config/sma:/usr/local/sma/config \
--v /docker_exchange_host/gdrive/Tv_Shows:/tv \
--v /docker_exchange_host/downloads:/downloads \
+-v /opt/tmp/config/sma:/usr/local/sma/config \
+-v /opt/tmp/config/sonarr:/config \
+-v /DATA/media/Tv_Shows:/tv \
+-v /DATA/tmp/Downloads/sonarr/nzbget:/downloads \
 mdhiggins/sonarr-sma:preview
