@@ -1,3 +1,7 @@
+#!/usr/bin/env bash
+
+#https://hub.docker.com/r/linuxserver/calibre-web
+
 #setting db path not working
   docker run -d --name=calibre \
     -e PUID=1000 \

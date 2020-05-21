@@ -1,3 +1,7 @@
+#!/usr/bin/env bash
+
+#https://hub.docker.com/r/hotio/mylar3
+
 docker run --name mylar3 \
 -e PUID=1000 \
 -e PGID=1000 \

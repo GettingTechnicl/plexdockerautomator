@@ -1,3 +1,7 @@
+#!/usr/bin/env bash
+
+#https://hub.docker.com/r/linuxserver/jackett
+
 docker run -d --name=jackett \
     -e PUID=1000 \
     -e PGID=1000 \

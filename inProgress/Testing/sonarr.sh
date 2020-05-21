@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+#https://hub.docker.com/r/mdhiggins/sonarr-sma
+
 ## New Sonarr version
 
 ##need variable to connect to nzbget, right now only connects ip, but what about other systems

@@ -1,4 +1,7 @@
+#!/usr/bin/env bash
+
 #https://hub.docker.com/r/linuxserver/lidarr
+
 docker run --name=lidarr \
   -e PUID=1000 \
   -e PGID=1000 \

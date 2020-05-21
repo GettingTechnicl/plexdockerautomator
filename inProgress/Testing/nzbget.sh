@@ -1,3 +1,7 @@
+#!/usr/bin/env bash
+
+#https://hub.docker.com/r/linuxserver/nzbget
+
 docker run -d --name nzbget \
 -e PUID=1000 \
 -e PGID=1000 \
