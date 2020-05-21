@@ -12,7 +12,7 @@ docker run -d --name rclone \
 --security-opt apparmor:unconfined \
 -v /opt/tmp/config:/config \
 -v /DATA/media:/data:shared \
-rclone/rclone mount gdrive:Cloud /DATA/gdrive \
+rclone/rclone mount gdrive:Cloud /data \
 --config /config/rclone/rclone.conf \
 --allow-other \
 --allow-non-empty \
