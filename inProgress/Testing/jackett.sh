@@ -7,7 +7,7 @@ docker run -d --name=jackett \
     -e PGID=1000 \
     -e TZ=America/Chicago \
     -p 9117:9117 \
-    -v /docker_exchange_host/config:/config \
+    -v /docker_exchange_host/config/jackett:/config \
     -v /docker_exchange_host/downloads:/downloads \
     --restart unless-stopped \
     linuxserver/jackett
