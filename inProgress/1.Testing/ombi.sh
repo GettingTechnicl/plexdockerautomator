@@ -7,6 +7,6 @@ docker run -d --name=ombi \
   -e PGID=1000 \
   -e TZ=America/Chicago \
   -p 3579:3579 \
-  -v /docker_exchange_host/config/ombi:/config \
+  -v /opt/tmp/config/ombi:/config \
   --restart unless-stopped \
   linuxserver/ombi
