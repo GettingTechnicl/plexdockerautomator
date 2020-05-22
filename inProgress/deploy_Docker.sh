@@ -8,7 +8,6 @@ docker pull linuxserver/plex
 docker pull linuxserver/sonarr
 docker pull linuxserver/radarr
 docker pull linuxserver/lidarr
-docker pull linuxserver/mylar
 docker pull linuxserver/jackett
 docker pull linuxserver/nzbget
 docker pull linuxserver/qbittorrent
@@ -71,11 +70,12 @@ docker run -d --name mylar \
   --restart unless-stopped \
   -e PUID=1000 \
   -e PGID=1000 \
+  -e TZ=America/Chicago \
   -p 8090:8090 \
   -v /opt/tmp/config:/config \
   -v /DATA/media/Comics:/comics \
   -v /DATA/tmp/Downloads/mylar/nzbget:/downloads \
-  linuxserver/mylar
+  hotio/mylar3
 
 
 
