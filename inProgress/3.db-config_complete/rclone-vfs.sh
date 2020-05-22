@@ -10,22 +10,23 @@ docker run -d --name rclone-vfs \
 --cap-add SYS_ADMIN \
 --device /dev/fuse \
 --security-opt apparmor:unconfined \
+-v /opt/tmp/cache:/cache \
 -v /opt/tmp/config:/config \
--v /DATA/media:/data:shared \
+-v /DATA/rclone-vfs:/data:shared \
 rclone/rclone mount gdrive:Cloud /data \
+--cache-dir /cache/rclone-vfs \
 --config /config/rclone/rclone.conf \
 --allow-other \
 --allow-non-empty \
---fast-list \
 --buffer-size 256M \
---drive-chunk-size 32M \
 --dir-cache-time 96h \
+--drive-chunk-size 32M \
+--fast-list \
 --log-level DEBUG \
+--rc \
 --timeout 1h \
 --tpslimit 4 \
 --umask 002 \
---rc \
 --vfs-cache-mode writes \
 --vfs-read-chunk-size 128M \
---vfs-read-chunk-size-limit off \
---cache-dir /data/cache \
+--vfs-read-chunk-size-limit off 
