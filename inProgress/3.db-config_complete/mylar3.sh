@@ -10,6 +10,6 @@ docker run -d --name mylar \
   -e TZ=America/Chicago \
   -p 8090:8090 \
   -v /opt/tmp/config:/config \
-  -v /DATA/media/Comics:/comics \
+  -v /DATA/rclone-cache/Comics:/comics \
   -v /DATA/tmp/Downloads/mylar/nzbget:/downloads \
   hotio/mylar3

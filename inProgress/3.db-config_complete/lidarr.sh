@@ -10,6 +10,6 @@ docker run -d --name lidarr \
   -e TZ=America/Chicago \
   -p 8686:8686 \
   -v /opt/tmp/config/Lidarr:/config \
-  -v /DATA/media/Music:/music \
+  -v /DATA/rclone-cache/Music:/music \
   -v /DATA/tmp/Downloads/lidarr/nzbget:/downloads \
   linuxserver/lidarr

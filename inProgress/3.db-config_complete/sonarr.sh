@@ -14,6 +14,6 @@ docker run -d --name sonarr-sma \
 -p 8989:8989 \
 -v /opt/tmp/config/sma:/usr/local/sma/config \
 -v /opt/tmp/config/sonarr:/config \
--v /DATA/media/Tv_Shows:/tv \
+-v /DATA/rclone-cache/Tv_Shows:/tv \
 -v /DATA/tmp/Downloads/sonarr/nzbget:/downloads \
 mdhiggins/sonarr-sma:preview

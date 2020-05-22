@@ -10,6 +10,6 @@ docker run -d --name radarr \
   -e TZ=America/Chicago \
   -p 7878:7878 \
   -v /opt/tmp/config/radarr:/config \
-  -v /DATA/media/Movies:/movies \
+  -v /DATA/rclone-cache/Movies:/movies \
   -v /DATA/tmp/Downloads/radarr/nzbget:/downloads \
   linuxserver/radarr
