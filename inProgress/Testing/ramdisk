@@ -1,0 +1,7 @@
+## Create ramdisk
+
+## Will maybe script this later, although could potentially brick systems
+
+# nano /etc/fstab
+
+tmpfs       /mnt/ramdisk tmpfs   nodev,nosuid,noexec,nodiratime,size=1024M   0 0
