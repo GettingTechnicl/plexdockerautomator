@@ -1,0 +1,12 @@
+[Unit]
+Description=mylar Container
+Requires=rclonecache.service
+After=rclonevfs.service
+
+[Service]
+Restart=always
+ExecStart=/usr/bin/docker start -a plex
+ExecStop=/usr/bin/docker stop -t 2 plex
+
+[Install]
+WantedBy=local.target
