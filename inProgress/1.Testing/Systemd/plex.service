@@ -1,7 +1,7 @@
 [Unit]
 Description=mylar Container
 Requires=rclonecache.service
-After=rclonevfs.service
+After=rclone-vfs.service
 
 [Service]
 Restart=always
