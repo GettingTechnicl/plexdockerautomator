@@ -1,5 +1,4 @@
 docker run -d --name plex \
---network=host \
 -e TZ="America/Chicago" \
 -e PLEX_CLAIM="<claimToken>" \
 -e ADVERTISE_IP="http://192.168.20.5:32400/" \
