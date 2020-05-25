@@ -13,10 +13,10 @@ docker run -d --name rclone-cache \
 -v /opt/tmp/config:/config \
 -v /opt/tmp/cache:/cache \
 -v /DATA/rclone-cache:/data:shared \
-rclone/rclone mount gdrive:Cloud /data \
---cache-chunk-path /cache/rclone-cache/cache-backend \
---cache-db-path /cache/rclone-cache/cache-backend \
---cache-tmp-upload-path /cache/rclone-cache_tmp_upload \
+rclone/rclone mount cache:Cloud /data \
+--cache-chunk-path /DATA/cache/rclone-cache/cache-backend \
+--cache-db-path /DATA/cache/rclone-cache/cache-backend \
+--cache-tmp-upload-path /DATA/cache/rclone-cache_tmp_upload \
 --config /config/rclone/rclone.conf \
 --allow-non-empty \
 --allow-other \
