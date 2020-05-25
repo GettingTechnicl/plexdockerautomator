@@ -14,9 +14,10 @@ docker run -d --name rclone-cache \
 -v /opt/tmp/cache:/cache \
 -v /DATA/rclone-cache:/data:shared \
 rclone/rclone mount cache:Cloud /data \
---cache-chunk-path /DATA/cache/rclone-cache/cache-backend \
---cache-db-path /DATA/cache/rclone-cache/cache-backend \
---cache-tmp-upload-path /DATA/cache/rclone-cache_tmp_upload \
+--cache-chunk-path /cache/rclone-cache/cache-backend \
+--cache-db-path /cache/rclone-cache/cache-backend \
+--cache-tmp-upload-path /cache/rclone-cache/tmp_upload \
+--cache-dir /cache/rclone/cache \
 --config /config/rclone/rclone.conf \
 --allow-non-empty \
 --allow-other \
@@ -32,7 +33,3 @@ rclone/rclone mount cache:Cloud /data \
 --drive-use-trash=false \
 --fast-list \
 --log-level INFO
---rc \
---syslog \
---tpslimit 5 \
---umask 002
