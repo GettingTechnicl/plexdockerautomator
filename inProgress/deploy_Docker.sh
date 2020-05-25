@@ -4,10 +4,15 @@
 # Enter Dockers with "docker exec -it <container name> /bin/bash" some containers may only support ash
 
 
+
+
+
+
 docker pull linuxserver/plex
 docker pull linuxserver/sonarr
 docker pull linuxserver/radarr
 docker pull linuxserver/lidarr
+docker pull linuxserver/mylar
 docker pull linuxserver/jackett
 docker pull linuxserver/nzbget
 docker pull linuxserver/qbittorrent
@@ -70,12 +75,11 @@ docker run -d --name mylar \
   --restart unless-stopped \
   -e PUID=1000 \
   -e PGID=1000 \
-  -e TZ=America/Chicago \
   -p 8090:8090 \
   -v /opt/tmp/config:/config \
   -v /DATA/media/Comics:/comics \
   -v /DATA/tmp/Downloads/mylar/nzbget:/downloads \
-  hotio/mylar3
+  linuxserver/mylar
 
 
 
@@ -135,15 +139,3 @@ docker run -d --name sonarr \
     -v /DATA/tmp/Downloads:/downloads \
     --restart unless-stopped \
     linuxserver/qbittorrent
-
-
-    # Plex Config
-    docker run -d --name plex \
-    --network=host \
-    -e TZ="America/Chicago" \
-    -e PLEX_CLAIM="<claimToken>" \
-    -e ADVERTISE_IP="http://192.168.20.5:32400/" \
-    -v /opt/tmp/config/plexdb:/config \
-    -v /mnt/ramdisk:/transcode \
-    -v /DATA/media:/data \
-    plexinc/pms-docker
