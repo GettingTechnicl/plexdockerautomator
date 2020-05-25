@@ -32,7 +32,6 @@ rclone/rclone mount cache:Cloud /data \
 --drive-use-trash=false \
 --fast-list \
 --log-level INFO
---modify-window 1s \
 --rc \
 --syslog \
 --tpslimit 5 \
