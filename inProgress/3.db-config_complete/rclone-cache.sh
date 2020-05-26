@@ -10,10 +10,10 @@ docker run -d --name rclone-cache \
 --cap-add SYS_ADMIN \
 --device /dev/fuse \
 --security-opt apparmor:unconfined \
--v /opt/tmp/config:/config \
--v /opt/tmp/cache:/cache \
--v /DATA/rclone-cache:/data:shared \
-rclone/rclone mount cache:Cloud /data \
+-v /docker_exchange_host/config:/config \
+-v /docker_exchange_host/cache:/cache \
+-v /docker_exchange_host/rclone-cache:/data:shared \
+rclone/rclone mount cache: /data \
 --cache-chunk-path /cache/rclone-cache/cache-backend \
 --cache-db-path /cache/rclone-cache/cache-backend \
 --cache-tmp-upload-path /cache/rclone-cache/tmp_upload \

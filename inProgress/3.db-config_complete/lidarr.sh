@@ -5,10 +5,11 @@
 # Lidarr Config
 docker run -d --name lidarr \
   --restart unless-stopped \
+  --network=host \
+  -e ADVERTISE_IP="localhost:8686/" \
   -e PUID=1000 \
   -e PGID=1000 \
   -e TZ=America/Chicago \
-  -p 8686:8686 \
   -v /opt/tmp/config/Lidarr:/config \
   -v /DATA/rclone-cache/Music:/music \
   -v /DATA/tmp/Downloads/lidarr/nzbget:/downloads \

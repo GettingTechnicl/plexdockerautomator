@@ -4,10 +4,11 @@
 
 ## New Sonarr version
 
-##need variable to connect to nzbget, right now only connects ip, but what about other systems
 docker run -d --name sonarr-sma \
 --restart=unless-stopped \
 --cap-add SYS_ADMIN \
+--network=host \
+-e ADVERTISE_IP="localhost:6790/" \
 -e PUID=1000 \
 -e PGID=1000 \
 -e TZ=America/Chicago \

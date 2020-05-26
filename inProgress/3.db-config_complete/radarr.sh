@@ -5,11 +5,12 @@
 # Radarr Config
 docker run -d --name radarr \
   --restart unless-stopped \
+  --network=host \
+  -e ADVERTISE_IP="localhost:7878/" \
   -e PUID=1000 \
   -e PGID=1000 \
   -e TZ=America/Chicago \
-  -p 7878:7878 \
   -v /opt/tmp/config/radarr:/config \
   -v /DATA/rclone-cache/Movies:/movies \
   -v /DATA/tmp/Downloads/radarr/nzbget:/downloads \
-  linuxserver/radarr
+  mdhiggins/radarr-sma
