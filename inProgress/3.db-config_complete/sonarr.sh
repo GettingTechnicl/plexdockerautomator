@@ -12,7 +12,6 @@ docker run -d --name sonarr-sma \
 -e PUID=1000 \
 -e PGID=1000 \
 -e TZ=America/Chicago \
--p 8989:8989 \
 -v /opt/tmp/config/sma:/usr/local/sma/config \
 -v /opt/tmp/config/sonarr:/config \
 -v /DATA/rclone-cache/Tv_Shows:/tv \
