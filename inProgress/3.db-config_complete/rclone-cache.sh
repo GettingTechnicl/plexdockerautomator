@@ -24,7 +24,7 @@ rclone/rclone mount cache: /data \
 --attr-timeout=1s \
 --buffer-size=0M \
 --cache-chunk-size=10M \
---cache-chunk-total-size=10G \
+--cache-chunk-total-size=100G \
 --cache-info-age=168h \
 --cache-tmp-wait-time 15m \
 --cache-workers=6 \
