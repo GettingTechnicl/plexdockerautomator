@@ -15,7 +15,7 @@ docker run -d --name rclone-vfs \
 -v /DATA/rclone-vfs:/data:shared \
 rclone/rclone mount gdrive:Cloud /data \
 --cache-dir /cache/rclone-vfs \
---config /config/rclone/rclone.conf \
+--config /config/rclone/rclone-vfs.conf \
 --allow-other \
 --allow-non-empty \
 --buffer-size 256M \
@@ -29,4 +29,4 @@ rclone/rclone mount gdrive:Cloud /data \
 --umask 002 \
 --vfs-cache-mode writes \
 --vfs-read-chunk-size 128M \
---vfs-read-chunk-size-limit off 
+--vfs-read-chunk-size-limit off

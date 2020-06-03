@@ -5,20 +5,20 @@
 
 docker pull rclone/rclone:latest
 
-docker run -d --name rclone-cache \
+docker run --name rclone-cache \
 --restart=unless-stopped \
 --cap-add SYS_ADMIN \
 --device /dev/fuse \
 --security-opt apparmor:unconfined \
--v /docker_exchange_host/config:/config \
--v /docker_exchange_host/cache:/cache \
--v /docker_exchange_host/rclone-cache:/data:shared \
-rclone/rclone mount cache: /data \
+-v /opt/tmp/config:/config \
+-v /opt/tmp/cache:/cache \
+-v /DATA/rclone-cache:/data:shared \
+rclone/rclone mount cache:Cloud /data \
 --cache-chunk-path /cache/rclone-cache/cache-backend \
 --cache-db-path /cache/rclone-cache/cache-backend \
 --cache-tmp-upload-path /cache/rclone-cache/tmp_upload \
 --cache-dir /cache/rclone/cache \
---config /config/rclone/rclone.conf \
+--config /config/rclone/rclone-cache.conf \
 --allow-non-empty \
 --allow-other \
 --attr-timeout=1s \
