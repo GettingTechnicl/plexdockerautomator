@@ -22,6 +22,9 @@ prefPUID=1000
 prefGUID=1000
 
 
+mkdir ${rioDir}
+mkdir ${rdbDir}
+
 # Plex Config
 docker run -d --name plex \
 --network=host \
