@@ -11,12 +11,15 @@ tZone="America/Chicago"
 # Your Plex claim Token
 cToken="<claimToken>"
 # Your ADVERTISE_IP setting here
-adv_Ip=http://localhost
+adv_Ip=http://${adv_Ip}
 # root directory specified for all databases (recommended on SSD) (no trailing forwardslash)
 rdbDir=/opt/PDA
 # root directory specified for heavy IO
 rioDir=/DATA/PDA
-
+# Your preferred PUID
+prefPUID=1000
+# Your Preferred GUID
+prefGUID=1000
 
 
 # Plex Config
@@ -24,7 +27,7 @@ docker run -d --name plex \
 --network=host \
 -e TZ=${tZone} \
 -e PLEX_CLAIM=${cToken} \
--e ADVERTISE_IP=${adv_Ip}:32400 \
+-e ADVERTISE_IP="${adv_Ip}:32400" \
 -v ${rdbDir}/config/plexdb:/config \
 -v /mnt/ramdisk:/transcode \
 -v ${rioDir}/rclone-vfs:/data \
@@ -34,12 +37,12 @@ plexinc/pms-docker
 # Jackett Config
 docker run -d --name jackett \
   --restart unless-stopped \
-  -e PUID=1000 \
-  -e PGID=1000 \
+  -e PUID=${prefPUID} \
+  -e PGID=${prefGUID} \
   -e TZ=${tZone} \
   -p 9117:9117 \
   -v ${rdbDir}/config:/config \
-  -v ${rioDir}/tmp/Downloads/blackhole:/downloads \
+  -v ${rioDir}/Downloads/blackhole:/downloads \
   linuxserver/jackett
 
 
@@ -47,13 +50,13 @@ docker run -d --name jackett \
   docker run -d --name lidarr \
     --restart unless-stopped \
     --network=host \
-    -e ADVERTISE_IP="localhost:8686/" \
-    -e PUID=1000 \
-    -e PGID=1000 \
+    -e ADVERTISE_IP="${adv_Ip}:8686/" \
+    -e PUID=${prefPUID} \
+    -e PGID=${prefGUID} \
     -e TZ=${tZone} \
     -v ${rdbDir}/config/Lidarr:/config \
-    -v /DATA/tmp/rclone-cache/Music:/music \
-    -v /DATA/tmp/Downloads/lidarr/nzbget:/downloads \
+    -v ${rioDir}/rclone-cache/Music:/music \
+    -v ${rioDir}/Downloads/lidarr/nzbget:/downloads \
     linuxserver/lidarr
 
 
@@ -61,13 +64,13 @@ docker run -d --name jackett \
     docker run -d --name mylar \
       --restart unless-stopped \
       --network=host \
-      -e ADVERTISE_IP="localhost:8090/" \
-      -e PUID=1000 \
-      -e PGID=1000 \
+      -e ADVERTISE_IP="${adv_Ip}:8090/" \
+      -e PUID=${prefPUID} \
+      -e PGID=${prefGUID} \
       -e TZ=${tZone} \
       -v ${rdbDir}/config:/config \
-      -v /DATA/tmp/rclone-cache/Comics:/comics \
-      -v /DATA/tmp/Downloads/mylar/nzbget:/downloads \
+      -v ${rioDir}/rclone-cache/Comics:/comics \
+      -v ${rioDir}/Downloads/mylar/nzbget:/downloads \
       hotio/mylar3
 
 
@@ -76,12 +79,12 @@ docker run -d --name jackett \
       docker run -d --name nzbget \
         --restart unless-stopped \
         --network=host \
-        -e ADVERTISE_IP="localhost:6790/" \
-        -e PUID=1000 \
-        -e PGID=1000 \
+        -e ADVERTISE_IP="${adv_Ip}:6790/" \
+        -e PUID=${prefPUID} \
+        -e PGID=${prefGUID} \
         -e TZ=${tZone} \
         -v ${rdbDir}/config/nzbget:/config \
-        -v /DATA/tmp/Downloads:/downloads \
+        -v ${rioDir}/Downloads:/downloads \
         linuxserver/nzbget
 
 
@@ -89,9 +92,9 @@ docker run -d --name jackett \
         #Ombi config
         docker run -d --name=ombi \
           --network=host \
-          -e ADVERTISE_IP="localhost:3579/" \
-          -e PUID=1000 \
-          -e PGID=1000 \
+          -e ADVERTISE_IP="${adv_Ip}:3579/" \
+          -e PUID=${prefPUID} \
+          -e PGID=${prefGUID} \
           -e TZ=${tZone} \
           -v ${rdbDir}/config/ombi:/config \
           --restart unless-stopped \
@@ -103,14 +106,14 @@ docker run -d --name jackett \
           docker run -d --name radarr-sma \
             --restart unless-stopped \
             --network=host \
-            -e ADVERTISE_IP="localhost:7878/" \
-            -e PUID=1000 \
-            -e PGID=1000 \
+            -e ADVERTISE_IP="${adv_Ip}:7878/" \
+            -e PUID=${prefPUID} \
+            -e PGID=${prefGUID} \
             -e TZ=${tZone} \
             -v ${rdbDir}/config/radarr:/config \
-            -v /DATA/tmp/rclone-cache/Movies:/movies \
-            -v /DATA/tmp/rclone-cache/Stand_Ups:/standups \
-            -v /DATA/tmp/Downloads/radarr/nzbget:/downloads \
+            -v ${rioDir}/rclone-cache/Movies:/movies \
+            -v ${rioDir}/rclone-cache/Stand_Ups:/standups \
+            -v ${rioDir}/Downloads/radarr/nzbget:/downloads \
             mdhiggins/radarr-sma
 
 
@@ -121,14 +124,14 @@ docker run -d --name jackett \
            --restart=unless-stopped \
            --cap-add SYS_ADMIN \
            --network=host \
-           -e ADVERTISE_IP="localhost:6790/" \
-           -e PUID=1000 \
-           -e PGID=1000 \
+           -e ADVERTISE_IP="${adv_Ip}:6790/" \
+           -e PUID=${prefPUID} \
+           -e PGID=${prefGUID} \
            -e TZ=${tZone} \
            -v ${rdbDir}/config/sma:/usr/local/sma/config \
            -v ${rdbDir}/config/sonarr:/config \
-           -v /DATA/tmp/rclone-cache/Tv_Shows:/tv \
-           -v /DATA/tmp/Downloads/sonarr/nzbget:/downloads \
+           -v ${rioDir}/rclone-cache/Tv_Shows:/tv \
+           -v ${rioDir}/Downloads/sonarr/nzbget:/downloads \
            mdhiggins/sonarr-sma:preview
 
 
@@ -143,7 +146,7 @@ docker run -d --name jackett \
             --security-opt apparmor:unconfined \
             -v ${rdbDir}/config:/config \
             -v ${rdbDir}/cache:/cache \
-            -v /DATA/tmp/rclone-cache:/data:shared \
+            -v ${rioDir}/rclone-cache:/data:shared \
             rclone/rclone mount cache:Cloud /data \
             --cache-chunk-path /cache/rclone-cache/cache-backend \
             --cache-db-path /cache/rclone-cache/cache-backend \
@@ -176,7 +179,7 @@ docker run -d --name jackett \
             --security-opt apparmor:unconfined \
             -v ${rdbDir}/cache:/cache \
             -v ${rdbDir}/config:/config \
-            -v /DATA/tmp/rclone-vfs:/data:shared \
+            -v ${rioDir}/rclone-vfs:/data:shared \
             rclone/rclone mount gdrive:Cloud /data \
             --cache-dir /cache/rclone-vfs \
             --config /config/rclone/rclone-vfs.conf \
