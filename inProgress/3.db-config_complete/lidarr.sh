@@ -11,6 +11,6 @@ docker run -d --name lidarr \
   -e PGID=1000 \
   -e TZ=America/Chicago \
   -v /opt/tmp/config/Lidarr:/config \
-  -v /DATA/rclone-cache/Music:/music \
+  -v /DATA/tmp/rclone-cache/Music:/music \
   -v /DATA/tmp/Downloads/lidarr/nzbget:/downloads \
   linuxserver/lidarr

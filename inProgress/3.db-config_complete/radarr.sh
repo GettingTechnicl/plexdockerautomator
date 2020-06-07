@@ -11,7 +11,7 @@ docker run -d --name radarr-sma \
   -e PGID=1000 \
   -e TZ=America/Chicago \
   -v /opt/tmp/config/radarr:/config \
-  -v /DATA/rclone-cache/Movies:/movies \
-  -v /DATA/rclone-cache/Stand_Ups:/standups \
+  -v /DATA/tmp/rclone-cache/Movies:/movies \
+  -v /DATA/tmp/rclone-cache/Stand_Ups:/standups \
   -v /DATA/tmp/Downloads/radarr/nzbget:/downloads \
   mdhiggins/radarr-sma

@@ -11,6 +11,6 @@ docker run -d --name mylar \
   -e PGID=1000 \
   -e TZ=America/Chicago \
   -v /opt/tmp/config:/config \
-  -v /DATA/rclone-cache/Comics:/comics \
+  -v /DATA/tmp/rclone-cache/Comics:/comics \
   -v /DATA/tmp/Downloads/mylar/nzbget:/downloads \
   hotio/mylar3

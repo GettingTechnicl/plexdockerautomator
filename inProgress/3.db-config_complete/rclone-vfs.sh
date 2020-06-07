@@ -12,7 +12,7 @@ docker run -d --name rclone-vfs \
 --security-opt apparmor:unconfined \
 -v /opt/tmp/cache:/cache \
 -v /opt/tmp/config:/config \
--v /DATA/rclone-vfs:/data:shared \
+-v /DATA/tmp/rclone-vfs:/data:shared \
 rclone/rclone mount gdrive:Cloud /data \
 --cache-dir /cache/rclone-vfs \
 --config /config/rclone/rclone-vfs.conf \

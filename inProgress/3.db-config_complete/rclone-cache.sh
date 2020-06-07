@@ -12,7 +12,7 @@ docker run --name rclone-cache \
 --security-opt apparmor:unconfined \
 -v /opt/tmp/config:/config \
 -v /opt/tmp/cache:/cache \
--v /DATA/rclone-cache:/data:shared \
+-v /DATA/tmp/rclone-cache:/data:shared \
 rclone/rclone mount cache:Cloud /data \
 --cache-chunk-path /cache/rclone-cache/cache-backend \
 --cache-db-path /cache/rclone-cache/cache-backend \
