@@ -11,7 +11,7 @@ tZone="America/Chicago"
 # Your Plex claim Token
 cToken="<claimToken>"
 # Your ADVERTISE_IP setting here
-adv_Ip=http://${adv_Ip}
+adv_Ip=http://localhost
 # root directory specified for all databases (recommended on SSD) (no trailing forwardslash)
 rdbDir=/opt/PDA
 # root directory specified for heavy IO
