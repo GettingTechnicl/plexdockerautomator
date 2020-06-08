@@ -13,5 +13,5 @@ docker run -d --name radarr-v3 \
   -v /opt/tmp/config/radarr:/config \
   -v /DATA/tmp/rclone-cache/Movies:/movies \
   -v /DATA/tmp/rclone-cache/Stand_Ups:/standups \
-  -v /DATA/tmp/Downloads/radarr/nzbget:/downloads \
+  -v /DATA/tmp/Downloads:/downloads \
   mdhiggins/radarr-sma:preview
