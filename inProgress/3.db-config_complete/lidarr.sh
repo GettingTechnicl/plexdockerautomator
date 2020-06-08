@@ -7,8 +7,8 @@ docker run -d --name lidarr \
   --restart unless-stopped \
   --network=host \
   -e ADVERTISE_IP="localhost:8686/" \
-  -e PUID=1000 \
-  -e PGID=1000 \
+  -e PUID=1002 \
+  -e PGID=1002 \
   -e TZ=America/Chicago \
   -v /opt/tmp/config/Lidarr:/config \
   -v /DATA/tmp/rclone-cache/Music:/music \

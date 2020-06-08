@@ -7,8 +7,8 @@ docker run -d --name mylar \
   --restart unless-stopped \
   --network=host \
   -e ADVERTISE_IP="localhost:8090/" \
-  -e PUID=1000 \
-  -e PGID=1000 \
+  -e PUID=1002 \
+  -e PGID=1002 \
   -e TZ=America/Chicago \
   -v /opt/tmp/config:/config \
   -v /DATA/tmp/rclone-cache/Comics:/comics \
