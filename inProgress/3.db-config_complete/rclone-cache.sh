@@ -23,13 +23,14 @@ rclone/rclone mount cache:Cloud /data \
 --allow-other \
 --attr-timeout=1s \
 --buffer-size=0M \
---cache-chunk-size=10M \
---cache-chunk-total-size=100G \
+--cache-chunk-size=128M \
+--cache-chunk-total-size=200G \
 --cache-info-age=168h \
 --cache-tmp-wait-time 15m \
 --cache-workers=6 \
 --daemon-timeout=10m \
 --dir-cache-time=160h \
 --drive-use-trash=false \
+--drive-chunk-size 128M \
 --fast-list \
 --log-level INFO
