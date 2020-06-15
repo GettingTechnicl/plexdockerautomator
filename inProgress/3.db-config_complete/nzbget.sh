@@ -6,7 +6,7 @@
 docker run -d --name nzbget \
   --restart unless-stopped \
   --network=host \
-  -e ADVERTISE_IP="localhost:6790/" \
+  -e ADVERTISE_IP="localhost:6789/" \
   -e PUID=1002 \
   -e PGID=1002 \
   -e TZ=America/Chicago \
