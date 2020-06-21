@@ -6,9 +6,9 @@
 docker run -d --name radarr-v3 \
   --restart unless-stopped \
   --network=host \
+  -e PUID=0 \
+  -e PGID=0 \
   -e ADVERTISE_IP="localhost:7878/" \
-  -e PUID=1002 \
-  -e PGID=1002 \
   -e TZ=America/Chicago \
   -v /opt/tmp/config/radarr:/config \
   -v /DATA/tmp/rclone-cache/Movies:/movies \

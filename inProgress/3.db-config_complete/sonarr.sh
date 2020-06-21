@@ -9,8 +9,6 @@ docker run -d --name sonarr-sma \
 --cap-add SYS_ADMIN \
 --network=host \
 -e ADVERTISE_IP="localhost:6790/" \
--e PUID=1002 \
--e PGID=1002 \
 -e TZ=America/Chicago \
 -v /opt/tmp/config/sma:/usr/local/sma/config \
 -v /opt/tmp/config/sonarr:/config \
