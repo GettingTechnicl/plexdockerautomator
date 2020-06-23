@@ -1,7 +1,7 @@
 [Unit]
 Description=radarr Container
-Requires=rclonecache.service
-After=rclonecache.service
+Requires=rclone-cache.service
+After=rclone-cache.service
 
 [Service]
 Restart=always
