@@ -27,25 +27,26 @@ prefGUID=0
 dCMD="create"
 
 # Directories Required
-sudo mkdir -p ${rioDir}
-sudo mkdir -p ${rdbDir}
 sudo mkdir -p /mnt/ramdisk
-sudo mkdir -p ${rioDir}/rclone-vfs
-sudo mkdir -p ${rioDir}/rclone-cache
+sudo mkdir -p ${rdbDir}
 sudo mkdir -p ${rdbDir}/cache
 sudo mkdir -p ${rdbDir}/config
 sudo mkdir -p ${rdbDir}/config/plexdb
 sudo mkdir -p ${rdbDir}/config/Lidarr
 sudo mkdir -p ${rdbDir}/config/nzbget
+sudo mkdir -p ${rdbDir}/config/ombi
+sudo mkdir -p ${rdbDir}/config/radarr
+sudo mkdir -p ${rdbDir}/config/sma
+#sudo mkdir -p ${rdbDir}/config/rclone
+sudo mkdir -p ${rioDir}
+sudo mkdir -p ${rioDir}/rclone-vfs
+sudo mkdir -p ${rioDir}/rclone-cache
 sudo mkdir -p ${rioDir}/Downloads
 sudo mkdir -p ${rioDir}/Downloads/blackhole
 sudo mkdir -p ${rioDir}/Downloads/lidarr/nzbget
 sudo mkdir -p ${rioDir}/Downloads/mylar/nzbget
 sudo mkdir -p ${rioDir}/Downloads/radarr/nzbget
 sudo mkdir -p ${rioDir}/Downloads/sonarr/nzbget
-sudo mkdir -p ${rdbDir}/config/ombi
-sudo mkdir -p ${rdbDir}/config/radarr
-sudo mkdir -p ${rdbDir}/config/sma
 
 sudo chmod -R 777 ${rioDir}
 sudo chown -R root.root ${rdbDir}
