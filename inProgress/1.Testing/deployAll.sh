@@ -50,6 +50,8 @@ sudo mkdir -p ${rdbDir}/config/sma
 sudo chmod -R 777 ${rioDir}
 sudo chown -R root.root ${rdbDir}
 
+
+
 # Plex Config
 docker ${dCMD} --name plex \
 --network=host \
@@ -214,3 +216,26 @@ docker ${dCMD} --name jackett \
             --vfs-cache-mode writes \
             --vfs-read-chunk-size 128M \
             --vfs-read-chunk-size-limit off
+
+
+            # Copies SystemD service scripts to systemD
+            sudo cp Systemd/* /etc/system/systemd/
+            sudo systemctl enable rclone-cache.service
+            sudo systemctl enable rclone-vfs.service
+            sudo systemctl enable jackett.service
+            sudo systemctl enable lidarr.service
+            sudo systemctl enable mylar.service
+            sudo systemctl enable nzbget.service
+            sudo systemctl enable plex.service
+            sudo systemctl enable radarr.service
+            sudo systemctl enable sonarr.service
+
+            sudo systemctl start rclone-cache.service
+            sudo systemctl start rclone-vfs.service
+            sudo systemctl start jackett.service
+            sudo systemctl start lidarr.service
+            sudo systemctl start mylar.service
+            sudo systemctl start nzbget.service
+            sudo systemctl start plex.service
+            sudo systemctl start radarr.service
+            sudo systemctl start sonarr.service
