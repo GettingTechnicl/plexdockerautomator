@@ -19,6 +19,8 @@ adv_Ip=http://localhost
 rdbDir=/opt/tmp
 # root directory specified for heavy IO
 rioDir=/DATA/tmp
+# root directory for all config
+rcloneCacheDir=/DATA/tmp
 # Your preferred PUID
 prefPUID=0
 # Your Preferred GUID
@@ -29,7 +31,7 @@ dCMD="create"
 # Directories Required
 sudo mkdir -p /mnt/ramdisk
 sudo mkdir -p ${rdbDir}
-sudo mkdir -p ${rdbDir}/cache
+sudo mkdir -p ${rcloneCacheDir}/cache/rclone
 sudo mkdir -p ${rdbDir}/config
 sudo mkdir -p ${rdbDir}/config/plexdb
 sudo mkdir -p ${rdbDir}/config/Lidarr
@@ -37,7 +39,7 @@ sudo mkdir -p ${rdbDir}/config/nzbget
 sudo mkdir -p ${rdbDir}/config/ombi
 sudo mkdir -p ${rdbDir}/config/radarr
 sudo mkdir -p ${rdbDir}/config/sma
-#sudo mkdir -p ${rdbDir}/config/rclone
+sudo mkdir -p ${rdbDir}/config/rclone
 sudo mkdir -p ${rioDir}
 sudo mkdir -p ${rioDir}/rclone-vfs
 sudo mkdir -p ${rioDir}/rclone-cache
@@ -51,6 +53,70 @@ sudo mkdir -p ${rioDir}/Downloads/sonarr/nzbget
 sudo chmod -R 777 ${rioDir}
 sudo chown -R root.root ${rdbDir}
 
+
+# Rclone Cache config
+docker ${dCMD} --name rclone-cache \
+--restart=unless-stopped \
+--cap-add SYS_ADMIN \
+--device /dev/fuse \
+--security-opt apparmor:unconfined \
+-v ${rdbDir}/config:/config \
+-v ${rcloneCacheDir}/cache:/cache \
+-v ${rioDir}/rclone-cache:/data:shared \
+rclone/rclone mount cache: /data \
+--cache-chunk-path /cache/rclone/cache-backend \
+--cache-db-path /cache/rclone/cache-backend \
+--config /config/rclone/rclone-cache.conf \
+--allow-non-empty \
+--allow-other \
+--attr-timeout=1s \
+--buffer-size=0M \
+--cache-chunk-size=64M \
+--cache-chunk-total-size=1000G \
+--cache-info-age=168h \
+--cache-workers=6 \
+--daemon-timeout=10m \
+--dir-cache-time=160h \
+--drive-use-trash=false \
+--drive-chunk-size 64M \
+--fast-list \
+--log-file /config/rclone/rclone-cache.log \
+--rc \
+--rc-addr :5573 \
+--log-level INFO
+
+
+
+# Rclone VFS Config
+docker ${dCMD} --name rclone-vfs \
+--restart=unless-stopped \
+--cap-add SYS_ADMIN \
+--device /dev/fuse \
+--security-opt apparmor:unconfined \
+-v ${rcloneCacheDir}/cache:/cache \
+-v ${rdbDir}/config:/config \
+-v ${rioDir}/rclone-vfs:/data:shared \
+rclone/rclone mount gdrive:Cloud /data \
+--cache-dir /cache/rclone-vfs \
+--config /config/rclone/rclone-vfs.conf \
+--allow-other \
+--allow-non-empty \
+--buffer-size 256M \
+--dir-cache-time 96h \
+--drive-chunk-size 32M \
+--fast-list \
+--log-level DEBUG \
+--rc \
+--timeout 1h \
+--tpslimit 4 \
+--umask 002 \
+--vfs-cache-mode writes \
+--vfs-read-chunk-size 128M \
+--vfs-read-chunk-size-limit off \
+--rc \
+--rc-addr :5572 \
+--log-file /config/rclone/rclone-vfs.log \
+--log-level INFO
 
 
 # Plex Config
@@ -157,66 +223,6 @@ docker ${dCMD} --name jackett \
            -v ${rioDir}/Downloads/sonarr/nzbget:/downloads \
            mdhiggins/sonarr-sma:preview
 
-
-
-            # Rclone Cache config
-            docker ${dCMD} --name rclone-cache \
-            --restart=unless-stopped \
-            --cap-add SYS_ADMIN \
-            --device /dev/fuse \
-            --security-opt apparmor:unconfined \
-            -v ${rdbDir}/config:/config \
-            -v ${rdbDir}/cache:/cache \
-            -v ${rioDir}/rclone-cache:/data:shared \
-            rclone/rclone mount cache:Cloud /data \
-            --cache-chunk-path /cache/rclone-cache/cache-backend \
-            --cache-db-path /cache/rclone-cache/cache-backend \
-            --cache-tmp-upload-path /cache/rclone-cache/tmp_upload \
-            --cache-dir /cache/rclone/cache \
-            --config /config/rclone/rclone-cache.conf \
-            --allow-non-empty \
-            --allow-other \
-            --attr-timeout=1s \
-            --buffer-size=0M \
-            --cache-chunk-size=10M \
-            --cache-chunk-total-size=100G \
-            --cache-info-age=168h \
-            --cache-tmp-wait-time 15m \
-            --cache-workers=6 \
-            --daemon-timeout=10m \
-            --dir-cache-time=160h \
-            --drive-use-trash=false \
-            --fast-list \
-            --log-level INFO
-
-
-
-            # Rclone VFS Config
-            docker ${dCMD} --name rclone-vfs \
-            --restart=unless-stopped \
-            --cap-add SYS_ADMIN \
-            --device /dev/fuse \
-            --security-opt apparmor:unconfined \
-            -v ${rdbDir}/cache:/cache \
-            -v ${rdbDir}/config:/config \
-            -v ${rioDir}/rclone-vfs:/data:shared \
-            rclone/rclone mount gdrive:Cloud /data \
-            --cache-dir /cache/rclone-vfs \
-            --config /config/rclone/rclone-vfs.conf \
-            --allow-other \
-            --allow-non-empty \
-            --buffer-size 256M \
-            --dir-cache-time 96h \
-            --drive-chunk-size 32M \
-            --fast-list \
-            --log-level DEBUG \
-            --rc \
-            --timeout 1h \
-            --tpslimit 4 \
-            --umask 002 \
-            --vfs-cache-mode writes \
-            --vfs-read-chunk-size 128M \
-            --vfs-read-chunk-size-limit off
 
 
             # Copies SystemD service scripts to systemD
