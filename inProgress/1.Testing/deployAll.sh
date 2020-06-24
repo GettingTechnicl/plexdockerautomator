@@ -113,7 +113,7 @@ docker ${dCMD} --name jackett \
             -v ${rioDir}/rclone-cache/Movies:/movies \
             -v ${rioDir}/rclone-cache/Stand_Ups:/standups \
             -v ${rioDir}/Downloads/radarr/nzbget:/downloads \
-            mdhiggins/radarr-sma
+            mdhiggins/radarr-sma:preview
 
 
 
