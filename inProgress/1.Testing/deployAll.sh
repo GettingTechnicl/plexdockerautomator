@@ -128,7 +128,7 @@ docker ${dCMD} --name jackett \
 
 
           # Radarr Config
-          docker ${dCMD} --name radarr-sma \
+          docker ${dCMD} --name radarr \
             --network=host \
             -e ADVERTISE_IP="${adv_Ip}:7878/" \
             -e PUID=${prefPUID} \
@@ -143,7 +143,7 @@ docker ${dCMD} --name jackett \
 
 
            # Sonarr config
-           docker ${dCMD} --name sonarr-sma \
+           docker ${dCMD} --name sonarr \
            --cap-add SYS_ADMIN \
            --network=host \
            -e ADVERTISE_IP="${adv_Ip}:6790/" \
@@ -219,7 +219,7 @@ docker ${dCMD} --name jackett \
 
 
             # Copies SystemD service scripts to systemD
-            sudo cp Systemd/* /etc/system/systemd/
+            sudo cp ${target_PWD}/Systemd/* /etc/system/systemd/
             sudo systemctl enable rclone-cache.service
             sudo systemctl enable rclone-vfs.service
             sudo systemctl enable jackett.service
