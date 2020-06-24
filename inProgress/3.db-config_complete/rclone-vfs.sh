@@ -37,7 +37,7 @@ rclone/rclone mount gdrive:Cloud /data \
 
 
 ################################## Alt Config Test
-docker run -d --name rclone-vfs \
+docker run --name rclone-vfs \
 --restart=unless-stopped \
 --cap-add SYS_ADMIN \
 --device /dev/fuse \
