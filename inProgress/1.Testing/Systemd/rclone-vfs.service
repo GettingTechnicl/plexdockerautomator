@@ -1,5 +1,5 @@
 [Unit]
-Description=rclonevfs Container
+Description=rclone-vfs Container
 Requires=docker.service
 After=docker.service
 

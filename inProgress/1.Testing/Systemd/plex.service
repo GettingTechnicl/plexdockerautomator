@@ -1,6 +1,6 @@
 [Unit]
 Description=mylar Container
-Requires=rclonecache.service
+Requires=rclone-vfs.service
 After=rclone-vfs.service
 
 [Service]
