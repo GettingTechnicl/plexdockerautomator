@@ -20,13 +20,15 @@ rioDir=/DATA/PDA
 prefPUID=1000
 # Your Preferred GUID
 prefGUID=1000
+# Docker Command
+dCMD="create"
 
 
 mkdir ${rioDir}
 mkdir ${rdbDir}
 
 # Plex Config
-docker run -d --name plex \
+docker ${dCMD} --name plex \
 --network=host \
 -e TZ=${tZone} \
 -e PLEX_CLAIM=${cToken} \
@@ -38,8 +40,7 @@ plexinc/pms-docker
 
 
 # Jackett Config
-docker run -d --name jackett \
-  --restart unless-stopped \
+docker ${dCMD} --name jackett \
   -e PUID=${prefPUID} \
   -e PGID=${prefGUID} \
   -e TZ=${tZone} \
@@ -50,8 +51,7 @@ docker run -d --name jackett \
 
 
 # Lidarr Config
-  docker run -d --name lidarr \
-    --restart unless-stopped \
+  docker ${dCMD} --name lidarr \
     --network=host \
     -e ADVERTISE_IP="${adv_Ip}:8686/" \
     -e PUID=${prefPUID} \
@@ -64,8 +64,7 @@ docker run -d --name jackett \
 
 
     # Mylar Config
-    docker run -d --name mylar \
-      --restart unless-stopped \
+    docker ${dCMD} --name mylar \
       --network=host \
       -e ADVERTISE_IP="${adv_Ip}:8090/" \
       -e PUID=${prefPUID} \
@@ -79,8 +78,7 @@ docker run -d --name jackett \
 
 
       # Nzbget config
-      docker run -d --name nzbget \
-        --restart unless-stopped \
+      docker ${dCMD} --name nzbget \
         --network=host \
         -e ADVERTISE_IP="${adv_Ip}:6790/" \
         -e PUID=${prefPUID} \
@@ -93,21 +91,19 @@ docker run -d --name jackett \
 
 
         #Ombi config
-        docker run -d --name=ombi \
+        docker ${dCMD} --name=ombi \
           --network=host \
           -e ADVERTISE_IP="${adv_Ip}:3579/" \
           -e PUID=${prefPUID} \
           -e PGID=${prefGUID} \
           -e TZ=${tZone} \
           -v ${rdbDir}/config/ombi:/config \
-          --restart unless-stopped \
           linuxserver/ombi
 
 
 
           # Radarr Config
-          docker run -d --name radarr-sma \
-            --restart unless-stopped \
+          docker ${dCMD} --name radarr-sma \
             --network=host \
             -e ADVERTISE_IP="${adv_Ip}:7878/" \
             -e PUID=${prefPUID} \
@@ -122,9 +118,7 @@ docker run -d --name jackett \
 
 
            # Sonarr config
-
-           docker run -d --name sonarr-sma \
-           --restart=unless-stopped \
+           docker ${dCMD} --name sonarr-sma \
            --cap-add SYS_ADMIN \
            --network=host \
            -e ADVERTISE_IP="${adv_Ip}:6790/" \
@@ -140,9 +134,7 @@ docker run -d --name jackett \
 
 
             # Rclone Cache config
-            docker pull rclone/rclone:latest
-
-            docker run --name rclone-cache \
+            docker ${dCMD} --name rclone-cache \
             --restart=unless-stopped \
             --cap-add SYS_ADMIN \
             --device /dev/fuse \
@@ -174,8 +166,7 @@ docker run -d --name jackett \
 
 
             # Rclone VFS Config
-
-            docker run -d --name rclone-vfs \
+            docker ${dCMD} --name rclone-vfs \
             --restart=unless-stopped \
             --cap-add SYS_ADMIN \
             --device /dev/fuse \
