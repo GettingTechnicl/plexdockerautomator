@@ -3,9 +3,12 @@
 ### Help Section ###
 # Enter Dockers with "docker exec -it <container name> /bin/bash" some containers may only support ash
 
-
+#####################################################
 # Print working directory - Do Not edit
 target_PWD="$(readlink -f .)"
+#####################################################
+
+
 # TimeZone
 tZone="America/Chicago"
 # Your Plex claim Token
@@ -13,19 +16,39 @@ cToken="<claimToken>"
 # Your ADVERTISE_IP setting here
 adv_Ip=http://localhost
 # root directory specified for all databases (recommended on SSD) (no trailing forwardslash)
-rdbDir=/opt/PDA
+rdbDir=/opt/tmp
 # root directory specified for heavy IO
-rioDir=/DATA/PDA
+rioDir=/DATA/tmp
 # Your preferred PUID
-prefPUID=1000
+prefPUID=0
 # Your Preferred GUID
-prefGUID=1000
+prefGUID=0
 # Docker Command
 dCMD="create"
 
+# Directories Required
+sudo mkdir -p ${rioDir}
+sudo mkdir -p ${rdbDir}
+sudo mkdir -p /mnt/ramdisk
+sudo mkdir -p ${rioDir}/rclone-vfs
+sudo mkdir -p ${rioDir}/rclone-cache
+sudo mkdir -p ${rdbDir}/cache
+sudo mkdir -p ${rdbDir}/config
+sudo mkdir -p ${rdbDir}/config/plexdb
+sudo mkdir -p ${rdbDir}/config/Lidarr
+sudo mkdir -p ${rdbDir}/config/nzbget
+sudo mkdir -p ${rioDir}/Downloads
+sudo mkdir -p ${rioDir}/Downloads/blackhole
+sudo mkdir -p ${rioDir}/Downloads/lidarr/nzbget
+sudo mkdir -p ${rioDir}/Downloads/mylar/nzbget
+sudo mkdir -p ${rioDir}/Downloads/radarr/nzbget
+sudo mkdir -p ${rioDir}/Downloads/sonarr/nzbget
+sudo mkdir -p ${rdbDir}/config/ombi
+sudo mkdir -p ${rdbDir}/config/radarr
+sudo mkdir -p ${rdbDir}/config/sma
 
-mkdir ${rioDir}
-mkdir ${rdbDir}
+sudo chmod -R 777 ${rioDir}
+sudo chown -R root.root ${rdbDir}
 
 # Plex Config
 docker ${dCMD} --name plex \
