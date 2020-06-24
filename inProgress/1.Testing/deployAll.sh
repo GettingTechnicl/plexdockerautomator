@@ -219,7 +219,7 @@ docker ${dCMD} --name jackett \
 
 
             # Copies SystemD service scripts to systemD
-            sudo cp ${target_PWD}/Systemd/* /etc/system/systemd/
+            sudo cp ${target_PWD}/Systemd/* /etc/systemd/system/
             sudo systemctl enable rclone-cache.service
             sudo systemctl enable rclone-vfs.service
             sudo systemctl enable jackett.service
