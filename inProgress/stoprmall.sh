@@ -21,3 +21,9 @@ docker rm rclone-vfs
 docker rm sonarr
 
 docker system prune -a
+
+git reset --hard
+git pull
+
+chmod +x stoprmall.sh
+chmod +x deploy_Docker.sh
