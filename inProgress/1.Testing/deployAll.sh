@@ -137,7 +137,7 @@ docker ${dCMD} --name jackett \
   -e PGID=${prefGUID} \
   -e TZ=${tZone} \
   -p 9117:9117 \
-  -v ${rdbDir}/config:/config \
+  -v ${rdbDir}/config/jackett:/config \
   -v ${rioDir}/Downloads/blackhole:/downloads \
   linuxserver/jackett
 
@@ -149,7 +149,7 @@ docker ${dCMD} --name jackett \
     -e PUID=${prefPUID} \
     -e PGID=${prefGUID} \
     -e TZ=${tZone} \
-    -v ${rdbDir}/config/Lidarr:/config \
+    -v ${rdbDir}/config/lidarr:/config \
     -v ${rioDir}/rclone-cache/Music:/music \
     -v ${rioDir}/Downloads/lidarr/nzbget:/downloads \
     linuxserver/lidarr
@@ -162,7 +162,7 @@ docker ${dCMD} --name jackett \
       -e PUID=${prefPUID} \
       -e PGID=${prefGUID} \
       -e TZ=${tZone} \
-      -v ${rdbDir}/config:/config \
+      -v ${rdbDir}/config/mylar:/config \
       -v ${rioDir}/rclone-cache/Comics:/comics \
       -v ${rioDir}/Downloads/mylar/nzbget:/downloads \
       hotio/mylar3
