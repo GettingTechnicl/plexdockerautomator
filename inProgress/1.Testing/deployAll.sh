@@ -56,8 +56,11 @@ sudo mkdir -p ${rioDir}/Downloads/sonarr/nzbget
 
 sudo chmod -R 777 ${rioDir}
 sudo chown -R root.root ${rdbDir}
+chmod g+s -R ${rioDir}
+chmod g+s -R ${rdbDir}
 
 sudo usermod -aG sudo plex
+
 
 # Rclone Cache config
 docker ${dCMD} --name rclone-cache \
