@@ -162,7 +162,7 @@ docker ${dCMD} --name jackett \
       -e PUID=${prefPUID} \
       -e PGID=${prefGUID} \
       -e TZ=${tZone} \
-      -v ${rdbDir}/config/mylar:/config \
+      -v ${rdbDir}/config:/config \
       -v ${rioDir}/rclone-cache/Comics:/comics \
       -v ${rioDir}/Downloads/mylar/nzbget:/downloads \
       hotio/mylar3
