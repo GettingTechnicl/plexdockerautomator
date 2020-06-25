@@ -11,6 +11,17 @@ service rclone-cache stop
 service rclone-vfs stop
 service sonarr stop
 
+docker stop jackett
+docker stop lidarr
+docker stop mylar
+docker stop nzbget
+docker stop ombi
+docker stop plex
+docker stop radarr
+docker stop rclone-cache
+docker stop rclone-vfs
+docker stop sonarr
+
 docker rm jackett
 docker rm lidarr
 docker rm mylar
