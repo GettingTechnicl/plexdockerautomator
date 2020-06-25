@@ -24,7 +24,11 @@ rcloneCacheDir=/DATA/tmp
 # Your preferred PUID
 prefPUID=1002
 # Your Preferred GUID
-prefGUID=0
+prefGUID=1002
+# Rclone preferred PUID
+RcprefPUID=0
+# Rclone Preferred GUID
+RcprefGUID=0
 # Docker Command
 dCMD="create"
 
@@ -53,6 +57,7 @@ sudo mkdir -p ${rioDir}/Downloads/sonarr/nzbget
 sudo chmod -R 777 ${rioDir}
 sudo chown -R root.root ${rdbDir}
 
+sudo usermod -aG sudo plex
 
 # Rclone Cache config
 docker ${dCMD} --name rclone-cache \
