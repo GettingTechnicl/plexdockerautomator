@@ -21,6 +21,7 @@ docker stop radarr
 docker stop rclone-cache
 docker stop rclone-vfs
 docker stop sonarr
+docker stop qbittorrent
 
 docker rm jackett
 docker rm lidarr
@@ -32,10 +33,6 @@ docker rm radarr
 docker rm rclone-cache
 docker rm rclone-vfs
 docker rm sonarr
+docker rm qbittorrent
 
 docker system prune -a
-
-git reset --hard
-git pull
-
-chmod +x /home/root/plexdockerautomator/inProgress/deploy_Docker.sh
