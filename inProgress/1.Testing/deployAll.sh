@@ -201,7 +201,7 @@ docker ${dCMD} --name jackett \
 
 
         #Ombi config
-        docker ${dCMD} --name=ombi \
+        docker ${dCMD} --name ombi \
           --network=host \
           -e ADVERTISE_IP="${adv_Ip}:3579/" \
           -e PUID=${prefPUID} \
