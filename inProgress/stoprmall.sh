@@ -27,5 +27,4 @@ docker system prune -a
 git reset --hard
 git pull
 
-chmod +x stoprmall.sh
-chmod +x deploy_Docker.sh
+chmod +x /home/root/plexdockerautomator/inProgress/deploy_Docker.sh
