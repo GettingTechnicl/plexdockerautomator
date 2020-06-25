@@ -11,24 +11,34 @@ target_PWD="$(readlink -f .)"
 
 # TimeZone
 tZone="America/Chicago"
+
 # Your Plex claim Token
 cToken="<claimToken>"
+
 # Your ADVERTISE_IP setting here
 adv_Ip=localhost
+
 # root directory specified for all databases (recommended on SSD) (no trailing forwardslash)
 rdbDir=/opt/tmp
+
 # root directory specified for heavy IO
 rioDir=/DATA/tmp
+
 # root directory for all config
 rcloneCacheDir=/DATA/tmp
+
 # Your preferred PUID (run "id youruser" to find your uid/guid)
 prefPUID=1002
+
 # Your Preferred GUID
 prefGUID=1002
-# Rclone preferred PUID
+
+# Rclone preferred PUID (rclone must be run as root)
 RcprefPUID=0
+
 # Rclone Preferred GUID
 RcprefGUID=0
+
 # Docker Command
 dCMD="create"
 
