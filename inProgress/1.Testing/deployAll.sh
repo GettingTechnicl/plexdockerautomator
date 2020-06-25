@@ -21,7 +21,7 @@ rdbDir=/opt/tmp
 rioDir=/DATA/tmp
 # root directory for all config
 rcloneCacheDir=/DATA/tmp
-# Your preferred PUID
+# Your preferred PUID (run "id youruser" to find your uid/guid)
 prefPUID=1002
 # Your Preferred GUID
 prefGUID=1002
