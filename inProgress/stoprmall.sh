@@ -1,3 +1,5 @@
+#!/usr/bin/env bash
+
 service jackett stop
 service lidarr stop
 service mylar stop
