@@ -22,7 +22,7 @@ rioDir=/DATA/tmp
 # root directory for all config
 rcloneCacheDir=/DATA/tmp
 # Your preferred PUID
-prefPUID=0
+prefPUID=1002
 # Your Preferred GUID
 prefGUID=0
 # Docker Command
