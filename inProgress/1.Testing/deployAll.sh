@@ -244,6 +244,7 @@ docker ${dCMD} --name jackett \
             sudo systemctl enable plex.service
             sudo systemctl enable radarr.service
             sudo systemctl enable sonarr.service
+            sudo systemctl enable ombi.service
 
             sudo systemctl start rclone-cache.service
             sudo systemctl start rclone-vfs.service
@@ -254,3 +255,4 @@ docker ${dCMD} --name jackett \
             sudo systemctl start plex.service
             sudo systemctl start radarr.service
             sudo systemctl start sonarr.service
+            sudo systemctl start ombi.service

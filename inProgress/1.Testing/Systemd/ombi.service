@@ -1,0 +1,12 @@
+[Unit]
+Description=ombi Container
+Requires=rclone-cache.service
+After=rclone-cache.service
+
+[Service]
+Restart=always
+ExecStart=/usr/bin/docker start -a ombi
+ExecStop=/usr/bin/docker stop -t 2 ombi
+
+[Install]
+WantedBy=local.target
