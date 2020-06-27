@@ -13,6 +13,8 @@ docker run --name rclone-cache \
 -v /opt/tmp/config:/config \
 -v /opt/tmp/cache:/cache \
 -v /DATA/tmp/rclone-cache:/data:shared \
+# -v /DATA/tmp/mergedhost:/mergedhost \
+# need to add a script in this docker to move files from mergedhost to the rclone mount cache:
 rclone/rclone mount cache: /data \
 --cache-chunk-path /cache/rclone/cache-backend \
 --cache-db-path /cache/rclone/cache-backend \
