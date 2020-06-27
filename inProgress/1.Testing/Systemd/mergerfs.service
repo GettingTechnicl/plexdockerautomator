@@ -1,11 +1,11 @@
 [Unit]
-Description=rclone-cache Container
-Requires=docker.service
-After=docker.service
+Description=mergerfs Container
+Requires=rclone-cache.service
+After=rclone-cache.service
 
 [Service]
 Restart=always
-ExecStartPre=-/bin/fusermount -u /DATA/tmp/rclone-cache
+ExecStartPre=-/bin/fusermount -u PATH
 ExecStart=/usr/bin/docker start -a rclone-cache
 ExecStop=/usr/bin/docker stop -t 2 rclone-cache
 
