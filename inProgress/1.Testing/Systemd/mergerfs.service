@@ -1,0 +1,13 @@
+[Unit]
+Description=mergerfs Container
+Requires=rclone-cache.service
+After=rclone-cache.service
+
+[Service]
+Restart=always
+ExecStartPre=-/bin/fusermount -u PATH
+ExecStart=/usr/bin/docker start -a rclone-cache
+ExecStop=/usr/bin/docker stop -t 2 rclone-cache
+
+[Install]
+WantedBy=local.target
