@@ -24,7 +24,7 @@ rdbDir=/opt/tmp
 # root directory specified for heavy IO
 rioDir=/DATA/tmp
 
-# root directory for all config
+# root directory for cache
 rcloneCacheDir=/DATA/tmp
 
 # Your preferred PUID (run "id youruser" to find your uid/guid)
