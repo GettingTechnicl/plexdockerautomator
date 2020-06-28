@@ -150,7 +150,7 @@ docker ${dCMD} --name rclone-sync \
 -e CRON_ABORT="0 6 * * *" \
 -e FORCE_SYNC=1 \
 -e CHECK_URL=https://hchk.io/hchk_uuid \
--e RCLONE_OPTS="--log-file /config/rclone-sync.log --log-level INFO" \
+-e RCLONE_OPTS="--log-file /root/.config/rclone/rclone-sync.log --log-level INFO" \
 -e SYNC_OPTS="-v --delete-after" \
 bcardiff/rclone
 
