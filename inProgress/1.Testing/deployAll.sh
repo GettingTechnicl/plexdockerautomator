@@ -139,7 +139,7 @@ rclone/rclone mount gdrive:Cloud /data \
 --log-file /config/rclone/rclone-vfs.log \
 --log-level INFO
 
-
+# https://github.com/robinostlund/docker-rclone-sync
 docker ${dCMD} --name rclone-sync \
 --restart=unless-stopped \
 --cap-add SYS_ADMIN \
@@ -148,7 +148,7 @@ docker ${dCMD} --name rclone-sync \
 -e PUID=${RcprefPUID} \
 -e GUID=${RcprefGUID} \
 -v ${rdbDir}/config/rclone/cache_config:/root/.config/rclone \
--v ${rioDir}/tmp_upload:/source \
+-v ${rioDir}/tmp_upload/test:/source \
 -e SYNC_SRC="/source" \
 -e SYNC_DEST="cache:test" \
 -e TZ=America/Chicago \
