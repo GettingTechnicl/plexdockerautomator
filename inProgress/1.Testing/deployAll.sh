@@ -141,7 +141,7 @@ docker ${dCMD} --name rclone-sync \
 --cap-add SYS_ADMIN \
 --device /dev/fuse \
 --security-opt apparmor:unconfined \
--v ${rdbDir}/config/rclone/cache_config:/config \
+-v ${rdbDir}/config/rclone/cache_config:~/rclone/.config \
 -v ${rioDir}/tmp_upload:/source \
 -e SYNC_SRC="/source" \
 -e SYNC_DEST="cache:test" \
@@ -150,8 +150,8 @@ docker ${dCMD} --name rclone-sync \
 -e CRON_ABORT="0 6 * * *" \
 -e FORCE_SYNC=1 \
 -e CHECK_URL=https://hchk.io/hchk_uuid \
--e RCLONE_OPTS="--delete-after --log-file /config/rclone-sync.log --log-level INFO" \
--e SYNC_OPTS=-v \
+-e RCLONE_OPTS="--log-file /config/rclone-sync.log --log-level INFO" \
+-e SYNC_OPTS="-v --delete-after" \
 bcardiff/rclone
 
 
