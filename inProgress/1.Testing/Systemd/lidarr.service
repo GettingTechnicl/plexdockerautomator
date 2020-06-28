@@ -1,7 +1,7 @@
 [Unit]
 Description=lidarr Container
 Requires=rclone-cache.service
-After=rclone-cache.service
+After=mergerfs.service
 
 [Service]
 Restart=always
