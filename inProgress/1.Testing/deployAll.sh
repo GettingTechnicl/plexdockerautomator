@@ -159,8 +159,6 @@ docker ${dCMD} --name mergerfs \
   --cap-add SYS_ADMIN \
   --device /dev/fuse \
   --restart unless-stopped \
-  -e PUID=${prefPUID} \
-  -e PGID=${prefGUID} \
   -e TZ=${tZone} \
   -v ${rioDir}/tmp_upload:/local \
   -v ${rioDir}/rclone-cache:/cloud_drive \
