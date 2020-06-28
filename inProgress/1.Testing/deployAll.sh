@@ -141,7 +141,7 @@ docker ${dCMD} --name rclone-sync \
 --cap-add SYS_ADMIN \
 --device /dev/fuse \
 --security-opt apparmor:unconfined \
--v ${rdbDir}/config/rclone/cache_config:~/rclone/.config \
+-v ${rdbDir}/config/rclone/cache_config:~/.config \
 -v ${rioDir}/tmp_upload:/source \
 -e SYNC_SRC="/source" \
 -e SYNC_DEST="cache:test" \
