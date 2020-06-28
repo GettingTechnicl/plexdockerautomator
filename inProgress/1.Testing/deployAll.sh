@@ -104,7 +104,6 @@ rclone/rclone mount cache: /data \
 --log-level INFO
 
 
-
 # Rclone VFS Config
 docker ${dCMD} --name rclone-vfs \
 --restart=unless-stopped \
@@ -135,6 +134,37 @@ rclone/rclone mount gdrive:Cloud /data \
 --rc-addr :5572 \
 --log-file /config/rclone/rclone-vfs.log \
 --log-level INFO
+
+
+docker run --name rclone-sync \
+-v ${rdbDir}/config/rclone/cache_config:/config \
+-v ${rioDir}/tmp_upload:/source \
+-e SYNC_SRC="/source" \
+-e SYNC_DEST="cache:" \
+-e TZ=America/Chicago \
+-e CRON="*/2 * * * *" \
+-e CRON_ABORT="0 6 * * *" \
+-e FORCE_SYNC=1 \
+-e CHECK_URL=https://hchk.io/hchk_uuid \
+bcardiff/rclone
+
+
+# merge local layer and cloud drive
+docker ${DCMD} --name mergerfs \
+  --security-opt apparmor:unconfined \
+  --cap-add SYS_ADMIN \
+  --device /dev/fuse \
+  --restart unless-stopped \
+  -e PUID=0 \
+  -e PGID=0 \
+  -e TZ=America/Chicago \
+  -v ${rioDir}/tmp_upload:/local \
+  -v ${rioDir}/rclone-cache:/cloud_drive \
+  -v ${rioDir}/mergerfs:/merged:shared \
+  hotio/mergerfs -o defaults,direct_io,sync_read,allow_other,category.action=all,category.create=ff \
+  /local:/cloud_drive \
+  /merged
+
 
 
 # Plex Config
