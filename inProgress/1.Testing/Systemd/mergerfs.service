@@ -5,9 +5,8 @@ After=rclone-cache.service
 
 [Service]
 Restart=always
-ExecStartPre=-/bin/fusermount -u PATH
-ExecStart=/usr/bin/docker start -a rclone-cache
-ExecStop=/usr/bin/docker stop -t 2 rclone-cache
+ExecStart=/usr/bin/docker start -a mergerfs
+ExecStop=/usr/bin/docker stop -t 2 mergerfs
 
 [Install]
 WantedBy=local.target
