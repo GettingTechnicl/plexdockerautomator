@@ -150,7 +150,8 @@ docker ${dCMD} --name rclone-sync \
 -e CRON_ABORT="0 6 * * *" \
 -e FORCE_SYNC=1 \
 -e CHECK_URL=https://hchk.io/hchk_uuid \
--e SYNC_OPTS="--delete-after --log-file /config/rclone/rclone-sync.log --log-level INFO" \
+-e RCLONE_OPTS="--delete-after --log-file /config/rclone/rclone-sync.log --log-level INFO" \
+-e SYNC_OPTS=-v
 bcardiff/rclone
 
 
@@ -163,9 +164,9 @@ docker ${dCMD} --name mergerfs \
   -e PUID=0 \
   -e PGID=0 \
   -e TZ=${tZone} \
-  -v /DATA/tmp/tmp_upload:/local \
-  -v /DATA/tmp/rclone-cache:/cloud_drive \
-  -v /DATA/tmp/mergerfs:/merged:shared \
+  -v ${rioDir}/tmp_upload:/local \
+  -v ${rioDir}/rclone-cache:/cloud_drive \
+  -v ${rioDir}/mergerfs:/merged:shared \
   hotio/mergerfs -o defaults,direct_io,sync_read,allow_other,category.action=all,category.create=ff \
   /local:/cloud_drive \
   /merged
