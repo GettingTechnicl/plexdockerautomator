@@ -37,3 +37,28 @@ rclone/rclone mount cache: /data \
 --rc \
 --rc-addr :5573 \
 --log-level INFO
+
+
+
+
+docker run --name rclone-sync \
+-v /opt/tmp/config/rclone/cache_config:/config \
+-v /DATA/tmp/tmp_upload:/source \
+-e SYNC_SRC="/source" \
+-e SYNC_DEST="cache:" \
+-e TZ=America/Chicago \
+-e CRON="*/2 * * * *" \
+-e CRON_ABORT="0 6 * * *" \
+-e FORCE_SYNC=1 \
+-e CHECK_URL=https://hchk.io/hchk_uuid \
+bcardiff/rclone
+
+
+
+
+
+
+
+
+*/5 * * * *
+0 2 * * *
