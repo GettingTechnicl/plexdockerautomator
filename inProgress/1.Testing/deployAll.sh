@@ -150,7 +150,7 @@ bcardiff/rclone
 
 
 # merge local layer and cloud drive
-docker ${DCMD} --name mergerfs \
+docker ${dCMD} --name mergerfs \
   --security-opt apparmor:unconfined \
   --cap-add SYS_ADMIN \
   --device /dev/fuse \
