@@ -84,7 +84,7 @@ docker ${dCMD} --name rclone-cache \
 rclone/rclone mount cache: /data \
 --cache-chunk-path /cache/rclone/cache-backend \
 --cache-db-path /cache/rclone/cache-backend \
---config /config/rclone/rclone-cache.conf \
+--config /config/rclone/cache_config/rclone.conf \
 --allow-non-empty \
 --allow-other \
 --attr-timeout=1s \
@@ -116,7 +116,7 @@ docker ${dCMD} --name rclone-vfs \
 -v ${rioDir}/rclone-vfs:/data:shared \
 rclone/rclone mount gdrive:Cloud /data \
 --cache-dir /cache/rclone-vfs \
---config /config/rclone/rclone-vfs.conf \
+--config /config/rclone/vfs_config/rclone.conf \
 --allow-other \
 --allow-non-empty \
 --buffer-size 256M \
