@@ -136,7 +136,7 @@ rclone/rclone mount gdrive:Cloud /data \
 --log-level INFO
 
 
-docker run --name rclone-sync \
+docker ${dCMD} --name rclone-sync \
 -v ${rdbDir}/config/rclone/cache_config:/config \
 -v ${rioDir}/tmp_upload:/source \
 -e SYNC_SRC="/source" \
