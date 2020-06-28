@@ -78,6 +78,8 @@ docker ${dCMD} --name rclone-cache \
 --cap-add SYS_ADMIN \
 --device /dev/fuse \
 --security-opt apparmor:unconfined \
+-e PUID=${RcprefPUID} \
+-e GUID=${RcprefGUID} \
 -v ${rdbDir}/config:/config \
 -v ${rcloneCacheDir}/cache:/cache \
 -v ${rioDir}/rclone-cache:/data:shared \
@@ -110,6 +112,8 @@ docker ${dCMD} --name rclone-vfs \
 --cap-add SYS_ADMIN \
 --device /dev/fuse \
 --security-opt apparmor:unconfined \
+-e PUID=${RcprefPUID} \
+-e GUID=${RcprefGUID} \
 -v ${rcloneCacheDir}/cache:/cache \
 -v ${rdbDir}/config:/config \
 -v ${rioDir}/rclone-vfs:/data:shared \
@@ -141,6 +145,8 @@ docker ${dCMD} --name rclone-sync \
 --cap-add SYS_ADMIN \
 --device /dev/fuse \
 --security-opt apparmor:unconfined \
+-e PUID=${RcprefPUID} \
+-e GUID=${RcprefGUID} \
 -v ${rdbDir}/config/rclone/cache_config:/root/.config/rclone \
 -v ${rioDir}/tmp_upload:/source \
 -e SYNC_SRC="/source" \
