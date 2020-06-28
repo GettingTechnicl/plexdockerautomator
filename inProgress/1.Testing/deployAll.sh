@@ -294,7 +294,10 @@ docker ${dCMD} --name jackett \
 
             sudo systemctl start rclone-cache.service
             sudo systemctl start rclone-vfs.service
+            sudo systemctl start rclone-sync.service
+            sleep 2
             sudo systemctl start mergerfs.service
+            sleep 2
             sudo systemctl start jackett.service
             sudo systemctl start lidarr.service
             sudo systemctl start mylar.service
@@ -303,4 +306,3 @@ docker ${dCMD} --name jackett \
             sudo systemctl start radarr.service
             sudo systemctl start sonarr.service
             sudo systemctl start ombi.service
-            sudo systemctl start rclone-sync.service
