@@ -137,6 +137,10 @@ rclone/rclone mount gdrive:Cloud /data \
 
 
 docker ${dCMD} --name rclone-sync \
+--restart=unless-stopped \
+--cap-add SYS_ADMIN \
+--device /dev/fuse \
+--security-opt apparmor:unconfined \
 -v ${rdbDir}/config/rclone/cache_config:/config \
 -v ${rioDir}/tmp_upload:/source \
 -e SYNC_SRC="/source" \
@@ -155,9 +159,9 @@ docker ${dCMD} --name mergerfs \
   --cap-add SYS_ADMIN \
   --device /dev/fuse \
   --restart unless-stopped \
-  -e PUID=0 \
-  -e PGID=0 \
-  -e TZ=America/Chicago \
+  -e PUID=${prefPUID} \
+  -e PGID=${prefGUID} \
+  -e TZ=${tZone} \
   -v ${rioDir}/tmp_upload:/local \
   -v ${rioDir}/rclone-cache:/cloud_drive \
   -v ${rioDir}/mergerfs:/merged:shared \
