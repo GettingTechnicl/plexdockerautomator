@@ -144,12 +144,13 @@ docker ${dCMD} --name rclone-sync \
 -v ${rdbDir}/config/rclone/cache_config:/config \
 -v ${rioDir}/tmp_upload:/source \
 -e SYNC_SRC="/source" \
--e SYNC_DEST="cache:" \
+-e SYNC_DEST="cache:test" \
 -e TZ=America/Chicago \
 -e CRON="*/2 * * * *" \
 -e CRON_ABORT="0 6 * * *" \
 -e FORCE_SYNC=1 \
 -e CHECK_URL=https://hchk.io/hchk_uuid \
+-e SYNC_OPTS="--delete-after" \
 bcardiff/rclone
 
 
