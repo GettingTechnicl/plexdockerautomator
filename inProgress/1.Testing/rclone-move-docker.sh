@@ -1,3 +1,9 @@
+#!/usr/bin/env bash
+
+
+##https://hub.docker.com/r/pfidr/rclone
+
+
 docker run --rm -it \
 -v $(pwd)/config:/config \
 -v /DATA/tmp/tmp_upload:/source \
