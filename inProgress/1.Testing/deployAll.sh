@@ -262,6 +262,7 @@ docker ${dCMD} --name jackett \
             -e PGID=${prefGUID} \
             -e TZ=${tZone} \
             -v ${rdbDir}/config/radarr:/config \
+            -v ${rdbdir}/config/sma:/usr/local/sma/config \
             -v ${rioDir}/rclone-cache/Movies:/movies \
             -v ${rioDir}/rclone-cache/Stand_Ups:/standups \
             -v ${rioDir}/Downloads/radarr/nzbget:/downloads \
@@ -277,8 +278,8 @@ docker ${dCMD} --name jackett \
            -e PUID=${prefPUID} \
            -e PGID=${prefGUID} \
            -e TZ=${tZone} \
-           -v ${rdbDir}/config/sma:/usr/local/sma/config \
            -v ${rdbDir}/config/sonarr:/config \
+           -v ${rdbDir}/config/sma:/usr/local/sma/config \
            -v ${rioDir}/rclone-cache/Tv_Shows:/tv \
            -v ${rioDir}/Downloads/sonarr/nzbget:/downloads \
            mdhiggins/sonarr-sma:preview
