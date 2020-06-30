@@ -300,7 +300,6 @@ docker ${dCMD} --name jackett \
             sudo systemctl enable radarr.service
             sudo systemctl enable sonarr.service
             sudo systemctl enable ombi.service
-
             sudo systemctl start rclone-cache.service
             sudo systemctl start rclone-vfs.service
             sudo systemctl start rclone-sync.service
