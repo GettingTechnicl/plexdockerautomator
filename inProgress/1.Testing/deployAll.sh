@@ -262,10 +262,10 @@ docker ${dCMD} --name jackett \
             -e PGID=${prefGUID} \
             -e TZ=${tZone} \
             -v ${rdbDir}/config/radarr:/config \
-            -v ${rdbdir}/config/sma:/usr/local/sma/config \
+            -v ${rdbDir}/config/sma:/usr/local/sma/config \
             -v ${rioDir}/rclone-cache/Movies:/movies \
             -v ${rioDir}/rclone-cache/Stand_Ups:/standups \
-            -v ${rioDir}/Downloads/radarr/nzbget:/downloads \
+            -v ${rioDir}/Downloads/radarr/nzbget:/downloads/radarr/nzbget \
             mdhiggins/radarr-sma:preview
 
 
