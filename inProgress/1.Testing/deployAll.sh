@@ -281,7 +281,7 @@ docker ${dCMD} --name jackett \
            -v ${rdbDir}/config/sonarr:/config \
            -v ${rdbDir}/config/sma:/usr/local/sma/config \
            -v ${rioDir}/rclone-cache/Tv_Shows:/tv \
-           -v ${rioDir}/Downloads/sonarr/nzbget:/downloads \
+           -v ${rioDir}/Downloads/sonarr/nzbget:/downloads/sonarr/nzbget \
            mdhiggins/sonarr-sma:preview
 
 
