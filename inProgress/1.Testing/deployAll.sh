@@ -232,7 +232,7 @@ docker ${dCMD} --name jackett \
       # Nzbget config
       docker ${dCMD} --name nzbget \
         --network=host \
-        -e ADVERTISE_IP="${adv_Ip}:6790/" \
+        -e ADVERTISE_IP="${adv_Ip}:6789/" \
         -e PUID=${prefPUID} \
         -e PGID=${prefGUID} \
         -e TZ=${tZone} \
