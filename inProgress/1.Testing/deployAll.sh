@@ -220,7 +220,7 @@ docker ${dCMD} --name lidarr \
   -e PGID=${prefGUID} \
   -e TZ=${tZone} \
   -v ${rdbDir}/config/lidarr:/config \
-  -v ${rioDir}/rclone-cache/Music:/music \
+  -v ${rioDir}mergerfsMusic:/music \
   -v ${rioDir}/Downloads/lidarr/nzbget:/downloads \
   linuxserver/lidarr
 
@@ -236,7 +236,7 @@ docker ${dCMD} --name mylar \
   -e PGID=${prefGUID} \
   -e TZ=${tZone} \
   -v ${rdbDir}/config:/config \
-  -v ${rioDir}/rclone-cache/Comics:/comics \
+  -v ${rioDir}mergerfsComics:/comics \
   -v ${rioDir}/Downloads/mylar/nzbget:/downloads \
   hotio/mylar3
 
@@ -285,8 +285,8 @@ docker ${dCMD} --name radarr \
   -e TZ=${tZone} \
   -v ${rdbDir}/config/radarr:/config \
   -v ${rdbDir}/config/sma:/usr/local/sma/config \
-  -v ${rioDir}/rclone-cache/Movies:/movies \
-  -v ${rioDir}/rclone-cache/Stand_Ups:/standups \
+  -v ${rioDir}mergerfsMovies:/movies \
+  -v ${rioDir}mergerfsStand_Ups:/standups \
   -v ${rioDir}/Downloads/radarr/nzbget:/downloads/radarr/nzbget \
   mdhiggins/radarr-sma:preview
 
@@ -304,7 +304,7 @@ docker ${dCMD} --name sonarr \
   -e TZ=${tZone} \
   -v ${rdbDir}/config/sonarr:/config \
   -v ${rdbDir}/config/sma:/usr/local/sma/config \
-  -v ${rioDir}/rclone-cache/Tv_Shows:/tv \
+  -v ${rioDir}mergerfsTv_Shows:/tv \
   -v ${rioDir}/Downloads/sonarr/nzbget:/downloads/sonarr/nzbget \
   mdhiggins/sonarr-sma:preview
 
