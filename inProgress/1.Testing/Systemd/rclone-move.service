@@ -1,0 +1,13 @@
+[Unit]
+Description=rclone-move Container
+Requires=docker.service
+After=docker.service
+
+[Service]
+Restart=always
+ExecStartPre=-/bin/fusermount -u /DATA/tmp/tmp_upload
+ExecStart=/usr/bin/docker start -a rclone-move
+ExecStop=/usr/bin/docker stop -t 2 rclone-move
+
+[Install]
+WantedBy=local.target

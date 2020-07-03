@@ -314,7 +314,7 @@ docker ${dCMD} --name sonarr \
 sudo mv ${target_PWD}/Systemd/* /etc/systemd/system/
 sudo systemctl enable rclone-cache.service
 sudo systemctl enable rclone-vfs.service
-sudo systemctl enable rclone-sync.service
+sudo systemctl enable rclone-move.service
 sudo systemctl enable mergerfs.service
 sudo systemctl enable jackett.service
 sudo systemctl enable lidarr.service
@@ -326,7 +326,7 @@ sudo systemctl enable sonarr.service
 sudo systemctl enable ombi.service
 sudo systemctl start rclone-cache.service
 sudo systemctl start rclone-vfs.service
-sudo systemctl start rclone-sync.service
+sudo systemctl start rclone-move.service
 sleep 2
 sudo systemctl start mergerfs.service
 sleep 2
