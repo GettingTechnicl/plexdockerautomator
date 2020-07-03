@@ -290,8 +290,8 @@ docker ${dCMD} --name radarr \
   -e TZ=${tZone} \
   -v ${rdbDir}/config/radarr:/config \
   -v ${rdbDir}/config/sma:/usr/local/sma/config \
-  -v ${rioDir}/mergerfs/Movies:/movies \
-  -v ${rioDir}/mergerfs/Stand_Ups:/standups \
+  -v ${rioDir}/rclone-vfs/Movies:/movies \
+  -v ${rioDir}/rclone-vfs/Stand_Ups:/standups \
   -v ${rioDir}/Downloads/radarr/nzbget:/downloads/radarr/nzbget \
   mdhiggins/radarr-sma:preview
 
