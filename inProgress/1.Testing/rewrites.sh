@@ -1,5 +1,9 @@
 #!/usr/bin/env bash
 
+target_PWD="$(readlink -f .)"
+
+
+
 # Copies SystemD service scripts to systemD
 sudo cp -a ${target_PWD}/Systemd/. ${target_PWD}/workspace
 #sudo sed -i "s|CACHEPATH|${rioDir}|g" ${target_PWD}/workspace/rclone-cache.service
