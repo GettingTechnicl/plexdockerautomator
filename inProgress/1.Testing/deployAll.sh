@@ -10,7 +10,7 @@ target_PWD="$(readlink -f .)"
 
 
 # TimeZone
-tZone="America/Chicago"
+tZone=America/Chicago
 
 # Your Plex claim Token
 cToken="<claimToken>"
@@ -40,7 +40,7 @@ RcprefPUID=0
 RcprefGUID=0
 
 # Docker Command
-dCMD="create"
+dCMD=create
 
 # Directories Required
 sudo mkdir -p /mnt/ramdisk
@@ -80,6 +80,7 @@ docker ${dCMD} --name rclone-cache \
   --network=host \
   -e PUID=${RcprefPUID} \
   -e GUID=${RcprefGUID} \
+  -e TZ=${tZone} \
   -v ${rdbDir}/config:/config \
   -v ${rcloneCacheDir}/cache:/cache \
   -v ${rioDir}/rclone-cache:/data:shared \
@@ -114,6 +115,7 @@ docker ${dCMD} --name rclone-vfs \
   --network=host \
   -e PUID=${RcprefPUID} \
   -e GUID=${RcprefGUID} \
+  -e TZ=${tZone} \
   -v ${rcloneCacheDir}/cache:/cache \
   -v ${rdbDir}/config:/config \
   -v ${rioDir}/rclone-vfs:/data:shared \
@@ -150,6 +152,7 @@ docker ${dCMD} --name rclone-move \
   --network=host \
   -e PUID=${RcprefPUID} \
   -e GUID=${RcprefGUID} \
+  -e TZ=${tZone} \
   -v ${rdbDir}/config/rclone/cache_config:/root/.config/rclone \
   -v ${rioDir}/tmp_upload:/source \
   -e RCLONE_CMD="move" \
