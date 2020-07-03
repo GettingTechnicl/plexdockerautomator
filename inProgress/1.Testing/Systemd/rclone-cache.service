@@ -5,7 +5,7 @@ After=docker.service
 
 [Service]
 Restart=always
-ExecStartPre=-/bin/fusermount -u /DATA/tmp/rclone-cache
+ExecStartPre=-/bin/fusermount -u CACHEPATH/rclone-cache
 ExecStart=/usr/bin/docker start -a rclone-cache
 ExecStop=/usr/bin/docker stop -t 2 rclone-cache
 
