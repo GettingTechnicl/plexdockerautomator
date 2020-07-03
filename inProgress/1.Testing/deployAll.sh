@@ -156,7 +156,8 @@ docker ${dCMD} --name rclone-move \
   -e TZ="America/Chicago" \
   -e CRON="*/2 * * * *" \
   -e CRON_ABORT="0 6 * * *" \
-  -e RCLONE_OPTS="--log-file /root/.config/rclone/rclone-sync.log --log-level INFO" \
+  -e SYNC_OPTS=""
+  -e RCLONE_OPTS="--log-file /root/.config/rclone-move.log --log-level INFO" \
   -e FORCE_SYNC=1 \
   pfidr/rclone
 
