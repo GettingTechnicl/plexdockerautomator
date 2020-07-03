@@ -5,6 +5,7 @@ After=mergerfs.service
 
 [Service]
 Restart=always
+ExecStartPre=/bin/sleep 5
 ExecStart=/usr/bin/docker start -a sonarr
 ExecStop=/usr/bin/docker stop -t 2 sonarr
 
