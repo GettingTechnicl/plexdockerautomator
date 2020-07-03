@@ -156,7 +156,7 @@ docker ${dCMD} --name rclone-move \
   -e SYNC_SRC="/source" \
   -e SYNC_DEST="gdrive:Cloud" \
   -e TZ="America/Chicago" \
-  -e CRON="*/2 * * * *" \
+  -e CRON="*/5 * * * *" \
   -e CRON_ABORT="0 6 * * *" \
   -e RCLONE_OPTS="--log-file /root/.config/rclone-move.log --delete-empty-src-dirs" \
   -e FORCE_SYNC=1 \
