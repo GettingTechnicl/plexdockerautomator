@@ -149,7 +149,7 @@ docker ${dCMD} --name rclone-move \
   -e PUID=${RcprefPUID} \
   -e GUID=${RcprefGUID} \
   -v ${rdbDir}/config/rclone/cache_config:/root/.config/rclone \
-  -v ${rioDir}/tmp_upload/test:/source \
+  -v ${rioDir}/tmp_upload:/source \
   -e RCLONE_CMD="move" \
   -e SYNC_SRC="/source" \
   -e SYNC_DEST="gdrive:Cloud" \
