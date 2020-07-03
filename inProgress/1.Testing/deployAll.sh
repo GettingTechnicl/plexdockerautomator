@@ -99,7 +99,7 @@ docker ${dCMD} --name rclone-cache \
   --daemon-timeout=10m \
   --dir-cache-time=160h \
   --drive-use-trash=false \
-  --drive-chunk-size 64M \
+  --drive-chunk-size 128M \
   --fast-list \
   --log-file /config/rclone/rclone-cache.log \
   --rc \
@@ -124,9 +124,9 @@ docker ${dCMD} --name rclone-vfs \
   --config /config/rclone/vfs_config/rclone.conf \
   --allow-other \
   --allow-non-empty \
-  --buffer-size 256M \
+  --buffer-size 1024M \
   --dir-cache-time 96h \
-  --drive-chunk-size 32M \
+  --drive-chunk-size 256M \
   --fast-list \
   --log-level DEBUG \
   --rc \
