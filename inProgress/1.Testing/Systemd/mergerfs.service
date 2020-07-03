@@ -5,7 +5,7 @@ After=rclone-cache.service
 
 [Service]
 Restart=always
-ExecStartPre=-/bin/fusermount -u MERGERPATH/mergerfs
+ExecStartPre=-/bin/fusermount -uz MERGERPATH/mergerfs
 ExecStartPre=/bin/sleep 5
 ExecStart=/usr/bin/docker start -a mergerfs
 ExecStop=/usr/bin/docker stop -t 2 mergerfs
