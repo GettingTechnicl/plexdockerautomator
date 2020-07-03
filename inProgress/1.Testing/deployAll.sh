@@ -142,7 +142,7 @@ docker ${dCMD} --name rclone-vfs \
 
 # https://github.com/robinostlund/docker-rclone-sync
 
-#rcloneopts should have log level but errors about -v, 
+#rcloneopts should have log level but errors about -v,
 docker ${dCMD} --name rclone-move \
   --cap-add SYS_ADMIN \
   --device /dev/fuse \
@@ -158,8 +158,7 @@ docker ${dCMD} --name rclone-move \
   -e TZ="America/Chicago" \
   -e CRON="*/2 * * * *" \
   -e CRON_ABORT="0 6 * * *" \
-  -e SYNC_OPTS="-v" \
-  -e RCLONE_OPTS="--log-file /root/.config/rclone-move.log" \
+  -e RCLONE_OPTS="--log-file /root/.config/rclone-move.log --delete-empty-src-dirs" \
   -e FORCE_SYNC=1 \
   pfidr/rclone
 
