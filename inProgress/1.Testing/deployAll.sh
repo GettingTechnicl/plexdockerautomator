@@ -141,6 +141,8 @@ docker ${dCMD} --name rclone-vfs \
 
 
 # https://github.com/robinostlund/docker-rclone-sync
+
+#rcloneopts should have log level but errors about -v, 
 docker ${dCMD} --name rclone-move \
   --cap-add SYS_ADMIN \
   --device /dev/fuse \
