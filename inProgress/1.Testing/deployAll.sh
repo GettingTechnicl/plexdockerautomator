@@ -124,22 +124,21 @@ docker ${dCMD} --name rclone-vfs \
   --config /config/rclone/vfs_config/rclone.conf \
   --allow-other \
   --allow-non-empty \
-  --buffer-size 1024M \
-  --dir-cache-time 96h \
-  --drive-chunk-size 256M \
   --fast-list \
-  --log-level DEBUG \
+  --log-level INFO \
   --rc \
   --timeout 1h \
   --tpslimit 4 \
   --umask 002 \
   --vfs-cache-mode writes \
   --vfs-read-chunk-size 128M \
-  --vfs-read-chunk-size-limit off \
   --rc \
   --rc-addr :5572 \
   --log-file /config/rclone/rclone-vfs.log \
   --log-level INFO
+
+
+
 
 
 # https://github.com/robinostlund/docker-rclone-sync
@@ -161,7 +160,7 @@ docker ${dCMD} --name rclone-move \
   -e TZ="America/Chicago" \
   -e CRON="*/5 * * * *" \
   -e CRON_ABORT="0 6 * * *" \
-  -e RCLONE_OPTS="--log-file /root/.config/rclone-move.log --delete-empty-src-dirs" \
+  -e RCLONE_OPTS="--log-file /root/.config/rclone-move.log" \
   -e FORCE_SYNC=1 \
   pfidr/rclone
 
