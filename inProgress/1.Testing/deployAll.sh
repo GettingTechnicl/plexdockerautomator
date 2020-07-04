@@ -157,12 +157,12 @@ docker ${dCMD} --name rclone-move \
   -e RCLONE_CMD="move" \
   -e SYNC_SRC="/source" \
   -e SYNC_DEST="gdrive:Cloud" \
-  -e TZ="America/Chicago" \
   -e CRON="*/5 * * * *" \
   -e CRON_ABORT="0 6 * * *" \
-  -e RCLONE_OPTS="--log-file /root/.config/rclone-move.log" \
+  -e RCLONE_OPTS="--transfers=5 --log-file /root/.config/rclone/rclone-move.log" \
   -e FORCE_SYNC=1 \
   pfidr/rclone
+
 
 
 # merge local layer and cloud drive
