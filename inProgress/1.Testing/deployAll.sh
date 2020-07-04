@@ -124,6 +124,8 @@ docker ${dCMD} --name rclone-vfs \
   --config /config/rclone/vfs_config/rclone.conf \
   --allow-other \
   --allow-non-empty \
+  --buffer-size 100G \
+  --cache-dir /cache/rclone-vfs \
   --fast-list \
   --log-level INFO \
   --rc \
@@ -131,7 +133,9 @@ docker ${dCMD} --name rclone-vfs \
   --tpslimit 4 \
   --umask 002 \
   --vfs-cache-mode writes \
-  --vfs-read-chunk-size 128M \
+  --vfs-cache-max-size 100G \
+  --vfs-read-chunk-size-limit 500M \
+  --vfs-read-chunk-size 100M \
   --rc \
   --rc-addr :5572 \
   --log-file /config/rclone/rclone-vfs.log \
