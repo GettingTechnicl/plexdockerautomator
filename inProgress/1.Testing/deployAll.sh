@@ -93,13 +93,13 @@ docker ${dCMD} --name rclone-cache \
   --attr-timeout=1s \
   --buffer-size=0M \
   --cache-chunk-size=64M \
-  --cache-chunk-total-size=1000G \
+  --cache-chunk-total-size=2000G \
   --cache-info-age=168h \
   --cache-workers=6 \
   --daemon-timeout=10m \
   --dir-cache-time=160h \
   --drive-use-trash=false \
-  --drive-chunk-size 128M \
+  --drive-chunk-size=64M \
   --fast-list \
   --log-file /config/rclone/rclone-cache.log \
   --rc \
@@ -293,8 +293,8 @@ docker ${dCMD} --name radarr \
   -e TZ=${tZone} \
   -v ${rdbDir}/config/radarr:/config \
   -v ${rdbDir}/config/sma:/usr/local/sma/config \
-  -v ${rioDir}/rclone-vfs/Movies:/movies \
-  -v ${rioDir}/rclone-vfs/Stand_Ups:/standups \
+  -v ${rioDir}/mergerfs/Movies:/movies \
+  -v ${rioDir}/mergerfs/Stand_Ups:/standups \
   -v ${rioDir}/Downloads/radarr/nzbget:/downloads/radarr/nzbget \
   mdhiggins/radarr-sma:preview
 
