@@ -163,7 +163,7 @@ docker ${dCMD} --name rclone-move \
   -e SYNC_DEST="gdrive:Cloud" \
   -e CRON="*/5 * * * *" \
   -e CRON_ABORT="0 6 * * *" \
-  -e RCLONE_OPTS="--transfers=5 --min-age 2h --exclude *.{mp4,original} --log-file /root/.config/rclone/rclone-move.log" \
+  -e RCLONE_OPTS="--transfers=5 --min-age 2h --exclude *.{mkv,original} --log-file /root/.config/rclone/rclone-move.log" \
   -e FORCE_SYNC=1 \
   pfidr/rclone
 
