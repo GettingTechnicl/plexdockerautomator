@@ -28,7 +28,7 @@ rioDir=/DATA/tmp
 rcloneCacheDir=/DATA/tmp
 
 # Your preferred PUID (run "id youruser" to find your uid/guid)
-prefPUID=1002
+prefPUID=0
 
 # Your Preferred GUID
 prefGUID=0
