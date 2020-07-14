@@ -119,7 +119,6 @@ docker ${dCMD} --name rclone-vfs \
   -v ${rcloneCacheDir}/cache:/cache \
   -v ${rdbDir}/config:/config \
   -v ${rioDir}/rclone-vfs:/data:shared \
-  -v ${rdbDir}/config/rclone_via_vfs_docker:/usr/local/bin:shared \
   rclone/rclone mount gdrive:Cloud /data \
   --cache-dir /cache/rclone-vfs \
   --config /config/rclone/vfs_config/rclone.conf \
