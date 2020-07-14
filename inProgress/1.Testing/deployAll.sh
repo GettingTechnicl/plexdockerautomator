@@ -34,10 +34,10 @@ prefPUID=1002
 prefGUID=1002
 
 # Rclone preferred PUID (rclone must be run as root)
-RcprefPUID=1002
+RcprefPUID=0
 
 # Rclone Preferred GUID
-RcprefGUID=1002
+RcprefGUID=0
 
 # Docker Command
 dCMD=create
