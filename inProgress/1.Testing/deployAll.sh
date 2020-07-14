@@ -28,16 +28,16 @@ rioDir=/DATA/tmp
 rcloneCacheDir=/DATA/tmp
 
 # Your preferred PUID (run "id youruser" to find your uid/guid)
-prefPUID=0
+prefPUID=1002
 
 # Your Preferred GUID
-prefGUID=0
+prefGUID=1002
 
 # Rclone preferred PUID (rclone must be run as root)
-RcprefPUID=0
+RcprefPUID=1002
 
 # Rclone Preferred GUID
-RcprefGUID=0
+RcprefGUID=1002
 
 # Docker Command
 dCMD=create
@@ -119,6 +119,7 @@ docker ${dCMD} --name rclone-vfs \
   -v ${rcloneCacheDir}/cache:/cache \
   -v ${rdbDir}/config:/config \
   -v ${rioDir}/rclone-vfs:/data:shared \
+  -v ${rdbDir}/config/rclone_via_vfs_docker:/usr/local/bin:shared \
   rclone/rclone mount gdrive:Cloud /data \
   --cache-dir /cache/rclone-vfs \
   --config /config/rclone/vfs_config/rclone.conf \
