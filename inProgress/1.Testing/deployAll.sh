@@ -31,7 +31,7 @@ rcloneCacheDir=/DATA/tmp
 prefPUID=1002
 
 # Your Preferred GUID
-prefGUID=1002
+prefGUID=0
 
 # Rclone preferred PUID (rclone must be run as root)
 RcprefPUID=0
