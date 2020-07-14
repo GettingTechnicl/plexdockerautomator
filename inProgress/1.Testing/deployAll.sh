@@ -188,18 +188,20 @@ docker ${dCMD} --name mergerfs \
 
 
 # Plex Config
-docker ${dCMD} --name plex \
-  --cap-add SYS_ADMIN \
-  --device /dev/fuse \
-  --security-opt apparmor:unconfined \
-  --network=host \
-  -e TZ=${tZone} \
-  -e PLEX_CLAIM=${cToken} \
-  -e ADVERTISE_IP="${adv_Ip}:32400" \
-  -v ${rdbDir}/config/plexdb:/config \
-  -v /mnt/ramdisk:/transcode \
-  -v ${rioDir}/rclone-vfs:/data \
-  plexinc/pms-docker
+  docker ${dCMD} --name plex \
+    --cap-add SYS_ADMIN \
+    --device /dev/fuse \
+    --security-opt apparmor:unconfined \
+    --network=host \
+    -e TZ=${tZone} \
+    -e PLEX_CLAIM=${cToken} \
+    -e ADVERTISE_IP="${adv_Ip}:32400/" \
+    -e PUID=${prefPUID} \
+    -e PGID=${prefGUID} \
+    -v ${rdbDir}/config/plexdb:/config \
+    -v /mnt/ramdisk:/transcode \
+    -v ${rioDir}/rclone-vfs:/data \
+    horjulf/plex_autoscan
 
 
 # Jackett Config
