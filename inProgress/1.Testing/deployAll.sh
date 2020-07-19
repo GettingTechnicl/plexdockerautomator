@@ -48,7 +48,7 @@ sudo mkdir -p ${rdbDir}
 sudo mkdir -p ${rcloneCacheDir}/cache/rclone
 sudo mkdir -p ${rdbDir}/config
 sudo mkdir -p ${rdbDir}/config/plexdb
-sudo mkdir -p ${rdbDir}/config/Lidarr
+sudo mkdir -p ${rdbDir}/config/lidarr
 sudo mkdir -p ${rdbDir}/config/nzbget
 sudo mkdir -p ${rdbDir}/config/ombi
 sudo mkdir -p ${rdbDir}/config/radarr
