@@ -279,7 +279,7 @@ docker ${dCMD} --name nzbget \
     -e TZ=${tZone} \
     -e WEBUI_PORT=9090 \
     -v ${rdbDir}/config/qbittorrent:/config \
-    -v ${rioDir}/Downloads/sonarr/qbittorrent:/downloads \
+    -v ${rioDir}/Downloads:/downloads \
     linuxserver/qbittorrent
 
 
@@ -312,7 +312,7 @@ docker ${dCMD} --name radarr \
   -v ${rdbDir}/config/sma:/usr/local/sma/config \
   -v ${rioDir}/mergerfs/Movies:/movies \
   -v ${rioDir}/mergerfs/Stand_Ups:/standups \
-  -v ${rioDir}/Downloads/radarr:/downloads \
+  -v ${rioDir}/Downloads:/downloads \
   mdhiggins/radarr-sma:preview
 
 
@@ -330,7 +330,7 @@ docker ${dCMD} --name sonarr \
   -v ${rdbDir}/config/sonarr:/config \
   -v ${rdbDir}/config/sma:/usr/local/sma/config \
   -v ${rioDir}/mergerfs/Tv_Shows:/tv \
-  -v ${rioDir}/Downloads/sonarr:/downloads \
+  -v ${rioDir}/Downloads:/downloads \
   mdhiggins/sonarr-sma:preview
 
 
