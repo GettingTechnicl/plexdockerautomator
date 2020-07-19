@@ -28,16 +28,16 @@ rioDir=/DATA/tmp
 rcloneCacheDir=/DATA/tmp
 
 # Your preferred PUID (run "id youruser" to find your uid/guid)
-prefPUID=1002
+prefPUID=0
 
 # Your Preferred GUID
-prefGUID=1002
+prefGUID=0
 
 # Rclone preferred PUID (rclone must be run as root)
 RcprefPUID=0
 
 # Rclone Preferred GUID
-RcprefGUID=1002
+RcprefGUID=0
 
 # Docker Command
 dCMD=create
@@ -269,6 +269,9 @@ docker ${dCMD} --name nzbget \
 
   docker ${dCMD} --name qbittorrent \
     --network=container:vpn \
+    --cap-add SYS_ADMIN \
+    --device /dev/fuse \
+    --security-opt apparmor:unconfined \
     -e PUID=${prefPUID} \
     -e PGID=${prefGUID} \
     -e TZ=${tZone} \
