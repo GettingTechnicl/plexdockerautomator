@@ -26,6 +26,8 @@ rioDir=/DATA/tmp
 
 # root directory for cache
 rcloneCacheDir=/DATA/tmp
+rcloneCacheSize=500G
+rcloneVfsCacheSize=100G
 
 # Your preferred PUID (run "id youruser" to find your uid/guid)
 prefPUID=1002
@@ -93,7 +95,7 @@ docker ${dCMD} --name rclone-cache \
   --attr-timeout=1s \
   --buffer-size=0M \
   --cache-chunk-size=64M \
-  --cache-chunk-total-size=2000G \
+  --cache-chunk-total-size=${rcloneCacheSize} \
   --cache-info-age=168h \
   --cache-workers=6 \
   --daemon-timeout=10m \
@@ -124,7 +126,7 @@ docker ${dCMD} --name rclone-vfs \
   --config /config/rclone/vfs_config/rclone.conf \
   --allow-other \
   --allow-non-empty \
-  --buffer-size 100G \
+  --buffer-size ${rcloneVfsCacheSize} \
   --cache-dir /cache/rclone-vfs \
   --fast-list \
   --log-level INFO \
@@ -133,7 +135,7 @@ docker ${dCMD} --name rclone-vfs \
   --tpslimit 4 \
   --umask 002 \
   --vfs-cache-mode writes \
-  --vfs-cache-max-size 100G \
+  --vfs-cache-max-size ${rcloneVfsCacheSize} \
   --vfs-read-chunk-size-limit 500M \
   --vfs-read-chunk-size 100M \
   --rc \
