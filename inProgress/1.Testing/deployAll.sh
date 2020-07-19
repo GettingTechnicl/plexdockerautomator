@@ -26,7 +26,7 @@ rioDir=/DATA/tmp
 
 # root directory for cache
 rcloneCacheDir=/DATA/tmp
-rcloneCacheSize=500G
+rcloneCacheSize=1000G
 rcloneVfsCacheSize=100G
 
 # Your preferred PUID (run "id youruser" to find your uid/guid)
