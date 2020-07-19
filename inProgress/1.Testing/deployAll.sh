@@ -28,16 +28,16 @@ rioDir=/DATA/tmp
 rcloneCacheDir=/DATA/tmp
 
 # Your preferred PUID (run "id youruser" to find your uid/guid)
-prefPUID=0
+prefPUID=1002
 
 # Your Preferred GUID
-prefGUID=0
+prefGUID=1002
 
 # Rclone preferred PUID (rclone must be run as root)
 RcprefPUID=0
 
 # Rclone Preferred GUID
-RcprefGUID=0
+RcprefGUID=1002
 
 # Docker Command
 dCMD=create
@@ -267,6 +267,16 @@ docker ${dCMD} --name nzbget \
   linuxserver/nzbget
 
 
+  docker ${dCMD} --name qbittorrent \
+    --network=container:vpn \
+    -e PUID=${prefPUID} \
+    -e PGID=${prefGUID} \
+    -e TZ=${tZone} \
+    -e WEBUI_PORT=9090 \
+    -v ${rdbDir}/config/qbittorrent:/config \
+    -v ${rioDir}/Downloads/sonarr/qbittorrent:/downloads \
+    linuxserver/qbittorrent
+
 
 #Ombi config
 docker ${dCMD} --name ombi \
@@ -339,6 +349,7 @@ sudo systemctl enable plex.service
 sudo systemctl enable radarr.service
 sudo systemctl enable sonarr.service
 sudo systemctl enable ombi.service
+sudo systemctl enable qbittorrent.service
 sudo systemctl start rclone-cache.service
 sudo systemctl start rclone-vfs.service
 sudo systemctl start rclone-move.service
@@ -351,3 +362,4 @@ sudo systemctl start plex.service
 sudo systemctl start radarr.service
 sudo systemctl start sonarr.service
 sudo systemctl start ombi.service
+sudo systemctl start qbittorrent.service

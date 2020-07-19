@@ -1,0 +1,12 @@
+[Unit]
+Description=qbittorrent Container
+Requires=docker.service
+After=docker.service
+
+[Service]
+Restart=always
+ExecStart=/usr/bin/docker start -a qbittorrent
+ExecStop=/usr/bin/docker stop -t 2 qbittorrent
+
+[Install]
+WantedBy=local.target
