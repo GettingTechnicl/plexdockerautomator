@@ -245,7 +245,7 @@ docker ${dCMD} --name mylar \
   -e PUID=${prefPUID} \
   -e PGID=${prefGUID} \
   -e TZ=${tZone} \
-  -v ${rdbDir}/config:/config \
+  -v ${rdbDir}/config/mylar:/config \
   -v ${rioDir}/mergerfs/Comics:/comics \
   -v ${rioDir}/Downloads/mylar/nzbget:/downloads \
   hotio/mylar3
