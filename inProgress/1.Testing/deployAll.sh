@@ -30,16 +30,16 @@ rcloneCacheSize=1000G
 rcloneVfsCacheSize=100G
 
 # Your preferred PUID (run "id youruser" to find your uid/guid)
-prefPUID=1002
+prefPUID=0
 
 # Your Preferred GUID
-prefGUID=1002
+prefGUID=0
 
 # Rclone preferred PUID (rclone must be run as root)
 RcprefPUID=0
 
 # Rclone Preferred GUID
-RcprefGUID=1002
+RcprefGUID=0
 
 # Docker Command
 dCMD=create
