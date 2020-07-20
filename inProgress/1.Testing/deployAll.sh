@@ -67,7 +67,7 @@ sudo mkdir -p ${rioDir}/Downloads/radarr/nzbget
 sudo mkdir -p ${rioDir}/Downloads/sonarr/nzbget
 
 sudo chmod -R 777 ${rioDir}
-sudo chown -R root.root ${rdbDir}
+sudo chown -R plex.plex ${rdbDir}
 chmod g+s -R ${rioDir}
 chmod g+s -R ${rdbDir}
 
