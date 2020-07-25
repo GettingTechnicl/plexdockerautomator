@@ -67,7 +67,7 @@ sudo mkdir -p ${rioDir}/Downloads/radarr/nzbget
 sudo mkdir -p ${rioDir}/Downloads/sonarr/nzbget
 
 sudo chmod -R 777 ${rioDir}
-sudo chown -R plex.plex ${rdbDir}
+sudo chown -R root.root ${rdbDir}
 chmod g+s -R ${rioDir}
 chmod g+s -R ${rdbDir}
 
@@ -163,7 +163,7 @@ docker ${dCMD} --name rclone-move \
   -e RCLONE_CMD="move" \
   -e SYNC_SRC="/source" \
   -e SYNC_DEST="gdrive:Cloud" \
-  -e CRON="*/5 * * * *" \
+  -e CRON="*/15 * * * *" \
   -e CRON_ABORT="0 6 * * *" \
   -e RCLONE_OPTS="--transfers=5 --min-age 2h --exclude *.{mkv,avi,original} --log-file /root/.config/rclone/rclone-move.log" \
   -e FORCE_SYNC=1 \
