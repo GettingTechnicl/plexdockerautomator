@@ -25,6 +25,7 @@ rdbDir=/opt/tmp
 rioDir=/DATA/tmp
 
 # root directory for cache
+rcloneBufferSize=100M
 rcloneCacheDir=/DATA/tmp
 rcloneCacheSize=1000G
 rcloneVfsCacheSize=100G
@@ -126,7 +127,7 @@ docker ${dCMD} --name rclone-vfs \
   --config /config/rclone/vfs_config/rclone.conf \
   --allow-other \
   --allow-non-empty \
-  --buffer-size ${rcloneVfsCacheSize} \
+  --buffer-size ${rcloneBufferSize} \
   --cache-dir /cache/rclone-vfs \
   --fast-list \
   --log-level INFO \
