@@ -182,7 +182,7 @@ docker ${dCMD} --name mergerfs \
   -e GUID=${RcprefGUID} \
   -e TZ=${tZone} \
   -v ${rioDir}/tmp_upload:/local \
-  -v ${rioDir}/rclone-cache:/cloud_drive \
+  -v ${rioDir}/rclone-vfs:/cloud_drive \
   -v ${rioDir}/mergerfs:/merged:shared \
   hotio/mergerfs -o defaults,direct_io,sync_read,allow_other,nonempty,category.action=all,category.create=ff \
   /local:/cloud_drive \
