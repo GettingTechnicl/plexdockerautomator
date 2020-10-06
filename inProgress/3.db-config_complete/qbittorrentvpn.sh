@@ -1,4 +1,4 @@
-docker run \
+docker run -it \
     --cap-add=NET_ADMIN \
     -p 6881:6881 \
     -p 6881:6881/udp \
