@@ -24,6 +24,9 @@ rdbDir=/home/plex/docker-exchange
 # root directory specified for heavy IO
 rioDir=/DATA/tmp
 
+# rclone cloud name
+rcN='gdrive:Cloud'
+
 # root directory for cache
 rcloneBufferSize=100M
 rcloneCacheDir=/DATA/tmp
@@ -130,7 +133,7 @@ docker ${dCMD} --name rclone-vfs \
   -v ${rcloneCacheDir}/cache:/cache \
   -v ${rdbDir}/config:/config \
   -v ${rioDir}/rclone-vfs:/data:shared \
-  rclone/rclone mount gdrive:Cloud /data \
+  rclone/rclone mount ${rcN} /data \
   --cache-dir /cache/rclone-vfs \
   --config /config/rclone/vfs_config/rclone.conf \
   --allow-other \
@@ -172,7 +175,7 @@ docker ${dCMD} --name rclone-move \
   -v ${rioDir}/tmp_upload:/source \
   -e RCLONE_CMD="move" \
   -e SYNC_SRC="/source" \
-  -e SYNC_DEST="gdrive:Cloud" \
+  -e SYNC_DEST="${rcN}" \
   -e CRON="*/15 * * * *" \
   -e CRON_ABORT="0 6 * * *" \
   -e RCLONE_OPTS="--transfers=5 --min-age 2h --exclude *.{mkv,avi,original} --log-file /root/.config/rclone/rclone-move.log" \
@@ -365,7 +368,35 @@ docker ${dCMD} --name sonarr \
   -v ${rioDir}/Downloads:/downloads \
   mdhiggins/sonarr-sma:preview
 
+# Stops previous system services if there are any
+sudo systemctl stop rclone-cache.service
+sudo systemctl stop rclone-vfs.service
+sudo systemctl stop rclone-move.service
+sudo systemctl stop mergerfs.service
+sudo systemctl stop jackett.service
+sudo systemctl stop lidarr.service
+sudo systemctl stop mylar.service
+sudo systemctl stop nzbget.service
+sudo systemctl stop plex.service
+sudo systemctl stop radarr.service
+sudo systemctl stop sonarr.service
+sudo systemctl stop ombi.service
+sudo systemctl stop qbittorrent.service
 
+# Removes previous SystemD Scripts if they exist
+sudo rm -rf /etc/systemd/system/rclone-cache.service
+sudo rm -rf /etc/systemd/system/rclone-vfs.service
+sudo rm -rf /etc/systemd/system/rclone-move.service
+sudo rm -rf /etc/systemd/system/mergerfs.service
+sudo rm -rf /etc/systemd/system/jackett.service
+sudo rm -rf /etc/systemd/system/lidarr.service
+sudo rm -rf /etc/systemd/system/mylar.service
+sudo rm -rf /etc/systemd/system/nzbget.service
+sudo rm -rf /etc/systemd/system/plex.service
+sudo rm -rf /etc/systemd/system/radarr.service
+sudo rm -rf /etc/systemd/system/sonarr.service
+sudo rm -rf /etc/systemd/system/ombi.service
+sudo rm -rf /etc/systemd/system/qbittorrent.service
 
 # Copies SystemD service scripts to systemD
 sudo cp -a ${target_PWD}/Systemd/. ${target_PWD}/workspace.local
@@ -374,6 +405,7 @@ sudo sed -i "s|VFSPATH|${rioDir}|g" ${target_PWD}/workspace.local/rclone-vfs.ser
 sudo sed -i "s|MERGERPATH|${rioDir}|g" ${target_PWD}/workspace.local/mergerfs.service
 sudo mv ${target_PWD}/workspace.local/* /etc/systemd/system/
 
+sudo systemctl daemon-reload
 sudo systemctl enable rclone-cache.service
 sudo systemctl enable rclone-vfs.service
 sudo systemctl enable rclone-move.service
