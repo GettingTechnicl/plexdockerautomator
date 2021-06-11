@@ -395,7 +395,7 @@ docker ${dCMD} --name=nginx \
 -e ONLY_SUBDOMAINS=${oSD} \
 -p ${hPORTS}:443 \
 -p ${hPORT}:80 \
--v ${rdbDir}/config/nginx>:/config \
+-v ${rdbDir}/config/nginx:/config \
     ghcr.io/linuxserver/swag
 
 # Stops previous system services if there are any
