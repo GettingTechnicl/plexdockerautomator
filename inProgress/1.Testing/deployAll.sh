@@ -19,7 +19,7 @@ cToken="<claimToken>"
 adv_Ip=http://localhost
 
 # root directory specified for all databases (recommended on SSD) (no trailing forwardslash)
-rdbDir=/opt/tmp
+rdbDir=/docker-exchange
 
 # root directory specified for heavy IO
 rioDir=/DATA/tmp
@@ -31,19 +31,22 @@ rcloneCacheSize=1000G
 rcloneVfsCacheSize=100G
 
 # Your preferred PUID (run "id youruser" to find your uid/guid)
-prefPUID=0
+prefPUID=1002
 
 # Your Preferred GUID
-prefGUID=0
+prefGUID=1002
 
 # Rclone preferred PUID (rclone must be run as root)
-RcprefPUID=0
+RcprefPUID=1002
 
 # Rclone Preferred GUID
-RcprefGUID=0
+RcprefGUID=1002
 
 # Docker Command
 dCMD=create
+
+# Docker Network Name
+dNET=pda
 
 # Directories Required
 sudo mkdir -p /mnt/ramdisk
@@ -67,20 +70,23 @@ sudo mkdir -p ${rioDir}/Downloads/mylar/nzbget
 sudo mkdir -p ${rioDir}/Downloads/radarr/nzbget
 sudo mkdir -p ${rioDir}/Downloads/sonarr/nzbget
 
-sudo chmod -R 777 ${rioDir}
+sudo chown -R plex.plex ${rioDir}
 sudo chown -R root.root ${rdbDir}
-chmod g+s -R ${rioDir}
-chmod g+s -R ${rdbDir}
+sudo chmod -R 2777 ${rioDir}
+sudo chmod -R 2777 ${rdbDir}
 
-sudo usermod -aG sudo plex
+# Create Plexdocker network
+docker network create ${dNET}
 
-
+# Remove rclone-cache if it exists
+docker stop rclone-cache
+docker rm rclone-cache
 # Rclone Cache config
 docker ${dCMD} --name rclone-cache \
   --cap-add SYS_ADMIN \
   --device /dev/fuse \
   --security-opt apparmor:unconfined \
-  --network=host \
+  --network=${dNET} \
   -e PUID=${RcprefPUID} \
   -e GUID=${RcprefGUID} \
   -e TZ=${tZone} \
@@ -109,13 +115,15 @@ docker ${dCMD} --name rclone-cache \
   --rc-addr :5573 \
   --log-level INFO
 
-
+# Remove Rclone-vfs if it exists
+docker stop rclone-vfs
+docker rm rclone-vfs
 # Rclone VFS Config
 docker ${dCMD} --name rclone-vfs \
   --cap-add SYS_ADMIN \
   --device /dev/fuse \
   --security-opt apparmor:unconfined \
-  --network=host \
+  --network=${dNET} \
   -e PUID=${RcprefPUID} \
   -e GUID=${RcprefGUID} \
   -e TZ=${tZone} \
@@ -147,15 +155,16 @@ docker ${dCMD} --name rclone-vfs \
 
 
 
-
+# Remove rclone-move if it exists
+docker stop rclone-move
+docker rm rclone-move
 # https://github.com/robinostlund/docker-rclone-sync
-
 #rcloneopts should have log level but errors about -v,
 docker ${dCMD} --name rclone-move \
   --cap-add SYS_ADMIN \
   --device /dev/fuse \
   --security-opt apparmor:unconfined \
-  --network=host \
+  --network=${dNET} \
   -e PUID=${RcprefPUID} \
   -e GUID=${RcprefGUID} \
   -e TZ=${tZone} \
@@ -171,31 +180,35 @@ docker ${dCMD} --name rclone-move \
   pfidr/rclone
 
 
-
+  # Remove mergerfs if it exists
+  docker stop mergerfs
+  docker rm mergerfs
 # merge local layer and cloud drive
 docker ${dCMD} --name mergerfs \
   --cap-add SYS_ADMIN \
   --device /dev/fuse \
   --security-opt apparmor:unconfined \
-  --network=host \
+  --network=${dNET} \
   -e PUID=${RcprefPUID} \
   -e GUID=${RcprefGUID} \
   -e TZ=${tZone} \
   -v ${rioDir}/tmp_upload:/local \
   -v ${rioDir}/rclone-vfs:/cloud_drive \
-  -v ${rioDir}/mergerfs:/merged:shared \
+  -v ${rioDir}/fusepoint:/merged:shared \
   hotio/mergerfs -o defaults,direct_io,sync_read,allow_other,nonempty,category.action=all,category.create=ff \
   /local:/cloud_drive \
   /merged
 
 
-
+  # Remove plex if it exists
+  docker stop plex
+  docker rm plex
 # Plex Config
   docker ${dCMD} --name plex \
     --cap-add SYS_ADMIN \
     --device /dev/fuse \
     --security-opt apparmor:unconfined \
-    --network=host \
+    --network=${dNET} \
     -e TZ=${tZone} \
     -e PLEX_CLAIM=${cToken} \
     -e ADVERTISE_IP="${adv_Ip}:32400/" \
@@ -206,13 +219,15 @@ docker ${dCMD} --name mergerfs \
     -v ${rioDir}/rclone-vfs:/data \
     horjulf/plex_autoscan
 
-
+# Remove jackett if it exists
+docker stop jackett
+docker rm jackett
 # Jackett Config
 docker ${dCMD} --name jackett \
   --cap-add SYS_ADMIN \
   --device /dev/fuse \
   --security-opt apparmor:unconfined \
-  --network=host \
+  --network=${dNET} \
   -e ADVERTISE_IP="${adv_Ip}:9117/" \
   -e PUID=${prefPUID} \
   -e PGID=${prefGUID} \
@@ -221,46 +236,52 @@ docker ${dCMD} --name jackett \
   -v ${rioDir}/Downloads/blackhole:/downloads \
   linuxserver/jackett
 
-
+  # Remove lidarr if it exists
+  docker stop lidarr
+  docker rm lidarr
 # Lidarr Config
 docker ${dCMD} --name lidarr \
   --cap-add SYS_ADMIN \
   --device /dev/fuse \
   --security-opt apparmor:unconfined \
-  --network=host \
+  --network=${dNET} \
   -e ADVERTISE_IP="${adv_Ip}:8686/" \
   -e PUID=${prefPUID} \
   -e PGID=${prefGUID} \
   -e TZ=${tZone} \
   -v ${rdbDir}/config/lidarr:/config \
-  -v ${rioDir}/mergerfs/Music:/music \
+  -v ${rioDir}/fusepoint/Music:/music \
   -v ${rioDir}/Downloads/lidarr/nzbget:/downloads \
   linuxserver/lidarr
 
-
+  # Remove mylar if it exists
+  docker stop mylar
+  docker rm mylar
 # Mylar Config
 docker ${dCMD} --name mylar \
   --cap-add SYS_ADMIN \
   --device /dev/fuse \
   --security-opt apparmor:unconfined \
-  --network=host \
+  --network=${dNET} \
   -e ADVERTISE_IP="${adv_Ip}:8090/" \
   -e PUID=${prefPUID} \
   -e PGID=${prefGUID} \
   -e TZ=${tZone} \
   -v ${rdbDir}/config/mylar:/config \
-  -v ${rioDir}/mergerfs/Comics:/comics \
+  -v ${rioDir}/fusepoint/Comics:/comics \
   -v ${rioDir}/Downloads/mylar/nzbget:/downloads \
   hotio/mylar3
 
 
-
+  # Remove nzbget if it exists
+  docker stop nzbget
+  docker rm nzbget
 # Nzbget config
 docker ${dCMD} --name nzbget \
   --cap-add SYS_ADMIN \
   --device /dev/fuse \
   --security-opt apparmor:unconfined \
-  --network=host \
+  --network=${dNET} \
   -e ADVERTISE_IP="${adv_Ip}:6789/" \
   -e PUID=${prefPUID} \
   -e PGID=${prefGUID} \
@@ -270,8 +291,12 @@ docker ${dCMD} --name nzbget \
   linuxserver/nzbget
 
 
+  # Remove qbittorrent if it exists
+  docker stop qbittorrent
+  docker rm qbittorrent
+  # Qbittorrent Config
   docker ${dCMD} --name qbittorrent \
-    --network=container:vpn \
+    --network=${dNET}:vpn \
     --cap-add SYS_ADMIN \
     --device /dev/fuse \
     --security-opt apparmor:unconfined \
@@ -283,13 +308,15 @@ docker ${dCMD} --name nzbget \
     -v ${rioDir}/Downloads:/downloads \
     linuxserver/qbittorrent
 
-
+# Remove ombi if it exists
+docker stop ombi
+docker rm ombi
 #Ombi config
 docker ${dCMD} --name ombi \
   --cap-add SYS_ADMIN \
   --device /dev/fuse \
   --security-opt apparmor:unconfined \
-  --network=host \
+  --network=${dNET} \
   -e ADVERTISE_IP="${adv_Ip}:3579/" \
   -e PUID=${prefPUID} \
   -e PGID=${prefGUID} \
@@ -298,39 +325,43 @@ docker ${dCMD} --name ombi \
   linuxserver/ombi
 
 
-
+# Remove radarr if it exists
+docker stop radarr
+docker rm radarr
 # Radarr Config
 docker ${dCMD} --name radarr \
   --cap-add SYS_ADMIN \
   --device /dev/fuse \
   --security-opt apparmor:unconfined \
-  --network=host \
+  --network=${dNET} \
   -e ADVERTISE_IP="${adv_Ip}:7878/" \
   -e PUID=${prefPUID} \
   -e PGID=${prefGUID} \
   -e TZ=${tZone} \
   -v ${rdbDir}/config/radarr:/config \
   -v ${rdbDir}/config/sma:/usr/local/sma/config \
-  -v ${rioDir}/mergerfs/Movies:/movies \
-  -v ${rioDir}/mergerfs/Stand_Ups:/standups \
+  -v ${rioDir}/fusepoint/Movies:/movies \
+  -v ${rioDir}/fusepoint/Stand_Ups:/standups \
   -v ${rioDir}/Downloads:/downloads \
   mdhiggins/radarr-sma:preview
 
 
-
+# Remove sonarr if it exists
+docker stop sonarr
+docker rm sonarr
 # Sonarr config
 docker ${dCMD} --name sonarr \
   --cap-add SYS_ADMIN \
   --device /dev/fuse \
   --security-opt apparmor:unconfined \
-  --network=host \
+  --network=${dNET} \
   -e ADVERTISE_IP="${adv_Ip}:6790/" \
   -e PUID=${prefPUID} \
   -e PGID=${prefGUID} \
   -e TZ=${tZone} \
   -v ${rdbDir}/config/sonarr:/config \
   -v ${rdbDir}/config/sma:/usr/local/sma/config \
-  -v ${rioDir}/mergerfs/Tv_Shows:/tv \
+  -v ${rioDir}/fusepoint/Tv_Shows:/tv \
   -v ${rioDir}/Downloads:/downloads \
   mdhiggins/sonarr-sma:preview
 
