@@ -73,6 +73,7 @@ sudo mkdir -p ${rdbDir}/config/ombi
 sudo mkdir -p ${rdbDir}/config/radarr
 sudo mkdir -p ${rdbDir}/config/sma
 sudo mkdir -p ${rdbDir}/config/rclone
+sudo mkdir -p ${rdbDir}/config/nginx
 sudo mkdir -p ${rioDir}
 sudo mkdir -p ${rioDir}/rclone-vfs
 sudo mkdir -p ${rioDir}/rclone-cache
