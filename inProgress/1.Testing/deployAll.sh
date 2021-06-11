@@ -19,7 +19,7 @@ cToken="<claimToken>"
 adv_Ip=http://localhost
 
 # root directory specified for all databases (recommended on SSD) (no trailing forwardslash)
-rdbDir=/docker-exchange
+rdbDir=/home/plex/docker-exchange
 
 # root directory specified for heavy IO
 rioDir=/DATA/tmp
