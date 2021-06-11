@@ -381,24 +381,20 @@ docker ${dCMD} --name sonarr \
 
 
 # Nginx Docker Config
-  docker ${dCMD} --name=nginx \
-    --cap-add=NET_ADMIN \
-    --network=${dNET} \
-    -e PUID=${prefPUID} \
-    -e PGID=${prefGUID} \
-    -e TZ=${tZone} \
-    -e URL=${wURL} \
-    -e SUBDOMAINS=www, \
-    -e VALIDATION=http \
-    -e CERTPROVIDER= `#optional` \
-    -e DNSPLUGIN=cloudflare `#optional` \
-    -e ONLY_SUBDOMAINS=${oSD} `#optional` \
-    -e EXTRA_DOMAINS=<extradomains> `#optional` \
-    -e STAGING=false `#optional` \
-    -p ${hPORTS}:443 \
-    -p ${hPORT}:80 `#optional` \
-    -v ${rdbDir}/config/nginx>:/config \
-    --restart unless-stopped \
+docker ${dCMD} --name=nginx \
+--cap-add=NET_ADMIN \
+--network=${dNET} \
+-e PUID=${prefPUID} \
+-e PGID=${prefGUID} \
+-e TZ=${tZone} \
+-e URL=${wURL} \
+-e SUBDOMAINS=www, \
+-e VALIDATION=http \
+-e DNSPLUGIN=cloudflare \
+-e ONLY_SUBDOMAINS=${oSD} \
+-p ${hPORTS}:443 \
+-p ${hPORT}:80 \
+-v ${rdbDir}/config/nginx>:/config \
     ghcr.io/linuxserver/swag
 
 # Stops previous system services if there are any
@@ -441,31 +437,31 @@ sudo sed -i "s|MERGERPATH|${rioDir}|g" ${target_PWD}/workspace.local/mergerfs.se
 sudo mv ${target_PWD}/workspace.local/* /etc/systemd/system/
 
 sudo systemctl daemon-reload
-sudo systemctl enable rclone-cache.service
-sudo systemctl enable rclone-vfs.service
-sudo systemctl enable rclone-move.service
-sudo systemctl enable mergerfs.service
-sudo systemctl enable jackett.service
-sudo systemctl enable lidarr.service
-sudo systemctl enable mylar.service
-sudo systemctl enable nzbget.service
-sudo systemctl enable plex.service
-sudo systemctl enable radarr.service
-sudo systemctl enable sonarr.service
-sudo systemctl enable ombi.service
-sudo systemctl enable qbittorrent.service
-sudo systemctl enable nginx.service
-sudo systemctl start rclone-cache.service
-sudo systemctl start rclone-vfs.service
-sudo systemctl start rclone-move.service
-sudo systemctl start mergerfs.service
-sudo systemctl start jackett.service
-sudo systemctl start lidarr.service
-sudo systemctl start mylar.service
-sudo systemctl start nzbget.service
-sudo systemctl start plex.service
-sudo systemctl start radarr.service
-sudo systemctl start sonarr.service
-sudo systemctl start ombi.service
-sudo systemctl start qbittorrent.service
-sudo systemctl start nginx.service
+#sudo systemctl enable rclone-cache.service
+#sudo systemctl enable rclone-vfs.service
+#sudo systemctl enable rclone-move.service
+#sudo systemctl enable mergerfs.service
+#sudo systemctl enable jackett.service
+#sudo systemctl enable lidarr.service
+#sudo systemctl enable mylar.service
+#sudo systemctl enable nzbget.service
+#sudo systemctl enable plex.service
+#sudo systemctl enable radarr.service
+#sudo systemctl enable sonarr.service
+#sudo systemctl enable ombi.service
+#sudo systemctl enable qbittorrent.service
+#sudo systemctl enable nginx.service
+#sudo systemctl start rclone-cache.service
+#sudo systemctl start rclone-vfs.service
+#sudo systemctl start rclone-move.service
+#sudo systemctl start mergerfs.service
+#sudo systemctl start jackett.service
+#sudo systemctl start lidarr.service
+#sudo systemctl start mylar.service
+#sudo systemctl start nzbget.service
+#sudo systemctl start plex.service
+#sudo systemctl start radarr.service
+#sudo systemctl start sonarr.service
+#sudo systemctl start ombi.service
+#sudo systemctl start qbittorrent.service
+#sudo systemctl start nginx.service
