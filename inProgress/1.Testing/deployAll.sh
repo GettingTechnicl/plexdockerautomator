@@ -381,6 +381,9 @@ docker ${dCMD} --name sonarr \
   mdhiggins/sonarr-sma:preview
 
 
+# Remove nginx if it exists
+docker stop nginx
+docker rm nginx
 # Nginx Docker Config
 docker ${dCMD} --name=nginx \
 --cap-add=NET_ADMIN \
