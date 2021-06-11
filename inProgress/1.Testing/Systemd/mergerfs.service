@@ -2,9 +2,12 @@
 Description=mergerfs Container
 Requires=rclone-cache.service
 After=rclone-cache.service
+StartLimitIntervalSec=33
+StartLimitBurst=5
 
 [Service]
 Restart=always
+RestartSec=5
 ExecStartPre=-/bin/fusermount -uz MERGERPATH/mergerfs
 ExecStartPre=/bin/sleep 5
 ExecStart=/usr/bin/docker start -a mergerfs

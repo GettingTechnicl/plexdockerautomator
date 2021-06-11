@@ -2,9 +2,12 @@
 Description=rclone-cache Container
 Requires=docker.service
 After=docker.service
+StartLimitIntervalSec=33
+StartLimitBurst=5
 
 [Service]
 Restart=always
+RestartSec=5
 ExecStartPre=-/bin/fusermount -uz CACHEPATH/rclone-cache
 ExecStart=/usr/bin/docker start -a rclone-cache
 ExecStop=/usr/bin/docker stop -t 2 rclone-cache

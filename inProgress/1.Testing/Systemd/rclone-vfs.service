@@ -2,9 +2,12 @@
 Description=rclone-vfs Container
 Requires=docker.service
 After=docker.service
+StartLimitIntervalSec=33
+StartLimitBurst=5
 
 [Service]
 Restart=always
+RestartSec=5
 ExecStartPre=-/bin/fusermount -uz VFSPATH/rclone-vfs
 ExecStart=/usr/bin/docker start -a rclone-vfs
 ExecStop=/usr/bin/docker stop -t 2 rclone-vfs

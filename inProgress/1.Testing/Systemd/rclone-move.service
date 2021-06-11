@@ -2,9 +2,12 @@
 Description=rclone-move Container
 Requires=docker.service
 After=docker.service
+StartLimitIntervalSec=33
+StartLimitBurst=5
 
 [Service]
 Restart=always
+RestartSec=5
 ExecStart=/usr/bin/docker start -a rclone-move
 ExecStop=/usr/bin/docker stop -t 2 rclone-move
 

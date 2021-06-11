@@ -2,9 +2,12 @@
 Description=jackett Container
 Requires=rclone-cache.service
 After=mergerfs.service
+StartLimitIntervalSec=33
+StartLimitBurst=5
 
 [Service]
 Restart=always
+RestartSec=5
 ExecStartPre=/bin/sleep 5
 ExecStart=/usr/bin/docker start -a jackett
 ExecStop=/usr/bin/docker stop -t 2 jackett
