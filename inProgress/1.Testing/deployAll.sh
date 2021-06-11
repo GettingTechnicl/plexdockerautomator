@@ -22,7 +22,7 @@ adv_Ip=http://localhost
 rdbDir=/home/plex/docker-exchange
 
 # root directory specified for heavy IO
-rioDir=/DATA/tmp
+rioDir=/DATA
 
 # rclone cloud name
 rcN='gdrive:Cloud'
