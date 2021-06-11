@@ -51,6 +51,16 @@ dCMD=create
 # Docker Network Name
 dNET=pda
 
+# Website Config INFO
+# WebURL
+wURL=base1.heyzzeus.com
+# Unencrypted Port
+hPORT=80
+# Encrypted Port
+hPORTS=443
+# Only Subdomains (true/false)
+oSD=true
+
 # Directories Required
 sudo mkdir -p /mnt/ramdisk
 sudo mkdir -p ${rdbDir}
@@ -365,8 +375,31 @@ docker ${dCMD} --name sonarr \
   -v ${rdbDir}/config/sonarr:/config \
   -v ${rdbDir}/config/sma:/usr/local/sma/config \
   -v ${rioDir}/fusepoint/Tv_Shows:/tv \
+  -v ${rioDir}/fusepoint/Anime:/anime \
   -v ${rioDir}/Downloads:/downloads \
   mdhiggins/sonarr-sma:preview
+
+
+# Nginx Docker Config
+  docker ${dCMD} --name=nginx \
+    --cap-add=NET_ADMIN \
+    --network=${dNET} \
+    -e PUID=${prefPUID} \
+    -e PGID=${prefGUID} \
+    -e TZ=${tZone} \
+    -e URL=${wURL} \
+    -e SUBDOMAINS=www, \
+    -e VALIDATION=http \
+    -e CERTPROVIDER= `#optional` \
+    -e DNSPLUGIN=cloudflare `#optional` \
+    -e ONLY_SUBDOMAINS=${oSD} `#optional` \
+    -e EXTRA_DOMAINS=<extradomains> `#optional` \
+    -e STAGING=false `#optional` \
+    -p ${hPORTS}:443 \
+    -p ${hPORT}:80 `#optional` \
+    -v ${rdbDir}/config/nginx>:/config \
+    --restart unless-stopped \
+    ghcr.io/linuxserver/swag
 
 # Stops previous system services if there are any
 sudo systemctl stop rclone-cache.service
@@ -382,6 +415,7 @@ sudo systemctl stop radarr.service
 sudo systemctl stop sonarr.service
 sudo systemctl stop ombi.service
 sudo systemctl stop qbittorrent.service
+sudo systemctl stop nginx.service
 
 # Removes previous SystemD Scripts if they exist
 sudo rm -rf /etc/systemd/system/rclone-cache.service
@@ -397,6 +431,7 @@ sudo rm -rf /etc/systemd/system/radarr.service
 sudo rm -rf /etc/systemd/system/sonarr.service
 sudo rm -rf /etc/systemd/system/ombi.service
 sudo rm -rf /etc/systemd/system/qbittorrent.service
+sudo rm -rf /etc/systemd/system/nginx.service
 
 # Copies SystemD service scripts to systemD
 sudo cp -a ${target_PWD}/Systemd/. ${target_PWD}/workspace.local
@@ -419,6 +454,7 @@ sudo systemctl enable radarr.service
 sudo systemctl enable sonarr.service
 sudo systemctl enable ombi.service
 sudo systemctl enable qbittorrent.service
+sudo systemctl enable nginx.service
 sudo systemctl start rclone-cache.service
 sudo systemctl start rclone-vfs.service
 sudo systemctl start rclone-move.service
@@ -432,3 +468,4 @@ sudo systemctl start radarr.service
 sudo systemctl start sonarr.service
 sudo systemctl start ombi.service
 sudo systemctl start qbittorrent.service
+sudo systemctl start nginx.service
