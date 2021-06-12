@@ -22,7 +22,7 @@ adv_Ip=http://localhost
 rdbDir=/home/plex/docker-exchange
 
 # root directory specified for heavy IO
-rioDir=/DATA
+rioDir=/DATA/iops
 
 # rclone cloud name
 rcN='gdrive:Cloud'
@@ -51,7 +51,7 @@ dCMD=create
 # Docker Network Name
 dNET=pda
 
-# Website Config INFO
+## Website Config INFO
 # WebURL
 wURL=base1.heyzzeus.com
 # Unencrypted Port
@@ -194,9 +194,9 @@ docker ${dCMD} --name rclone-move \
   pfidr/rclone
 
 
-  # Remove mergerfs if it exists
-  docker stop mergerfs
-  docker rm mergerfs
+# Remove mergerfs if it exists
+docker stop mergerfs
+docker rm mergerfs
 # merge local layer and cloud drive
 docker ${dCMD} --name mergerfs \
   --cap-add SYS_ADMIN \
@@ -214,11 +214,11 @@ docker ${dCMD} --name mergerfs \
   /merged
 
 
-  # Remove plex if it exists
-  docker stop plex
-  docker rm plex
+# Remove plex if it exists
+docker stop plex
+docker rm plex
 # Plex Config
-  docker ${dCMD} --name plex \
+docker ${dCMD} --name plex \
     --cap-add SYS_ADMIN \
     --device /dev/fuse \
     --security-opt apparmor:unconfined \
@@ -250,9 +250,9 @@ docker ${dCMD} --name jackett \
   -v ${rioDir}/Downloads/blackhole:/downloads \
   linuxserver/jackett
 
-  # Remove lidarr if it exists
-  docker stop lidarr
-  docker rm lidarr
+# Remove lidarr if it exists
+docker stop lidarr
+docker rm lidarr
 # Lidarr Config
 docker ${dCMD} --name lidarr \
   --cap-add SYS_ADMIN \
@@ -268,9 +268,9 @@ docker ${dCMD} --name lidarr \
   -v ${rioDir}/Downloads/lidarr/nzbget:/downloads \
   linuxserver/lidarr
 
-  # Remove mylar if it exists
-  docker stop mylar
-  docker rm mylar
+# Remove mylar if it exists
+docker stop mylar
+docker rm mylar
 # Mylar Config
 docker ${dCMD} --name mylar \
   --cap-add SYS_ADMIN \
@@ -287,9 +287,9 @@ docker ${dCMD} --name mylar \
   hotio/mylar3
 
 
-  # Remove nzbget if it exists
-  docker stop nzbget
-  docker rm nzbget
+# Remove nzbget if it exists
+docker stop nzbget
+docker rm nzbget
 # Nzbget config
 docker ${dCMD} --name nzbget \
   --cap-add SYS_ADMIN \
