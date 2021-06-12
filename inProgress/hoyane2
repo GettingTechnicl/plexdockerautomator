@@ -12,7 +12,7 @@ service plex start
 service radarr start
 service sonarr start
 
-
+  
 
 docker run --name plex \
   --cap-add SYS_ADMIN \
