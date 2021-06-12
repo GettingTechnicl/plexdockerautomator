@@ -84,10 +84,12 @@ sudo mkdir -p ${rioDir}/Downloads/mylar/nzbget
 sudo mkdir -p ${rioDir}/Downloads/radarr/nzbget
 sudo mkdir -p ${rioDir}/Downloads/sonarr/nzbget
 
-sudo chown -R plex.plex ${rioDir}
-sudo chown -R root.root ${rdbDir}
-sudo chmod -R 2777 ${rioDir}
-sudo chmod -R 2777 ${rdbDir}
+sudo addgroup pda
+sudo usermod -aG pda plex
+sudo chown -R root.pda ${rioDir}
+sudo chown -R root.pda ${rdbDir}
+sudo chmod -R 2751 ${rioDir}
+sudo chmod -R 2751 ${rdbDir}
 
 # Create Plexdocker network
 docker network create ${dNET}
