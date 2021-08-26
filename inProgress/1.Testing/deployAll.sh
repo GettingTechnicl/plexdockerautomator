@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+${PDAuser}#!/usr/bin/env bash
 
 ### Help Section ###
 # Enter Dockers with "docker exec -it <container name> /bin/bash" some containers may only support ash
@@ -19,17 +19,20 @@ cToken="<claimToken>"
 adv_Ip=http://localhost
 
 # root directory specified for all databases (recommended on SSD) (no trailing forwardslash)
-rdbDir=/home/plex/docker-exchange
+rdbDir=/DATA/pda/docker-exchange
 
 # root directory specified for heavy IO
-rioDir=/DATA/iops
+rioDir=/DATA/pda/iops
+
+#LogDir
+logdir=/var/log/pda
 
 # rclone cloud name
 rcN='gdrive:Cloud'
 
 # root directory for cache
 rcloneBufferSize=100M
-rcloneCacheDir=/DATA/tmp
+rcloneCacheDir=${rioDir}/rclonecache
 rcloneCacheSize=1000G
 rcloneVfsCacheSize=100G
 
@@ -47,6 +50,9 @@ RcprefGUID=1002
 
 # Docker Command
 dCMD=create
+
+# Owner of all data / should be same user as PUID
+PDAuser=plex
 
 # Docker Network Name
 dNET=pda
@@ -77,19 +83,27 @@ sudo mkdir -p ${rdbDir}/config/nginx
 sudo mkdir -p ${rioDir}
 sudo mkdir -p ${rioDir}/rclone-vfs
 sudo mkdir -p ${rioDir}/rclone-cache
+sudo mkdir -p ${rioDir}/rclonecache/cache
+sudo mkdir -p ${rioDir}/rclonecache/vfscache
 sudo mkdir -p ${rioDir}/Downloads
 sudo mkdir -p ${rioDir}/Downloads/blackhole
 sudo mkdir -p ${rioDir}/Downloads/lidarr/nzbget
 sudo mkdir -p ${rioDir}/Downloads/mylar/nzbget
 sudo mkdir -p ${rioDir}/Downloads/radarr/nzbget
 sudo mkdir -p ${rioDir}/Downloads/sonarr/nzbget
+sudo mkdir -p ${logdir}
+sudo mkdir -p ${rioDir}/mergerfs/tmp_upload
+sudo mkdir -p ${rioDir}/mergerfs/gdrive
+sudo mkdir -p ${rioDir}/mergerfs/fusepoint
 
 sudo addgroup pda
-sudo usermod -aG pda plex
+sudo usermod -aG pda ${PDAuser}
 sudo chown -R root.pda ${rioDir}
 sudo chown -R root.pda ${rdbDir}
+sudo chown -R root.pda ${logdir}
 sudo chmod -R 2751 ${rioDir}
 sudo chmod -R 2751 ${rdbDir}
+sudo chmod -R 2751 ${logdir}
 
 # Create Plexdocker network
 docker network create ${dNET}
@@ -106,13 +120,14 @@ docker ${dCMD} --name rclone-cache \
   -e PUID=${RcprefPUID} \
   -e GUID=${RcprefGUID} \
   -e TZ=${tZone} \
-  -v ${rdbDir}/config:/config \
-  -v ${rcloneCacheDir}/cache:/cache \
-  -v ${rioDir}/rclone-cache:/data:shared \
+  -v ${rdbDir}/config/rclone-cache:/config/rclone \
+  -v ${rcloneCacheDir}/rclonecache/cache:/cache \
+  -v ${rioDir}/rclonecache/cache:/data:shared \
+  -v ${logdir}:/logs \
   rclone/rclone mount cache: /data \
   --cache-chunk-path /cache/rclone/cache-backend \
   --cache-db-path /cache/rclone/cache-backend \
-  --config /config/rclone/cache_config/rclone.conf \
+  --config /config/rclone/rclone.conf \
   --allow-non-empty \
   --allow-other \
   --attr-timeout=1s \
@@ -126,7 +141,7 @@ docker ${dCMD} --name rclone-cache \
   --drive-use-trash=false \
   --drive-chunk-size=64M \
   --fast-list \
-  --log-file /config/rclone/rclone-cache.log \
+  --log-file /logs/rclone-cache.log \
   --rc \
   --rc-addr :5573 \
   --log-level INFO
@@ -143,12 +158,13 @@ docker ${dCMD} --name rclone-vfs \
   -e PUID=${RcprefPUID} \
   -e GUID=${RcprefGUID} \
   -e TZ=${tZone} \
-  -v ${rcloneCacheDir}/cache:/cache \
-  -v ${rdbDir}/config:/config \
+  -v ${rcloneCacheDir}/vfscache:/cache \
+  -v ${rdbDir}/config/rclone-vfs:/config/rclone \
   -v ${rioDir}/rclone-vfs:/data:shared \
+  -v ${logdir}:/logs \
   rclone/rclone mount ${rcN} /data \
   --cache-dir /cache/rclone-vfs \
-  --config /config/rclone/vfs_config/rclone.conf \
+  --config /config/rclone/rclone.conf \
   --allow-other \
   --allow-non-empty \
   --buffer-size ${rcloneBufferSize} \
@@ -165,7 +181,7 @@ docker ${dCMD} --name rclone-vfs \
   --vfs-read-chunk-size 100M \
   --rc \
   --rc-addr :5572 \
-  --log-file /config/rclone/rclone-vfs.log \
+  --log-file /logs/rclone-vfs.log \
   --log-level INFO
 
 
@@ -185,7 +201,7 @@ docker ${dCMD} --name rclone-move \
   -e GUID=${RcprefGUID} \
   -e TZ=${tZone} \
   -v ${rdbDir}/config/rclone/cache_config:/root/.config/rclone \
-  -v ${rioDir}/tmp_upload:/source \
+  -v ${rioDir}/mergerfs/tmp_upload:/source \
   -e RCLONE_CMD="move" \
   -e SYNC_SRC="/source" \
   -e SYNC_DEST="${rcN}" \
@@ -208,9 +224,9 @@ docker ${dCMD} --name mergerfs \
   -e PUID=${RcprefPUID} \
   -e GUID=${RcprefGUID} \
   -e TZ=${tZone} \
-  -v ${rioDir}/tmp_upload:/local \
-  -v ${rioDir}/rclone-vfs:/cloud_drive \
-  -v ${rioDir}/fusepoint:/merged:shared \
+  -v ${rioDir}/mergerfs/tmp_upload:/local \
+  -v ${rioDir}/mergerfs/gdrive:/cloud_drive \
+  -v ${rioDir}/mergerfs/fusepoint:/merged:shared \
   hotio/mergerfs -o defaults,direct_io,sync_read,allow_other,nonempty,category.action=all,category.create=ff \
   /local:/cloud_drive \
   /merged
