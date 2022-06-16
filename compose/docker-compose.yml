@@ -1,0 +1,439 @@
+## Docker List ##
+### Delete when finished ###
+##  Testing: B1-rclone, B2-rclone-move, C1-mergerfs, C2-gluetun, D1-qbittorrent, D2-nzbget, E1-jackett, E2-lidarr, E3-ombi, E4-plex, E5-sonarr, E6-radarr | Completed Testing:
+
+
+version: ‘3.8’
+services:
+  B1-rclone:
+    image: rclone/rclone:latest
+    container_name: B1-rclone
+    restart: unless-stopped
+    network_mode: host
+    environment:
+      - PUID=1001
+      - PGID=1001
+    volumes:
+      - type: bind
+        source: ${FastStorageArray}/config
+        target: /config
+        bind:
+          propagation: rprivate
+      - type: bind
+        source: ${FastStorageArray}/gdrive
+        target: /data
+        bind:
+          propagation: shared
+      - /etc/passwd:/etc/passwd:ro
+      - /etc/group:/etc/group:ro
+    cap_add:
+      - SYS_ADMIN
+    devices:
+      - /dev/fuse
+    security_opt:
+      - apparmor:unconfined
+    command: "mount gdrive:Cloud /data --config /config/rclone/rclone.conf --allow-other --allow-non-empty --rc --rc-addr 0.0.0.0:5572 --fast-list --tpslimit 4 --vfs-cache-mode writes --vfs-cache-max-size 50G --vfs-read-chunk-size-limit 500M --vfs-read-chunk-size 100M --dir-cache-time 72h --cache-dir ${LargeStorageArray}/rclone-tmp/cache --uid 1001 --gid 1001"
+
+  B2-rclone-move:
+    image: robostlund/rclone-move:latest
+    container_name: B2-rclone-move
+    restart: unless-stopped
+    network_mode: host
+    environment:
+      - PUID=1001
+      - PGID=1001
+      - MOVE_SRC= "/uploads"
+      - MOVE_DEST= "gdrive:Cloud"
+      - MOVE_OPTS= "-v --transfers 3 --min-age 10m --exclude *.mkv --exclude *.avi --exclude *.partial --exclude *.qtfs --delete-empty-src-dirs"
+      - RCLONE_OPTS= "--config /config/rclone-move/rclone.conf"
+      - CRON= "*/5 * * * *"
+      - TZ= "America/Chicago"
+      - CRON_ABORT= "0 5 * * *"
+      - FORCE_MOVE= "true"
+    volumes:
+      - type: bind
+        source: ${FastStorageArray}/config
+        target: /config
+        bind:
+          propagation: rprivate
+      - type: bind
+        source: ${FastStorageArray}/mergerfs
+        target: /data
+        bind:
+          propagation: rslave
+      - type: bind
+        source: ${LargeStorageArray}/rclone-tmp/uploads
+        target: /uploads
+        bind:
+          propagation: shared
+      - /etc/passwd:/etc/passwd:ro
+      - /etc/group:/etc/group:ro
+    depends_on:
+      - B1-rclone
+      - C1-mergerfs
+
+  C1-mergerfs:
+    image: hotio/mergerfs:latest
+    container_name: C1-mergerfs
+    restart: unless-stopped
+    network_mode: host
+    cap_add:
+      - SYS_ADMIN
+    devices:
+      - "/dev/fuse"
+    security_opt:
+      - "apparmor:unconfined"
+    environment:
+      - PUID=1001
+      - PGID=1001
+      - TZ=America/Chicago
+    volumes:
+      - type: bind
+        source: ${FastStorageArray}/gdrive
+        target: /gdrive
+        bind:
+          propagation: rslave
+      - type: bind
+        source: ${FastStorageArray}/mergerfs
+        target: /mergerfs
+        bind:
+          propagation: shared
+      - type: bind
+        source: ${LargeStorageArray}/rclone-tmp/uploads
+        target: /uploads
+        bind:
+          propagation: shared
+    command: /uploads:/gdrive /mergerfs -o defaults,direct_io,sync_read,allow_other,category.action=all,category.create=ff
+    depends_on:
+      - B1-rclone
+
+
+
+
+  C2-gluetun:
+    image: qmcgaw/gluetun:latest
+    container_name: C2-gluetun
+    restart: unless-stopped
+    network_mode: host
+    cap_add:
+      - NET_ADMIN
+    devices:
+      - /dev/net/tun:/dev/net/tun
+    ports:
+      - 8888:8888/tcp # HTTP Proxy
+      - 8388:8388/tcp # Shadowsocks
+      - 8388:8388/udp # Shadowsocks
+    volumes:
+      - type: bind
+        source: ${FastStorageArray}/config/gluetun
+        target: /gluetun
+        bind:
+          propagation: rprivate
+    environment:
+      # See https://github.com/qdm12/gluetun/wiki
+      - VPN_SERVICE_PROVIDER=pia
+      - VPN_TYPE=openvpn
+      - VPN_INTERFACE=tun0
+      - OPENVPN_PROTOCOL=udp
+      - OPENVPN_USER=Redacted
+      - OPENVPN_PASSWORD=Redacted
+      - SERVER_REGIONS="CA MONTREAL"
+      - TZ=America/Chicago
+      - HEALTH_SERVER_ADDRESS=127.0.0.1:9999
+      - HEALTH_TARGET_ADDRESS=github.com:443
+      - DOT=on
+      - DOT_PROVIDERS=cloudflare
+      - BLOCK_MALICIOUS=on
+      - BLOCK_SURVEILLANCE=on
+      - BLOCK_ADS=off
+      - DNS_UPDATE_PERIOD=24h
+      - DNS_ADDRESS=127.0.0.1
+      - DNS_KEEP_NAMESERVER=off
+      - HTTPPROXY_LOG=off
+      - HTTPPROXY_LISTENING_ADDRESS=":8888"
+      - HTTP_CONTROL_SERVER_ADDRESS=":8000"
+      - UPDATER_PERIOD=0
+      - PUBLICIP_FILE=/tmp/gluetun/ip
+      - PUBLICIP_PERIOD=12h
+      - PPROF_HTTP_SERVER_ADDRESS=":6060"
+    depends_on:
+      - B1-rclone
+      - C1-mergerfs
+
+  D1-qbittorrent:
+    image: lscr.io/linuxserver/qbittorrent:latest
+    container_name: D1-qbittorrent
+    restart: unless-stopped
+    network_mode: host
+    environment:
+      - PUID=1001
+      - PGID=1001
+      - TZ=America/Chicago
+      - WEBUI_PORT=8585
+      - HOME=/config
+      - LANGUAGE=en_US.UTF-8
+      - LANG=en_US.UTF-8
+      - TERM=xterm
+      - XDG_CONFIG_HOME=/config
+      - XDG_DATA_HOME=/config
+    volumes:
+      - type: bind
+        source: ${FastStorageArray}/config/qbittorrent
+        target: /config
+        bind:
+          propagation: rprivate
+      - type: bind
+        source: ${LargeStorageArray}/downloads
+        target: /downloads
+        bind:
+          propagation: shared
+    depends_on:
+      - B1-rclone
+      - C1-mergerfs
+      - C2-gluetun
+
+  D2-nzbget:
+    image: lscr.io/linuxserver/nzbget:latest
+    container_name: D2-nzbget
+    restart: unless-stopped
+    network_mode: host
+    environment:
+      - PUID=1001
+      - PGID=1001
+      - TZ=America/Chicago
+    #  - NZBGET_USER=
+    #  - NZBGET_PASS=
+    volumes:
+      - type: bind
+        source: ${LargeStorageArray}/downloads
+        target: /downloads
+        bind:
+          propagation: rslave
+      - type: bind
+        source: ${FastStorageArray}/config/nzbget
+        target: /config
+        bind:
+          propagation: rprivate
+    depends_on:
+      - B1-rclone
+      - C1-mergerfs
+
+  E1-jackett:
+    image: lscr.io/linuxserver/jackett:development
+    container_name: E1-jackett
+    restart: unless-stopped
+    network_mode: host
+    environment:
+      - PUID=1001
+      - PGID=1001
+      - TZ=America/Chicago
+      - AUTO_UPDATE=true
+      - RUN_OPTS =  #optional
+    volumes:
+      - type: bind
+        source: ${FastStorageArray}/config/jackett
+        target: /config
+        bind:
+          propagation: rprivate
+      - type: bind
+        source: ${FastStorageArray}/downloads
+        target: /downloads
+        bind:
+          propagation: rslave
+    ports:
+      - 9117:9117
+    depends_on:
+      - B1-rclone
+      - C1-mergerfs
+      - C2-gluetun
+      - D1-qbittorrent
+
+
+  E2-lidarr:
+    image: lscr.io/linuxserver/lidarr:latest
+    container_name: E2-lidarr
+    restart: unless-stopped
+    network_mode: host
+    environment:
+      - PUID=1001
+      - PGID=1001
+      - TZ=America/Chicago
+    volumes:
+      - type: bind
+        source: ${FastStorageArray}/config/lidarr
+        target: /config
+        bind:
+          propagation: rprivate
+      - type: bind
+        source: ${FastStorageArray}/mergerfs
+        target: /data
+        bind:
+          propagation: rslave
+      - type: bind
+        source: ${FastStorageArray}/downloads
+        target: /downloads
+        bind:
+          propagation: rslave
+    ports:
+      - 8686:8686
+    depends_on:
+      - B1-rclone
+      - C1-mergerfs
+      - E4-plex
+      - D2-nzbget
+      - D1-qbittorrent
+      - E1-jackett
+
+  E3-ombi:
+    image: lscr.io/linuxserver/ombi:latest
+    container_name: E3-ombi
+    restart: unless-stopped
+    network_mode: host
+    environment:
+      - PUID=1001
+      - PGID=1001
+      - TZ=America/Chicago
+    volumes:
+      - type: bind
+        source: ${FastStorageArray}/config/ombi
+        target: /config
+        bind:
+          propagation: rprivate
+    ports:
+      - 3579:3579
+    depends_on:
+      - B1-rclone
+      - C1-mergerfs
+      - E2-lidarr
+      - E5-sonarr
+      - E6-radarr
+
+  E4-plex:
+    image: horjulf/plex_autoscan:latest
+    container_name: E4-plex
+    restart: unless-stopped
+    network_mode: host
+    environment:
+      - PUID=1001
+      - PGID=1001
+      - ADVERTISE_IP=192.170.1.2
+      - TZ=America/Chicago
+      - DEBIAN_FRONTEND=noninteractive
+      - PLEX_ARCH=amd64
+      - PLEX_AUTOSCAN_CACHEFILE=/config/plex_autoscan/cache.db
+      - PLEX_AUTOSCAN_CONFIG=/config/plex_autoscan/config.json
+      - PLEX_AUTOSCAN_LOGFILE=/config/plex_autoscan/plex_autoscan.log
+      - PLEX_AUTOSCAN_QUEUEFILE=/config/plex_autoscan/queue.db
+      - PLEX_DOWNLOAD=https://downloads.plex.tv/plex-media-server-new
+      - PLEX_MEDIA_SERVER_APPLICATION_SUPPORT_DIR=""/config/Library/Application Support"
+      - PLEX_MEDIA_SERVER_HOME=/usr/lib/plexmediaserver
+      - PLEX_MEDIA_SERVER_INFO_DEVICE="Docker Container (LinuxServer.io)"
+      - PLEX_MEDIA_SERVER_INFO_VENDOR=Docker
+      - USE_DOCKER=false
+      - USE_SUDO=false
+    volumes:
+      - type: bind
+        source: ${FastStorageArray}/config/plex
+        target: /config
+        bind:
+          propagation: rprivate
+      - type: bind
+        source: ${FastStorageArray}/mergerfs
+        target: /data
+        bind:
+          propagation: rslave
+      - type: bind
+        source: ${FastStorageArray}/transcode
+        target: /transcode
+        bind:
+          propagation: rprivate
+    ports:
+      - 32410:32410/udp
+      - 32412:32412/udp
+      - 32413:32413/udp
+      - 32414:32414/udp
+      - 32469:32469/tcp
+      - 3467:3467/tcp
+      - 5353:5353/udp
+      - 8324:8324/tcp
+    depends_on:
+      - B1-rclone
+      - C1-mergerfs
+
+  E5-sonarr:
+    image: lscr.io/linuxserver/sonarr:latest
+    container_name: E5-sonarr
+    restart: unless-stopped
+    network_mode: host
+    environment:
+      - PUID=1001
+      - PGID=1001
+      - TZ=America/Chicago
+    volumes:
+      - type: bind
+        source: ${FastStorageArray}/config/sonarr
+        target: /config
+        bind:
+          propagation: rprivate
+      - type: bind
+        source: ${FastStorageArray}/mergerfs
+        target: /data
+        bind:
+          propagation: rslave
+      - type: bind
+        source: ${LargeStorageArray}/downloads
+        target: /downloads
+        bind:
+          propagation: rslave
+      - type: bind
+        source: ${FastStorageArray}/downloads
+        target: /downloads-tmp
+        bind:
+          propagation: rslave
+    ports:
+      - 8989:8989
+    depends_on:
+      - B1-rclone
+      - C1-mergerfs
+      - E4-plex
+      - D2-nzbget
+      - D1-qbittorrent
+      - E1-jackett
+
+  E6-radarr:
+    image: lscr.io/linuxserver/radarr:latest
+    container_name: E6-radarr
+    restart: unless-stopped
+    network_mode: host
+    environment:
+      - PUID=1001
+      - GUID=1001
+      - TZ=America/Chicago
+    volumes:
+      - type: bind
+        source: ${LargeStorageArray}/rclone-tmp/TEMP
+        target: /TEMP
+        bind:
+          propagation: rslave
+      - type: bind
+        source: ${FastStorageArray}/config/radarr
+        target: /config
+        bind:
+          propagation: rprivate
+      - type: bind
+        source: ${FastStorageArray}/mergerfs
+        target: /data
+        bind:
+          propagation: rslave
+      - type: bind
+        source: ${LargeStorageArray}/downloads
+        target: /downloads
+        bind:
+          propagation: rslave
+        depends_on:
+          - B1-rclone
+          - C1-mergerfs
+          - E4-plex
+          - D2-nzbget
+          - D1-qbittorrent
+          - E1-jackett
