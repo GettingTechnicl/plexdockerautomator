@@ -135,8 +135,8 @@ services:
       - VPN_TYPE=openvpn
       - VPN_INTERFACE=tun0
       - OPENVPN_PROTOCOL=udp
-      - OPENVPN_USER=Redacted
-      - OPENVPN_PASSWORD=Redacted
+      - OPENVPN_USER=${vpnUsername}
+      - OPENVPN_PASSWORD=${vpnPassword}
       - SERVER_REGIONS="CA MONTREAL"
       - TZ=America/Chicago
       - HEALTH_SERVER_ADDRESS=127.0.0.1:9999
@@ -316,7 +316,8 @@ services:
     environment:
       - PUID=1001
       - PGID=1001
-      - ADVERTISE_IP=192.170.1.2
+      - ADVERTISE_IP=${StaticIP}
+      - PLEX_CLAIM=${claimToken}
       - TZ=America/Chicago
       - DEBIAN_FRONTEND=noninteractive
       - PLEX_ARCH=amd64
@@ -331,6 +332,7 @@ services:
       - PLEX_MEDIA_SERVER_INFO_VENDOR=Docker
       - USE_DOCKER=false
       - USE_SUDO=false
+      - VERSION=latest
     volumes:
       - type: bind
         source: ${FastStorageArray}/config/plex
