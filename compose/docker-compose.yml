@@ -280,10 +280,8 @@ services:
     depends_on:
       - B1-rclone
       - C1-mergerfs
-      - E4-plex
       - D2-nzbget
       - D1-qbittorrent
-      - E1-jackett
 
   E3-ombi:
     image: lscr.io/linuxserver/ombi:latest
