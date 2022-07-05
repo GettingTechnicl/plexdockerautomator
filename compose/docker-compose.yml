@@ -191,6 +191,7 @@ services:
       - B1-rclone
       - C1-mergerfs
       - C2-gluetun
+      - E1-jackett
 
   D2-nzbget:
     image: lscr.io/linuxserver/nzbget:latest
@@ -302,8 +303,6 @@ services:
     ports:
       - 3579:3579
     depends_on:
-      - B1-rclone
-      - C1-mergerfs
       - E2-lidarr
       - E5-sonarr
       - E6-radarr
@@ -397,10 +396,8 @@ services:
     depends_on:
       - B1-rclone
       - C1-mergerfs
-      - E4-plex
       - D2-nzbget
       - D1-qbittorrent
-      - E1-jackett
 
   E6-radarr:
     image: lscr.io/linuxserver/radarr:latest
@@ -435,7 +432,5 @@ services:
         depends_on:
           - B1-rclone
           - C1-mergerfs
-          - E4-plex
           - D2-nzbget
           - D1-qbittorrent
-          - E1-jackett
