@@ -427,8 +427,8 @@ services:
         target: /downloads
         bind:
           propagation: rslave
-        depends_on:
-          - B1-rclone
-          - C1-mergerfs
-          - D2-nzbget
-          - D1-qbittorrent
+    depends_on:
+      - B1-rclone
+      - C1-mergerfs
+      - D2-nzbget
+      - D1-qbittorrent
