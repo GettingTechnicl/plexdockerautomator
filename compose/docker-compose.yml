@@ -160,7 +160,7 @@ services:
     image: lscr.io/linuxserver/qbittorrent:latest
     container_name: D1-qbittorrent
     restart: unless-stopped
-    network_mode: container:C2-gluetun
+    network_mode: service:C2-gluetun
     environment:
       - PUID=1001
       - PGID=1001
