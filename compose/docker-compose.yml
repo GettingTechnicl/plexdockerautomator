@@ -118,6 +118,7 @@ services:
       - 8888:8888/tcp # HTTP Proxy
       - 8388:8388/tcp # Shadowsocks
       - 8388:8388/udp # Shadowsocks
+      - 8585:8585     # QbitTorrent
     volumes:
       - type: bind
         source: ${FastStorageArray}/config/gluetun
@@ -159,7 +160,7 @@ services:
     image: lscr.io/linuxserver/qbittorrent:latest
     container_name: D1-qbittorrent
     restart: unless-stopped
-    network_mode: service:C2-gluetun
+    network_mode: container:C2-gluetun
     environment:
       - PUID=1001
       - PGID=1001
@@ -182,6 +183,8 @@ services:
         target: /downloads
         bind:
           propagation: shared
+    ports:
+      - 8585:8585
     depends_on:
       - B1-rclone
       - C1-mergerfs
