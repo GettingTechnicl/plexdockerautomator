@@ -3,7 +3,7 @@
 ##  Testing: B1-rclone, B2-rclone-move, C1-mergerfs, C2-gluetun, D1-qbittorrent, D2-nzbget, E1-jackett, E2-lidarr, E3-ombi, E4-plex, E5-sonarr, E6-radarr | Completed Testing:
 
 
-version: ‘3.8’
+version: '3.8'
 services:
   B1-rclone:
     image: rclone/rclone:latest
@@ -47,7 +47,7 @@ services:
       - MOVE_OPTS= "-v --transfers 3 --min-age 10m --exclude *.mkv --exclude *.avi --exclude *.partial --exclude *.qtfs --delete-empty-src-dirs"
       - RCLONE_OPTS= "--config /config/rclone-move/rclone.conf"
       - CRON= "*/5 * * * *"
-      - TZ= "America/Chicago"
+      - TZ= America/Chicago
       - CRON_ABORT= "0 5 * * *"
       - FORCE_MOVE= "true"
     volumes:
@@ -119,10 +119,10 @@ services:
       - NET_ADMIN
     devices:
       - /dev/net/tun:/dev/net/tun
-    ports:
-      - 8888:8888/tcp # HTTP Proxy
-      - 8388:8388/tcp # Shadowsocks
-      - 8388:8388/udp # Shadowsocks
+    #ports:
+      #- 8888:8888/tcp # HTTP Proxy
+      #- 8388:8388/tcp # Shadowsocks
+      #- 8388:8388/udp # Shadowsocks
     volumes:
       - type: bind
         source: ${FastStorageArray}/config/gluetun
@@ -137,7 +137,7 @@ services:
       - OPENVPN_PROTOCOL=udp
       - OPENVPN_USER=${vpnUsername}
       - OPENVPN_PASSWORD=${vpnPassword}
-      - SERVER_REGIONS="CA MONTREAL"
+      - SERVER_REGIONS="CA Montreal"
       - TZ=America/Chicago
       - HEALTH_SERVER_ADDRESS=127.0.0.1:9999
       - HEALTH_TARGET_ADDRESS=github.com:443
@@ -150,12 +150,12 @@ services:
       - DNS_ADDRESS=127.0.0.1
       - DNS_KEEP_NAMESERVER=off
       - HTTPPROXY_LOG=off
-      - HTTPPROXY_LISTENING_ADDRESS=":8888"
-      - HTTP_CONTROL_SERVER_ADDRESS=":8000"
+      #- HTTPPROXY_LISTENING_ADDRESS="192.170.1.2:8888"
+      #- HTTP_CONTROL_SERVER_ADDRESS="192.170.1.2:8000"
       - UPDATER_PERIOD=0
       - PUBLICIP_FILE=/tmp/gluetun/ip
       - PUBLICIP_PERIOD=12h
-      - PPROF_HTTP_SERVER_ADDRESS=":6060"
+      #- PPROF_HTTP_SERVER_ADDRESS=":6060"
     depends_on:
       - B1-rclone
       - C1-mergerfs
@@ -228,7 +228,7 @@ services:
       - PGID=1001
       - TZ=America/Chicago
       - AUTO_UPDATE=true
-      - RUN_OPTS =  #optional
+      #- RUN_OPTS =  #optional
     volumes:
       - type: bind
         source: ${FastStorageArray}/config/jackett
@@ -322,7 +322,7 @@ services:
       - PLEX_AUTOSCAN_LOGFILE=/config/plex_autoscan/plex_autoscan.log
       - PLEX_AUTOSCAN_QUEUEFILE=/config/plex_autoscan/queue.db
       - PLEX_DOWNLOAD=https://downloads.plex.tv/plex-media-server-new
-      - PLEX_MEDIA_SERVER_APPLICATION_SUPPORT_DIR=""/config/Library/Application Support"
+      - PLEX_MEDIA_SERVER_APPLICATION_SUPPORT_DIR=/config/Library/Application Support
       - PLEX_MEDIA_SERVER_HOME=/usr/lib/plexmediaserver
       - PLEX_MEDIA_SERVER_INFO_DEVICE="Docker Container (LinuxServer.io)"
       - PLEX_MEDIA_SERVER_INFO_VENDOR=Docker
@@ -334,7 +334,7 @@ services:
         source: ${FastStorageArray}/config/plex
         target: /config
         bind:
-          propagation: rprivate
+          propagation: slave
       - type: bind
         source: ${FastStorageArray}/mergerfs
         target: /data
@@ -359,7 +359,7 @@ services:
       - C1-mergerfs
 
   E5-sonarr:
-    image: lscr.io/linuxserver/sonarr:latest
+    image: mdhiggins/sonarr-sma
     container_name: E5-sonarr
     restart: unless-stopped
     network_mode: host
@@ -397,7 +397,7 @@ services:
       - D1-qbittorrent
 
   E6-radarr:
-    image: lscr.io/linuxserver/radarr:latest
+    image: mdhiggins/radarr-sma
     container_name: E6-radarr
     restart: unless-stopped
     network_mode: host
