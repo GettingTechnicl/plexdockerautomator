@@ -401,7 +401,7 @@ services:
     network_mode: host
     environment:
       - PUID=1001
-      - GUID=1001
+      - PGID=1001
       - TZ=America/Chicago
     volumes:
       - type: bind
