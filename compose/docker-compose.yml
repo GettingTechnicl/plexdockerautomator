@@ -1,4 +1,4 @@
-version: '3.8'
+version: '3.9'
 services:
 
   B1-rclone:
@@ -133,7 +133,7 @@ services:
       - OPENVPN_PROTOCOL=udp
       - OPENVPN_USER=${vpnUsername}
       - OPENVPN_PASSWORD=${vpnPassword}
-      - SERVER_REGIONS="CA Montreal"
+      - SERVER_REGIONS=CA Montreal
       - TZ=America/Chicago
       - HEALTH_SERVER_ADDRESS=127.0.0.1:9999
       - HEALTH_TARGET_ADDRESS=github.com:443
@@ -147,7 +147,7 @@ services:
       - DNS_KEEP_NAMESERVER=off
       - HTTPPROXY_LOG=off
       #- HTTPPROXY_LISTENING_ADDRESS="192.170.1.2:8888"
-      - HTTP_CONTROL_SERVER_ADDRESS=${StaticIP}:8020
+      #- HTTP_CONTROL_SERVER_ADDRESS=${StaticIP}:8020
       - UPDATER_PERIOD=0
       - PUBLICIP_FILE=/tmp/gluetun/ip
       - PUBLICIP_PERIOD=12h
@@ -332,7 +332,7 @@ services:
         source: ${FastStorageArray}/config/plex
         target: /config
         bind:
-          propagation: slave
+          propagation: rshared
       - type: bind
         source: ${FastStorageArray}/mergerfs
         target: /data
@@ -401,7 +401,7 @@ services:
     network_mode: host
     environment:
       - PUID=1001
-      - GUID=1001
+      - PGID=1001
       - TZ=America/Chicago
     volumes:
       - type: bind
