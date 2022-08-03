@@ -429,3 +429,21 @@ services:
       - C1-mergerfs
       - D2-nzbget
       - D1-qbittorrent
+  autoscan:
+    image: cloudb0x/autoscan
+    container_name: autoscan
+    restart: unless-stopped
+    network_mode: host
+    environment:
+      - PUID=1001
+      - PGID=1001
+      - UMASK=002
+      - TZ=America/Chicago
+      - PLEX_LOGIN=${PlexUsername}
+      - PLEX_PASSWORD=${PlexPassword}
+    volumes:
+      - type: bind
+        source: ${FastStorageArray}/config/autoscan
+        target: /config
+        bind:
+          propagation: rprivate
