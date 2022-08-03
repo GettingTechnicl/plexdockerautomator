@@ -430,7 +430,7 @@ services:
       - D2-nzbget
       - D1-qbittorrent
   autoscan:
-    image: cloudb0x/autoscan
+    image: cr.hotio.dev/hotio/autoscan
     container_name: autoscan
     restart: unless-stopped
     network_mode: host
