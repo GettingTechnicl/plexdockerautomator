@@ -433,6 +433,7 @@ services:
     image: cr.hotio.dev/hotio/autoscan
     container_name: autoscan
     restart: unless-stopped
+    network_mode: host
     environment:
       - PUID=1001
       - PGID=1001
@@ -446,8 +447,8 @@ services:
         target: /config
         bind:
           propagation: rprivate
-    ports:
-      - 3030:3030
+    #ports:
+      #- 3030:3030
     depends_on:
       - B1-rclone
       - C1-mergerfs
