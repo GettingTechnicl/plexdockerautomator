@@ -38,14 +38,14 @@ services:
     environment:
       - PUID=1001
       - PGID=1001
-      - MOVE_SRC= "/uploads"
-      - MOVE_DEST= "gdrive:Cloud"
-      - MOVE_OPTS= "-v --transfers 3 --min-age 10m --exclude *.mkv --exclude *.avi --exclude *.partial --exclude *.qtfs --delete-empty-src-dirs"
-      - RCLONE_OPTS= "--config /config/rclone-move/rclone.conf"
-      - CRON= "*/5 * * * *"
+      - MOVE_SRC=/uploads
+      - MOVE_DEST=gdrive:Cloud
+      - MOVE_OPTS=-v --transfers 3 --min-age 10m --exclude *.mkv --exclude *.avi --exclude *.partial --exclude *.qtfs --delete-empty-src-dirs
+      - RCLONE_OPTS=--config /config/rclone-move/rclone.conf
+      - CRON=*/5 * * * *
       - TZ=America/Chicago
-      - CRON_ABORT= "0 5 * * *"
-      - FORCE_MOVE= "true"
+      - CRON_ABORT=0 5 * * *
+      - FORCE_MOVE=true
     volumes:
       - type: bind
         source: ${FastStorageArray}/config
