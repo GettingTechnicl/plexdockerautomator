@@ -433,7 +433,6 @@ services:
     image: cr.hotio.dev/hotio/autoscan
     container_name: autoscan
     restart: unless-stopped
-    network_mode: host
     environment:
       - PUID=1001
       - PGID=1001
