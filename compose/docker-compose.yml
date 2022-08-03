@@ -450,7 +450,7 @@ services:
     depends_on:
       - B1-rclone
       - C1-mergerfs
-      - E4-Plex
+      - E4-plex
   a-train:
     image: ghcr.io/m-rots/a-train
     container_name: a-train
