@@ -447,3 +447,20 @@ services:
         target: /config
         bind:
           propagation: rprivate
+      depends_on:
+        - B1-rclone
+        - C1-mergerfs
+        - E4-Plex
+  a-train:
+    image: ghcr.io/m-rots/a-train
+    container_name: a-train
+    restart: unless-stopped
+    network_mode: host
+    volumes:
+      - type: bind
+        source: ${FastStorageArray}/config/a-train
+        target: /data
+        bind:
+          propagation: rprivate
+      depends_on:
+        - autoscan
