@@ -20,6 +20,11 @@ services:
         target: /data
         bind:
           propagation: shared
+      - type: bind
+        source: ${LargeStorageArray}/rclone-tmp
+        target: /rclone-tmp
+        bind:
+          propagation: shared
       - /etc/passwd:/etc/passwd:ro
       - /etc/group:/etc/group:ro
     cap_add:
@@ -28,7 +33,7 @@ services:
       - /dev/fuse
     security_opt:
       - apparmor:unconfined
-    command: "mount gdrive:Cloud /data --config /config/rclone/rclone.conf --allow-other --allow-non-empty --rc --rc-addr 0.0.0.0:5572 --fast-list --tpslimit 4 --vfs-cache-mode writes --vfs-cache-max-size 50G --vfs-read-chunk-size-limit 500M --vfs-read-chunk-size 100M --dir-cache-time 72h --cache-dir ${LargeStorageArray}/rclone-tmp/cache --uid 1001 --gid 1001"
+    command: "mount gdrive:Cloud /data --config /config/rclone/rclone.conf --allow-other --allow-non-empty --rc --rc-addr 0.0.0.0:5572 --fast-list --tpslimit 4 --vfs-cache-mode writes --vfs-cache-max-size 50G --vfs-read-chunk-size-limit 500M --vfs-read-chunk-size 100M --dir-cache-time 72h --cache-dir /rclone-tmp/cache --uid 1001 --gid 1001"
 
   B2-rclone-move:
     image: robostlund/rclone-move:latest
