@@ -434,9 +434,9 @@ services:
       - C1-mergerfs
       - D2-nzbget
       - D1-qbittorrent
-  autoscan:
+  E7-autoscan:
     image: cr.hotio.dev/hotio/autoscan
-    container_name: autoscan
+    container_name: E7-autoscan
     restart: unless-stopped
     network_mode: host
     environment:
@@ -463,9 +463,9 @@ services:
       - B1-rclone
       - C1-mergerfs
       - E4-plex
-  a-train:
+  E8-a-train:
     image: ghcr.io/m-rots/a-train
-    container_name: a-train
+    container_name: E8-a-train
     restart: unless-stopped
     network_mode: host
     volumes:
