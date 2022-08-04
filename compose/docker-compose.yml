@@ -303,7 +303,7 @@ services:
       - E6-radarr
 
   E4-plex:
-    image: horjulf/plex_autoscan:latest
+    image: lscr.io/linuxserver/plex:latest
     container_name: E4-plex
     restart: unless-stopped
     network_mode: host
