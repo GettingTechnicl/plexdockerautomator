@@ -475,4 +475,4 @@ services:
         bind:
           propagation: rprivate
     depends_on:
-      - autoscan
+      - E7-autoscan
