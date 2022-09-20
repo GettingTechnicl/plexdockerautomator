@@ -496,8 +496,8 @@ services:
     cap_add:
       - NET_ADMIN
     environment:
-      - PUID=1000
-      - PGID=1000
+      - PUID=1001
+      - PGID=1001
       - TZ=America/Chicago
       - URL=${URL}
       - SUBDOMAINS=${SUBDOMAINS}
