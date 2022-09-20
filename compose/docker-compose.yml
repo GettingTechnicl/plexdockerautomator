@@ -489,7 +489,7 @@ services:
           propagation: rprivate
     depends_on:
       - E7-autoscan
-  E9-swag
+  E9-swag:
     image: ghcr.io/linuxserver/swag
     container_name: swag
     restart: unless-stopped
