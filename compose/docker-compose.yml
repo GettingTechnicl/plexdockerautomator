@@ -476,3 +476,26 @@ services:
           propagation: rprivate
     depends_on:
       - E7-autoscan
+  E9-swag
+    image: ghcr.io/linuxserver/swag
+    container_name: swag
+    restart: unless-stopped
+    cap_add:
+      - NET_ADMIN
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=America/Chicago
+      - URL=${URL}
+      - SUBDOMAINS=${SUBDOMAINS}
+      - VALIDATION=${VALIDATION}
+      - CERTPROVIDER=${CERTPROVIDER}
+      - DNSPLUGIN=${DNSPLUGIN}
+      - EMAIL=${EMAIL}
+      - ONLY_SUBDOMAINS=${ONLY_SUBDOMAINS}
+      - STAGING=${STAGING}
+    volumes:
+      - ${FastStorageArray}/config/swag:/config
+    ports:
+      - 443:443
+      - 80:80
