@@ -111,12 +111,12 @@ services:
         source: ${FastStorageArray}/mergerfs
         target: /mergerfs
         bind:
-          propagation: rshared
+          propagation: shared
       - type: bind
         source: ${LargeStorageArray}/rclone-tmp/uploads
         target: /uploads
         bind:
-          propagation: rshared
+          propagation: shared
     command: /uploads:/gdrive /mergerfs -o defaults,nonempty,direct_io,sync_read,allow_other,category.action=all,category.create=ff
     depends_on:
       - B1-rclone
@@ -390,7 +390,7 @@ services:
       - PUID=1001
       - PGID=1001
       - TZ=America/Chicago
-      - SMA_UPDATE=true
+      - SMA_UPDATE=false
     volumes:
       - type: bind
         source: ${FastStorageArray}/config/sonarr
@@ -519,7 +519,7 @@ services:
       - PGID=1000
       - TZ=America/Chicago
       - URL=heyzzeus.com
-      - SUBDOMAINS=jellyfin,tdarr
+      - SUBDOMAINS=
       - VALIDATION=http
       - CERTPROVIDER=letsencrypt
       - DNSPLUGIN=cloudflare
@@ -568,161 +568,27 @@ services:
 
 
   jellyfin:
-    image: jellyfin/jellyfin:latest
+    image: lscr.io/linuxserver/jellyfin:latest
     container_name: jellyfin
-    user: 1001:1001
-    network_mode: 'host'
+    environment:
+      - PUID=1001
+      - PGID=1001
+      - TZ=America/Chicago
+      - JELLYFIN_PublishedServerUrl=4.2.0.8 #optional
     volumes:
-#      - ${FastStorageArray}/config/jellyfin/config:/config
-#      - ${FastStorageArray}/config/jellyfin/cache:/cache
-#      - ${FastStorageArray}/config/jellyfin/media:/media
-#      - ${FastStorageArray}/mergerfs:/data
-
       - type: bind
-        source: ${FastStorageArray}/config/jellyfin/config
+        source: ${FastStorageArray}/config/jellyfin
         target: /config
         bind:
-         propagation: rslave
-
+          propagation: rshared
       - type: bind
-        source: ${FastStorageArray}/config/jellyfin/cache
-        target: /cache
-        bind:
-         propagation: rslave
-
-      - type: bind
-        source: ${FastStorageArray}/config/jellyfin/media
+        source: ${FastStorageArray}/mergerfs
         target: /media
         bind:
-         propagation: rslave
-
-
-      - type: bind
-        source: ${FastStorageArray}/mergerfs
-        target: /data
-        bind:
-         propagation: rslave
-    restart: unless-stopped
-# Optional - may be necessary for docker healthcheck to pass if running in host network mode
-    extra_hosts:
-      - "host.docker.internal:host-gateway"
-
-
-  tdarr:
-    container_name: tdarr
-    image: ghcr.io/haveagitgat/tdarr:latest
-    network_mode: host
+          propagation: rshared
     ports:
-      - 8265:8265 # webUI port
-      - 8266:8266 # server port
-      - 8267:8267 # Internal node port
-      - 8268:8268 # Example extra node port
-    environment:
-      - TZ=America/Chicago	
-      - PUID=1001
-      - PGID=1001
-      - UMASK_SET=002
-      - serverIP=0.0.0.0
-      - serverPort=8266
-      - webUIPort=8265
-      - internalNode=true
-      - nodeName=MyInternalNode
-    volumes:
-      - ${FastStorageArray}/config/tdarr/server:/app/server
-      - ${FastStorageArray}/config/tdarr/configs:/app/configs
-      - ${FastStorageArray}/config/tdarr/logs:/app/logs
-      - ${FastStorageArray}/mergerfs:/media
-      - ${FastStorageArray}/transcode:/temp
+      - 8096:8096
+ #     - 8920:8920 #optional
+ #     - 7359:7359/udp #optional
+ #     - 1900:1900/udp #optional
     restart: unless-stopped
-
-  radarr_4K:
-    image: mdhiggins/radarr-sma
-    container_name: radarr_4K
-    restart: unless-stopped
-    network_mode: host
-    environment:
-      - PUID=1001
-      - PGID=1001
-      - TZ=America/Chicago
-      - SMA_UPDATE=true
-    volumes:
-      - type: bind
-        source: ${FastStorageArray}/config/radarr_4K
-        target: /config
-        bind:
-          propagation: rshared
-      - type: bind
-        source: ${FastStorageArray}/mergerfs
-        target: /data
-        bind:
-          propagation: rshared
-      - type: bind
-        source: ${LargeStorageArray}/downloads
-        target: /downloads
-        bind:
-          propagation: rshared
-      - type: bind
-        source: ${FastStorageArray}/config/radarr_4K/sma/config
-        target: /usr/local/sma/config
-        bind:
-          propagation: rshared
-    depends_on:
-      - B1-rclone
-      - C1-mergerfs
-      - D2-nzbget
-      - D1-qbittorrent
-
-
-  sonarr_4K:
-    image: mdhiggins/sonarr-sma
-    container_name: sonarr_4K
-    restart: unless-stopped
-    network_mode: host
-    environment:
-      - PUID=1001
-      - PGID=1001
-      - TZ=America/Chicago
-      - SMA_UPDATE=true
-    volumes:
-      - type: bind
-        source: ${FastStorageArray}/config/sonarr_4K
-        target: /config
-        bind:
-          propagation: rshared
-      - type: bind
-        source: ${FastStorageArray}/mergerfs
-        target: /data
-        bind:
-          propagation: rshared
-      - type: bind
-        source: ${LargeStorageArray}/downloads
-        target: /downloads
-        bind:
-          propagation: rshared
-      - type: bind
-        source: ${FastStorageArray}/config/sonarr_4K/sma/config
-        target: /usr/local/sma/config
-        bind:
-          propagation: rshared
-    depends_on:
-      - B1-rclone
-      - C1-mergerfs
-      - D2-nzbget
-      - D1-qbittorrent
-
-
-  xteve:
-    image: scp002/xteve:latest
-    container_name: xteve
-    hostname: xteve
-    restart: unless-stopped
-    networks:
-      - default
-    ports:
-      - "34400:34400"
-      - "1901:1900" #1900 used by Plex
-    environment:
-      TZ: America/Chicago
-    volumes:
-      - ${FastStorageArray}/config/xteve:/config:rw
-      - /dev/shm:/tmp/xteve
