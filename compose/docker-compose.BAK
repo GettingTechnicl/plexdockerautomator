@@ -523,7 +523,7 @@ services:
       - VALIDATION=http
       - CERTPROVIDER=letsencrypt
       - DNSPLUGIN=cloudflare
-      - EMAIL=***REMOVED***
+      - EMAIL=terrylee23@ymail.com
       - ONLY_SUBDOMAINS=false
       - STAGING=false
     volumes:
