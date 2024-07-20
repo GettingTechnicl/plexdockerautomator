@@ -1,0 +1,12 @@
+FROM mdhiggins/radarr-sma
+
+# Install dependencies
+RUN apt-get update && apt-get install -y wget
+
+# Download and install the specific version of ffmpeg
+RUN wget https://archive.archlinux.org/packages/f/ffmpeg/ffmpeg-5.1.2-1-x86_64.pkg.tar.zst && \
+    tar -I zstd -xf ffmpeg-5.1.2-1-x86_64.pkg.tar.zst -C /usr/local/bin/ && \
+    rm ffmpeg-5.1.2-1-x86_64.pkg.tar.zst
+
+# Clean up
+RUN apt-get clean && rm -rf /var/lib/apt/lists/*
