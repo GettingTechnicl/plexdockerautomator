@@ -1,4 +1,3 @@
-version: '3.9'
 services:
 
   A1-portainer:
@@ -10,7 +9,7 @@ services:
     volumes:
       - /etc/localtime:/etc/localtime:ro
       - /var/run/docker.sock:/var/run/docker.sock:ro
-      - ./portainer-data:/data
+      - /home/plex/docker-exchange/config/portainer:/data
     ports:
       - 9000:9000
 
@@ -34,7 +33,7 @@ services:
         bind:
           propagation: shared
       - type: bind
-        source: ${LargeStorageArray}/rclone-tmp
+        source: ${FastStorageArray}/tmpDATA/rclone-tmp
         target: /rclone-tmp
         bind:
           propagation: shared
@@ -47,44 +46,6 @@ services:
     security_opt:
       - apparmor:unconfined
     command: "mount gdrive:Cloud /data --config /config/rclone/rclone.conf --allow-other --allow-non-empty --rc --rc-addr 0.0.0.0:5572 --fast-list --tpslimit 4 --vfs-cache-mode writes --vfs-cache-max-size 50G --vfs-read-chunk-size-limit 500M --vfs-read-chunk-size 100M --dir-cache-time 72h --cache-dir /rclone-tmp/cache --uid 1001 --gid 1001"
-
-  B2-rclone-move:
-    image: robostlund/rclone-move:latest
-    container_name: B2-rclone-move
-    restart: unless-stopped
-    network_mode: host
-    environment:
-      - PUID=1001
-      - PGID=1001
-      - MOVE_SRC=/uploads
-      - MOVE_DEST=gdrive:Cloud
-      - MOVE_OPTS=-v --transfers 3 --min-age 10m --exclude *.mkv --exclude *.avi --exclude *.partial --exclude *.qtfs --delete-empty-src-dirs
-      - RCLONE_OPTS=--config /config/rclone/rclone.conf
-      - CRON=*/5 * * * *
-      - TZ=America/Chicago
-      - CRON_ABORT=0 5 * * *
-      - FORCE_MOVE=true
-    volumes:
-      - type: bind
-        source: ${FastStorageArray}/config
-        target: /config
-        bind:
-          propagation: rprivate
-      - type: bind
-        source: ${FastStorageArray}/mergerfs
-        target: /data
-        bind:
-          propagation: rslave
-      - type: bind
-        source: ${LargeStorageArray}/rclone-tmp/uploads
-        target: /uploads
-        bind:
-          propagation: shared
-      - /etc/passwd:/etc/passwd:ro
-      - /etc/group:/etc/group:ro
-    depends_on:
-      - B1-rclone
-      - C1-mergerfs
 
   C1-mergerfs:
     image: hotio/mergerfs:latest
@@ -113,11 +74,11 @@ services:
         bind:
           propagation: rshared
       - type: bind
-        source: ${LargeStorageArray}/rclone-tmp/uploads
-        target: /uploads
+        source: /DATA/Media
+        target: /Media
         bind:
           propagation: rshared
-    command: /uploads:/gdrive /mergerfs -o defaults,nonempty,direct_io,sync_read,allow_other,category.action=all,category.create=ff
+    command: /Media:/gdrive /mergerfs -o defaults,nonempty,direct_io,sync_read,allow_other,category.action=all,category.create=ff
     depends_on:
       - B1-rclone
 
@@ -199,7 +160,7 @@ services:
         bind:
           propagation: rprivate
       - type: bind
-        source: ${LargeStorageArray}/downloads
+        source: ${FastStorageArray}/tmpDATA/downloads
         target: /downloads
         bind:
           propagation: shared
@@ -223,7 +184,7 @@ services:
     #  - NZBGET_PASS=
     volumes:
       - type: bind
-        source: ${LargeStorageArray}/downloads
+        source: ${FastStorageArray}/tmpDATA/downloads
         target: /downloads
         bind:
           propagation: rslave
@@ -363,11 +324,6 @@ services:
         target: /transcode
         bind:
           propagation: rprivate
-      - type: bind
-        source: ${FastStorageArray}/config/autoscan
-        target: /config/plex_autoscan
-        bind:
-          propagation: rshared
     #ports:
       #- 32410:32410/udp
       #- 32412:32412/udp
@@ -403,12 +359,12 @@ services:
         bind:
           propagation: rslave
       - type: bind
-        source: ${LargeStorageArray}/downloads
+        source: ${FastStorageArray}/tmpDATA/downloads
         target: /downloads
         bind:
           propagation: rslave
       - type: bind
-        source: ${LargeStorageArray}/downloads
+        source: ${FastStorageArray}/tmpDATA/downloads
         target: /downloads-tmp
         bind:
           propagation: rslave
@@ -437,7 +393,7 @@ services:
       - SMA_UPDATE=true
     volumes:
       - type: bind
-        source: ${LargeStorageArray}/rclone-tmp/TEMP
+        source: ${FastStorageArray}/tmpDATA/rclone-tmp/TEMP
         target: /TEMP
         bind:
           propagation: rslave
@@ -452,7 +408,7 @@ services:
         bind:
           propagation: rslave
       - type: bind
-        source: ${LargeStorageArray}/downloads
+        source: ${FastStorageArray}/tmpDATA/downloads
         target: /downloads
         bind:
           propagation: rslave
@@ -467,11 +423,12 @@ services:
       - D2-nzbget
       - D1-qbittorrent
   E7-autoscan:
-    image: cr.hotio.dev/hotio/autoscan
+    image: cloudb0x/autoscan:latest
     container_name: E7-autoscan
     restart: unless-stopped
     network_mode: host
     environment:
+      - AUTOSCAN_VERBOSITY=1
       - PUID=1001
       - PGID=1001
       - UMASK=002
@@ -480,17 +437,22 @@ services:
       - PLEX_PASSWORD=${PlexPassword}
     volumes:
       - type: bind
-        source: ${FastStorageArray}/config/plex/plex_autoscan
+        source: ${FastStorageArray}/config/autoscan
         target: /config
         bind:
-          propagation: rprivate
+          propagation: rshared
       - type: bind
         source: ${FastStorageArray}/mergerfs
         target: /data
         bind:
-          propagation: shared
-    #ports:
-      #- 3030:3030
+          propagation: rslave
+      - type: bind
+        source: ${FastStorageArray}/transcode
+        target: /transcode
+        bind:
+          propagation: rprivate
+    ports:
+      - 3459:3459
     depends_on:
       - B1-rclone
       - C1-mergerfs
@@ -506,6 +468,8 @@ services:
         target: /data
         bind:
           propagation: rprivate
+    environment:
+      - TZ=America/Chicago
     depends_on:
       - E7-autoscan
 
@@ -553,7 +517,7 @@ services:
         bind:
           propagation: rslave
       - type: bind
-        source: ${LargeStorageArray}/downloads
+        source: ${FastStorageArray}/tmpDATA/downloads
         target: /downloads
         bind:
           propagation: rslave
@@ -577,26 +541,21 @@ services:
 #      - ${FastStorageArray}/config/jellyfin/cache:/cache
 #      - ${FastStorageArray}/config/jellyfin/media:/media
 #      - ${FastStorageArray}/mergerfs:/data
-
       - type: bind
         source: ${FastStorageArray}/config/jellyfin/config
         target: /config
         bind:
          propagation: rslave
-
       - type: bind
         source: ${FastStorageArray}/config/jellyfin/cache
         target: /cache
         bind:
          propagation: rslave
-
       - type: bind
         source: ${FastStorageArray}/config/jellyfin/media
         target: /media
         bind:
          propagation: rslave
-
-
       - type: bind
         source: ${FastStorageArray}/mergerfs
         target: /data
@@ -610,7 +569,7 @@ services:
 
   tdarr:
     container_name: tdarr
-    image: ghcr.io/haveagitgat/tdarr:latest
+    image: haveagitgat/tdarr:2.23.01
     network_mode: host
     ports:
       - 8265:8265 # webUI port
@@ -657,7 +616,7 @@ services:
         bind:
           propagation: rshared
       - type: bind
-        source: ${LargeStorageArray}/downloads
+        source: ${FastStorageArray}/tmpDATA/downloads
         target: /downloads
         bind:
           propagation: rshared
@@ -695,7 +654,7 @@ services:
         bind:
           propagation: rshared
       - type: bind
-        source: ${LargeStorageArray}/downloads
+        source: ${FastStorageArray}/tmpDATA/downloads
         target: /downloads
         bind:
           propagation: rshared
@@ -726,3 +685,25 @@ services:
     volumes:
       - ${FastStorageArray}/config/xteve:/config:rw
       - /dev/shm:/tmp/xteve
+
+
+  bazarr:
+    image: lscr.io/linuxserver/bazarr:latest
+    container_name: bazarr
+    network_mode: host
+    environment:
+      - PUID=1001
+      - PGID=1001
+      - TZ=America/Chicago
+    volumes:
+      - ${FastStorageArray}/config:/config
+      - type: bind
+        source: ${FastStorageArray}/mergerfs
+        target: /data
+        bind:
+         propagation: rslave
+#      - ${FastStorageArray}/mergerfs/Movies:/movies #optional
+#      - ${FastStorageArray}/mergerfs/Tv_Shows:/tv #optional
+#    ports:
+#      - 6767:6767
+    restart: unless-stopped
