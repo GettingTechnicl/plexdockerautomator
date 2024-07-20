@@ -3,33 +3,29 @@ FROM mdhiggins/sonarr-sma
 # Install dependencies
 RUN apk update && apk add wget build-base \
     yasm \
-    libx264-dev \
-    libx265-dev \
+    x264-dev \
+    x265-dev \
     libvpx-dev \
-    libfdk-aac-dev \
-    libvorbis-dev \
+    vorbis-dev \
     libass-dev \
     libwebp-dev \
-    libtheora-dev \
-    libopus-dev \
+    theora-dev \
+    opus-dev \
     freetype-dev \
     frei0r-plugins-dev \
-    libvidstab-dev \
-    libvmaf-dev \
+    vidstab-dev \
     libxcb-dev \
-    libx264 \
-    libx265 \
+    x264 \
+    x265 \
     libvpx \
-    libfdk-aac \
-    libvorbis \
+    vorbis \
     libass \
     libwebp \
-    libtheora \
-    libopus \
+    theora \
+    opus \
     freetype \
     frei0r-plugins \
-    libvidstab \
-    libvmaf \
+    vidstab \
     libxcb
 
 # Download and compile FFmpeg
@@ -37,9 +33,9 @@ RUN wget https://ffmpeg.org/releases/ffmpeg-4.2.2.tar.bz2 && \
     tar xjf ffmpeg-4.2.2.tar.bz2 && \
     cd ffmpeg-4.2.2 && \
     ./configure --enable-nonfree --enable-gpl --enable-libx264 --enable-libx265 \
-                --enable-libvpx --enable-libfdk-aac --enable-libvorbis --enable-libass \
+                --enable-libvpx --enable-libvorbis --enable-libass \
                 --enable-libwebp --enable-libtheora --enable-libopus --enable-libfreetype \
-                --enable-frei0r --enable-libvidstab --enable-libvmaf --enable-libxcb --enable-nvenc && \
+                --enable-frei0r --enable-libvidstab --enable-libxcb --enable-nvenc && \
     make && \
     make install && \
     cd .. && \
@@ -47,18 +43,14 @@ RUN wget https://ffmpeg.org/releases/ffmpeg-4.2.2.tar.bz2 && \
 
 # Clean up
 RUN apk del build-base yasm \
-    libx264-dev \
-    libx265-dev \
+    x264-dev \
+    x265-dev \
     libvpx-dev \
-    libfdk-aac-dev \
-    libvorbis-dev \
+    vorbis-dev \
     libass-dev \
     libwebp-dev \
-    libtheora-dev \
-    libopus-dev \
+    theora-dev \
+    opus-dev \
     freetype-dev \
     frei0r-plugins-dev \
-    libvidstab-dev \
-    libvmaf-dev \
-    libxcb-dev
-
+    vidstab-
