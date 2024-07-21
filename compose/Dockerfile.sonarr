@@ -34,28 +34,19 @@ RUN apk update && apk add --no-cache wget build-base \
     make \
     curl \
     bash \
-    linux-headers \
-    dpkg
+    linux-headers
 
-# Create temporary directory
-RUN mkdir -p /run/sonarr-temp && chmod 777 /run/sonarr-temp
-
-# Set TMPDIR environment variable
-ENV TMPDIR /run/sonarr-temp
-
-# Install CUDA and cuDNN
-RUN wget https://developer.download.nvidia.com/compute/cuda/repos/ubuntu1804/x86_64/cuda-repo-ubuntu1804_11.2.2-1_amd64.deb && \
-    dpkg -i cuda-repo-ubuntu1804_11.2.2-1_amd64.deb && \
-    apt-key adv --fetch-keys https://developer.download.nvidia.com/compute/cuda/repos/ubuntu1804/x86_64/7fa2af80.pub && \
+# Install CUDA Toolkit and cuDNN
+RUN wget https://developer.download.nvidia.com/compute/cuda/11.2.2/local_installers/cuda-repo-ubuntu1804-11-2-local_11.2.2-460.32.03-1_amd64.deb && \
+    dpkg -i cuda-repo-ubuntu1804-11-2-local_11.2.2-460.32.03-1_amd64.deb && \
+    apt-key adv --fetch-keys http://developer.download.nvidia.com/compute/cuda/repos/ubuntu1804/x86_64/7fa2af80.pub && \
     apt-get update && \
-    apt-get install -y --no-install-recommends cuda-11-2 && \
-    wget https://developer.download.nvidia.com/compute/machine-learning/repos/ubuntu1804/x86_64/libcudnn8_8.1.1.33-1+cuda11.2_amd64.deb && \
-    wget https://developer.download.nvidia.com/compute/machine-learning/repos/ubuntu1804/x86_64/libcudnn8-dev_8.1.1.33-1+cuda11.2_amd64.deb && \
-    dpkg -i libcudnn8_8.1.1.33-1+cuda11.2_amd64.deb && \
-    dpkg -i libcudnn8-dev_8.1.1.33-1+cuda11.2_amd64.deb && \
-    rm cuda-repo-ubuntu1804_11.2.2-1_amd64.deb libcudnn8_8.1.1.33-1+cuda11.2_amd64.deb libcudnn8-dev_8.1.1.33-1+cuda11.2_amd64.deb && \
-    apt-get clean && \
-    rm -rf /var/lib/apt/lists/*
+    apt-get install -y cuda && \
+    wget https://developer.download.nvidia.com/compute/machine-learning/cudnn/secure/8.1.0/local_installers/11.2/cudnn-local-repo-ubuntu1804-8.1.0.77_1.0-1_amd64.deb && \
+    dpkg -i cudnn-local-repo-ubuntu1804-8.1.0.77_1.0-1_amd64.deb && \
+    apt-get update && \
+    apt-get install -y libcudnn8 libcudnn8-dev && \
+    rm cuda-repo-ubuntu1804-11-2-local_11.2.2-460.32.03-1_amd64.deb cudnn-local-repo-ubuntu1804-8.1.0.77_1.0-1_amd64.deb
 
 # Install ffnvcodec headers
 RUN git clone https://git.videolan.org/git/ffmpeg/nv-codec-headers.git && \
@@ -74,7 +65,7 @@ RUN wget https://ffmpeg.org/releases/ffmpeg-4.2.2.tar.bz2 && \
                 --enable-libvpx --enable-libvorbis --enable-libass \
                 --enable-libwebp --enable-libopus --enable-libfreetype \
                 --enable-frei0r --enable-libvidstab --enable-libxcb --enable-nvenc && \
-    make -j$(nproc) && \
+    make && \
     make install && \
     cd .. && \
     rm -rf ffmpeg-4.2.2 ffmpeg-4.2.2.tar.bz2
@@ -94,12 +85,4 @@ RUN apk del build-base yasm \
     libvorbis-dev \
     pkgconfig \
     git \
-    nasm \
-    autoconf \
-    automake \
-    libtool \
-    make \
-    curl \
-    bash \
-    linux-headers \
-    dpkg
+    nasm
