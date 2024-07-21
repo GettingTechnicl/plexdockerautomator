@@ -44,16 +44,16 @@ RUN mkdir -p /run/sonarr-temp && chmod 777 /run/sonarr-temp
 ENV TMPDIR /run/sonarr-temp
 
 # Install CUDA and cuDNN
-RUN wget https://developer.download.nvidia.com/compute/cuda/repos/ubuntu2004/x86_64/cuda-repo-ubuntu2004_11.4.2-1_amd64.deb && \
-    dpkg -i cuda-repo-ubuntu2004_11.4.2-1_amd64.deb && \
-    apt-key adv --fetch-keys https://developer.download.nvidia.com/compute/cuda/repos/ubuntu2004/x86_64/7fa2af80.pub && \
+RUN wget https://developer.download.nvidia.com/compute/cuda/repos/ubuntu1804/x86_64/cuda-repo-ubuntu1804_11.2.2-1_amd64.deb && \
+    dpkg -i cuda-repo-ubuntu1804_11.2.2-1_amd64.deb && \
+    apt-key adv --fetch-keys https://developer.download.nvidia.com/compute/cuda/repos/ubuntu1804/x86_64/7fa2af80.pub && \
     apt-get update && \
-    apt-get install -y --no-install-recommends cuda-11-4 && \
-    wget https://developer.download.nvidia.com/compute/machine-learning/repos/ubuntu2004/x86_64/libcudnn8_8.2.4.15-1+cuda11.4_amd64.deb && \
-    wget https://developer.download.nvidia.com/compute/machine-learning/repos/ubuntu2004/x86_64/libcudnn8-dev_8.2.4.15-1+cuda11.4_amd64.deb && \
-    dpkg -i libcudnn8_8.2.4.15-1+cuda11.4_amd64.deb && \
-    dpkg -i libcudnn8-dev_8.2.4.15-1+cuda11.4_amd64.deb && \
-    rm cuda-repo-ubuntu2004_11.4.2-1_amd64.deb libcudnn8_8.2.4.15-1+cuda11.4_amd64.deb libcudnn8-dev_8.2.4.15-1+cuda11.4_amd64.deb && \
+    apt-get install -y --no-install-recommends cuda-11-2 && \
+    wget https://developer.download.nvidia.com/compute/machine-learning/repos/ubuntu1804/x86_64/libcudnn8_8.1.1.33-1+cuda11.2_amd64.deb && \
+    wget https://developer.download.nvidia.com/compute/machine-learning/repos/ubuntu1804/x86_64/libcudnn8-dev_8.1.1.33-1+cuda11.2_amd64.deb && \
+    dpkg -i libcudnn8_8.1.1.33-1+cuda11.2_amd64.deb && \
+    dpkg -i libcudnn8-dev_8.1.1.33-1+cuda11.2_amd64.deb && \
+    rm cuda-repo-ubuntu1804_11.2.2-1_amd64.deb libcudnn8_8.1.1.33-1+cuda11.2_amd64.deb libcudnn8-dev_8.1.1.33-1+cuda11.2_amd64.deb && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 
