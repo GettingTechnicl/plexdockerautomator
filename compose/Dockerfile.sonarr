@@ -44,9 +44,10 @@ RUN mkdir -p /run/sonarr-temp && chmod 777 /run/sonarr-temp
 ENV TMPDIR /run/sonarr-temp
 
 # Install CUDA Toolkit
-RUN wget https://developer.download.nvidia.com/compute/cuda/repos/alpine101/x86_64/cuda-11.2.2-460.32.03-r0.apk && \
-    apk add --allow-untrusted cuda-11.2.2-460.32.03-r0.apk && \
-    rm cuda-11.2.2-460.32.03-r0.apk
+RUN wget https://developer.download.nvidia.com/compute/cuda/11.2.2/local_installers/cuda_11.2.2_460.32.03_linux.run && \
+    chmod +x cuda_11.2.2_460.32.03_linux.run && \
+    ./cuda_11.2.2_460.32.03_linux.run --silent --toolkit && \
+    rm cuda_11.2.2_460.32.03_linux.run
 
 # Install cuDNN
 RUN wget https://developer.download.nvidia.com/compute/machine-learning/cudnn/secure/8.1.0/local_installers/11.2/cudnn-11.2-linux-x64-v8.1.0.77.tgz && \
