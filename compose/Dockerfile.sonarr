@@ -27,7 +27,17 @@ RUN apk update && apk add --no-cache wget build-base \
     libxcb \
     libvorbis \
     git \
-    nasm
+    nasm \
+    autoconf \
+    automake \
+    libtool \
+    make \
+    curl \
+    bash \
+    linux-headers \
+    nvidia-cuda-dev \
+    nvidia-cudnn-dev \
+    nvidia-container-runtime
 
 # Create temporary directory
 RUN mkdir -p /run/sonarr-temp && chmod 777 /run/sonarr-temp
@@ -35,9 +45,10 @@ RUN mkdir -p /run/sonarr-temp && chmod 777 /run/sonarr-temp
 # Set TMPDIR environment variable
 ENV TMPDIR /run/sonarr-temp
 
-# Install specific version of ffnvcodec headers
-RUN git clone -b sdk/11.1 https://git.videolan.org/git/ffmpeg/nv-codec-headers.git && \
+# Install ffnvcodec headers
+RUN git clone https://git.videolan.org/git/ffmpeg/nv-codec-headers.git && \
     cd nv-codec-headers && \
+    git checkout n11.1.5.3 && \
     make && \
     make install && \
     cd .. && \
@@ -51,7 +62,7 @@ RUN wget https://ffmpeg.org/releases/ffmpeg-4.2.2.tar.bz2 && \
                 --enable-libvpx --enable-libvorbis --enable-libass \
                 --enable-libwebp --enable-libopus --enable-libfreetype \
                 --enable-frei0r --enable-libvidstab --enable-libxcb --enable-nvenc && \
-    make && \
+    make -j$(nproc) && \
     make install && \
     cd .. && \
     rm -rf ffmpeg-4.2.2 ffmpeg-4.2.2.tar.bz2
@@ -71,4 +82,14 @@ RUN apk del build-base yasm \
     libvorbis-dev \
     pkgconfig \
     git \
-    nasm
+    nasm \
+    autoconf \
+    automake \
+    libtool \
+    make \
+    curl \
+    bash \
+    linux-headers \
+    nvidia-cuda-dev \
+    nvidia-cudnn-dev \
+    nvidia-container-runtime
