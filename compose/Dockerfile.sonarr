@@ -46,7 +46,7 @@ ENV TMPDIR /run/sonarr-temp
 # Install CUDA Toolkit
 RUN wget https://developer.download.nvidia.com/compute/cuda/11.2.2/local_installers/cuda_11.2.2_460.32.03_linux.run && \
     chmod +x cuda_11.2.2_460.32.03_linux.run && \
-    ./cuda_11.2.2_460.32.03_linux.run --silent --toolkit && \
+    sh cuda_11.2.2_460.32.03_linux.run --silent --toolkit && \
     rm cuda_11.2.2_460.32.03_linux.run
 
 # Install cuDNN
