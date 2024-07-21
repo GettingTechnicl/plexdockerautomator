@@ -33,6 +33,14 @@ RUN mkdir -p /run/sonarr-temp && chmod 777 /run/sonarr-temp
 # Set TMPDIR environment variable
 ENV TMPDIR /run/sonarr-temp
 
+# Install ffnvcodec headers
+RUN git clone https://git.videolan.org/git/ffmpeg/nv-codec-headers.git && \
+    cd nv-codec-headers && \
+    make && \
+    make install && \
+    cd .. && \
+    rm -rf nv-codec-headers
+
 # Download and compile FFmpeg with NVIDIA support
 RUN wget https://ffmpeg.org/releases/ffmpeg-4.2.2.tar.bz2 && \
     tar xjf ffmpeg-4.2.2.tar.bz2 && \
