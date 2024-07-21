@@ -1,7 +1,7 @@
 FROM mdhiggins/radarr-sma
 
 # Install dependencies
-RUN apk update && apk add wget build-base \
+RUN apk update && apk add --no-cache wget build-base \
     yasm \
     x264-dev \
     x265-dev \
@@ -13,12 +13,18 @@ RUN apk update && apk add wget build-base \
     frei0r-plugins-dev \
     vidstab-dev \
     libxcb-dev \
-    nvidia-sdk \
-    nvidia-cuda-dev \
-    nvidia-cudnn-dev \
-    nvidia-container-runtime
+    x264 \
+    x265 \
+    libvpx \
+    libass \
+    libwebp \
+    opus \
+    freetype \
+    frei0r-plugins \
+    vidstab \
+    libxcb
 
-# Download and compile FFmpeg
+# Download and compile FFmpeg with NVIDIA support
 RUN wget https://ffmpeg.org/releases/ffmpeg-4.2.2.tar.bz2 && \
     tar xjf ffmpeg-4.2.2.tar.bz2 && \
     cd ffmpeg-4.2.2 && \
@@ -35,11 +41,3 @@ RUN wget https://ffmpeg.org/releases/ffmpeg-4.2.2.tar.bz2 && \
 RUN apk del build-base yasm \
     x264-dev \
     x265-dev \
-    libvpx-dev \
-    libass-dev \
-    libwebp-dev \
-    opus-dev \
-    freetype-dev \
-    frei0r-plugins-dev \
-    vidstab-dev \
-    libxcb-dev
