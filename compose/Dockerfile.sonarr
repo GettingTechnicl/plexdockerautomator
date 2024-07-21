@@ -25,7 +25,9 @@ RUN apk update && apk add --no-cache wget build-base \
     frei0r-plugins \
     vidstab \
     libxcb \
-    libvorbis
+    libvorbis \
+    git \
+    nasm
 
 # Create temporary directory
 RUN mkdir -p /run/sonarr-temp && chmod 777 /run/sonarr-temp
@@ -48,23 +50,3 @@ RUN wget https://ffmpeg.org/releases/ffmpeg-4.2.2.tar.bz2 && \
     ./configure --enable-nonfree --enable-gpl --enable-libx264 --enable-libx265 \
                 --enable-libvpx --enable-libvorbis --enable-libass \
                 --enable-libwebp --enable-libopus --enable-libfreetype \
-                --enable-frei0r --enable-libvidstab --enable-libxcb --enable-nvenc && \
-    make && \
-    make install && \
-    cd .. && \
-    rm -rf ffmpeg-4.2.2 ffmpeg-4.2.2.tar.bz2
-
-# Clean up
-RUN apk del build-base yasm \
-    x264-dev \
-    x265-dev \
-    libvpx-dev \
-    libass-dev \
-    libwebp-dev \
-    opus-dev \
-    freetype-dev \
-    frei0r-plugins-dev \
-    vidstab-dev \
-    libxcb-dev \
-    libvorbis-dev \
-    pkgconfig
