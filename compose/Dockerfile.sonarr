@@ -34,19 +34,23 @@ RUN apk update && apk add --no-cache wget build-base \
     make \
     curl \
     bash \
-    linux-headers
-
-# Install NVIDIA CUDA and cuDNN
-RUN apk add --no-cache --repository=https://developer.download.nvidia.com/compute/cuda/repos/alpine101/x86_64 \
-    cuda \
-    libcudnn8 \
-    libcudnn8-dev
+    linux-headers \
+    dpkg
 
 # Create temporary directory
 RUN mkdir -p /run/sonarr-temp && chmod 777 /run/sonarr-temp
 
 # Set TMPDIR environment variable
 ENV TMPDIR /run/sonarr-temp
+
+# Install CUDA and cuDNN
+RUN wget https://developer.download.nvidia.com/compute/cuda/repos/ubuntu1804/x86_64/cuda-ubuntu1804.pin -P /etc/apt/preferences.d/ && \
+    curl -fsSL https://developer.download.nvidia.com/compute/cuda/repos/ubuntu1804/x86_64/7fa2af80.pub | apt-key add - && \
+    echo "deb https://developer.download.nvidia.com/compute/cuda/repos/ubuntu1804/x86_64 /" > /etc/apt/sources.list.d/cuda.list && \
+    apt-get update && \
+    apt-get install -y --no-install-recommends cuda-11-1 libcudnn8=8.0.5.39-1+cuda11.1 libcudnn8-dev=8.0.5.39-1+cuda11.1 && \
+    apt-get clean && \
+    rm -rf /var/lib/apt/lists/*
 
 # Install ffnvcodec headers
 RUN git clone https://git.videolan.org/git/ffmpeg/nv-codec-headers.git && \
@@ -92,4 +96,5 @@ RUN apk del build-base yasm \
     make \
     curl \
     bash \
-    linux-headers
+    linux-headers \
+    dpkg
