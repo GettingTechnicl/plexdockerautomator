@@ -34,7 +34,14 @@ RUN apk update && apk add --no-cache wget build-base \
     make \
     curl \
     bash \
-    linux-headers
+    linux-headers \
+    coreutils
+
+# Create temporary directory
+RUN mkdir -p /run/sonarr-temp && chmod 777 /run/sonarr-temp
+
+# Set TMPDIR environment variable
+ENV TMPDIR /run/sonarr-temp
 
 # Install CUDA Toolkit
 RUN wget https://developer.download.nvidia.com/compute/cuda/11.2.2/local_installers/cuda_11.2.2_460.32.03_linux.run && \
