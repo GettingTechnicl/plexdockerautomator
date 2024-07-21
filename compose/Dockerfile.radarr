@@ -22,7 +22,8 @@ RUN apk update && apk add wget build-base \
     freetype \
     frei0r-plugins \
     vidstab \
-    libxcb
+    libxcb \
+    nvidia-utils
 
 # Download and compile FFmpeg
 RUN wget https://ffmpeg.org/releases/ffmpeg-4.2.2.tar.bz2 && \
