@@ -1,7 +1,9 @@
 FROM mdhiggins/sonarr-sma
 
 # Install dependencies
-RUN apk update && apk add --no-cache wget build-base \
+RUN apk update && apk add --no-cache \
+    wget \
+    build-base \
     yasm \
     x264-dev \
     x265-dev \
@@ -34,28 +36,16 @@ RUN apk update && apk add --no-cache wget build-base \
     make \
     curl \
     bash \
-    linux-headers \
-    coreutils
+    linux-headers
 
-# Create temporary directory
-RUN mkdir -p /run/sonarr-temp && chmod 777 /run/sonarr-temp
-
-# Set TMPDIR environment variable
-ENV TMPDIR /run/sonarr-temp
-
-# Install CUDA Toolkit
+# Install CUDA
 RUN wget https://developer.download.nvidia.com/compute/cuda/11.2.2/local_installers/cuda_11.2.2_460.32.03_linux.run && \
     chmod +x cuda_11.2.2_460.32.03_linux.run && \
     sh cuda_11.2.2_460.32.03_linux.run --silent --toolkit && \
     rm cuda_11.2.2_460.32.03_linux.run
 
-# Install cuDNN
-RUN wget https://developer.download.nvidia.com/compute/machine-learning/cudnn/secure/8.1.0/local_installers/11.2/cudnn-11.2-linux-x64-v8.1.0.77.tgz && \
-    tar -xzvf cudnn-11.2-linux-x64-v8.1.0.77.tgz && \
-    cp -P cuda/include/cudnn*.h /usr/local/cuda/include && \
-    cp -P cuda/lib64/libcudnn* /usr/local/cuda/lib64 && \
-    chmod a+r /usr/local/cuda/include/cudnn*.h /usr/local/cuda/lib64/libcudnn* && \
-    rm cudnn-11.2-linux-x64-v8.1.0.77.tgz
+# Set TMPDIR environment variable
+ENV TMPDIR /run/sonarr-temp
 
 # Install ffnvcodec headers
 RUN git clone https://git.videolan.org/git/ffmpeg/nv-codec-headers.git && \
@@ -94,4 +84,11 @@ RUN apk del build-base yasm \
     libvorbis-dev \
     pkgconfig \
     git \
-    nasm
+    nasm \
+    autoconf \
+    automake \
+    libtool \
+    make \
+    curl \
+    bash \
+    linux-headers
