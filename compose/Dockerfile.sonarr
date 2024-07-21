@@ -13,6 +13,8 @@ RUN apk update && apk add --no-cache wget build-base \
     frei0r-plugins-dev \
     vidstab-dev \
     libxcb-dev \
+    libvorbis-dev \
+    pkgconfig \
     x264 \
     x265 \
     libvpx \
@@ -22,10 +24,14 @@ RUN apk update && apk add --no-cache wget build-base \
     freetype \
     frei0r-plugins \
     vidstab \
-    libxcb
+    libxcb \
+    libvorbis
+
+# Create temporary directory
+RUN mkdir -p /run/sonarr-temp && chmod 777 /run/sonarr-temp
 
 # Set TMPDIR environment variable
-ENV TMPDIR /tmp
+ENV TMPDIR /run/sonarr-temp
 
 # Download and compile FFmpeg with NVIDIA support
 RUN wget https://ffmpeg.org/releases/ffmpeg-4.2.2.tar.bz2 && \
@@ -51,4 +57,6 @@ RUN apk del build-base yasm \
     freetype-dev \
     frei0r-plugins-dev \
     vidstab-dev \
-    libxcb-dev
+    libxcb-dev \
+    libvorbis-dev \
+    pkgconfig
