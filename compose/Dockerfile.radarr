@@ -1,70 +1,27 @@
-FROM mdhiggins/radarr-sma
+# Use a base image that supports NVIDIA and FFmpeg
+FROM jrottenberg/ffmpeg:4.2-nvidia
 
 # Install dependencies
-RUN apk update && apk add --no-cache wget build-base \
-    yasm \
-    x264-dev \
-    x265-dev \
-    libvpx-dev \
-    libass-dev \
-    libwebp-dev \
-    opus-dev \
-    freetype-dev \
-    frei0r-plugins-dev \
-    vidstab-dev \
-    libxcb-dev \
-    libvorbis-dev \
-    pkgconfig \
-    x264 \
-    x265 \
-    libvpx \
-    libass \
-    libwebp \
-    opus \
-    freetype \
-    frei0r-plugins \
-    vidstab \
-    libxcb \
-    libvorbis
+RUN apt-get update && apt-get install -y \
+    python3 \
+    python3-pip \
+    git \
+    && apt-get clean
 
-# Create temporary directory
-RUN mkdir -p /run/sonarr-temp && chmod 777 /run/sonarr-temp
+# Clone and set up SMA
+RUN git clone https://github.com/mdhiggins/sickbeard_mp4_automator.git /usr/local/sma \
+    && cd /usr/local/sma \
+    && pip3 install -r requirements.txt
 
-# Set TMPDIR environment variable
-ENV TMPDIR /run/sonarr-temp
+# Set up configuration files for SMA (adjust these paths if needed)
+COPY sma-config/autoProcess.ini /usr/local/sma/config/autoProcess.ini
+COPY sma-config/sample.env /usr/local/sma/config/sample.env
 
-# Install ffnvcodec headers
-RUN git clone https://git.videolan.org/git/ffmpeg/nv-codec-headers.git && \
-    cd nv-codec-headers && \
-    make && \
-    make install && \
-    cd .. && \
-    rm -rf nv-codec-headers
+# Copy Radarr binary (you may need to adjust the source path)
+COPY Radarr /usr/local/bin/Radarr
 
-# Download and compile FFmpeg with NVIDIA support
-RUN wget https://ffmpeg.org/releases/ffmpeg-4.2.2.tar.bz2 && \
-    tar xjf ffmpeg-4.2.2.tar.bz2 && \
-    cd ffmpeg-4.2.2 && \
-    ./configure --enable-nonfree --enable-gpl --enable-libx264 --enable-libx265 \
-                --enable-libvpx --enable-libvorbis --enable-libass \
-                --enable-libwebp --enable-libopus --enable-libfreetype \
-                --enable-frei0r --enable-libvidstab --enable-libxcb --enable-nvenc && \
-    make && \
-    make install && \
-    cd .. && \
-    rm -rf ffmpeg-4.2.2 ffmpeg-4.2.2.tar.bz2
+# Expose necessary ports
+EXPOSE 7878
 
-# Clean up
-RUN apk del build-base yasm \
-    x264-dev \
-    x265-dev \
-    libvpx-dev \
-    libass-dev \
-    libwebp-dev \
-    opus-dev \
-    freetype-dev \
-    frei0r-plugins-dev \
-    vidstab-dev \
-    libxcb-dev \
-    libvorbis-dev \
-    pkgconfig
+# Set the entrypoint or command
+CMD ["dotnet", "/usr/local/bin/Radarr/Radarr.dll"]
