@@ -1,39 +1,25 @@
-FROM mdhiggins/sonarr-sma
+FROM nvidia/cuda:11.4.2-devel-ubuntu20.04
 
 # Install dependencies
-RUN apk update && apk add --no-cache wget build-base \
+RUN apt-get update && apt-get install -y \
+    wget \
+    build-essential \
     yasm \
-    x264-dev \
-    x265-dev \
+    pkg-config \
+    libx264-dev \
+    libx265-dev \
     libvpx-dev \
     libass-dev \
     libwebp-dev \
-    opus-dev \
-    freetype-dev \
+    libopus-dev \
+    libfreetype6-dev \
     frei0r-plugins-dev \
-    vidstab-dev \
-    libxcb-dev \
+    libvidstab-dev \
+    libxcb1-dev \
     libvorbis-dev \
-    pkgconfig \
-    x264 \
-    x265 \
-    libvpx \
-    libass \
-    libwebp \
-    opus \
-    freetype \
-    frei0r-plugins \
-    vidstab \
-    libxcb \
-    libvorbis \
     git \
-    nasm
-
-# Create temporary directory
-RUN mkdir -p /run/sonarr-temp && chmod 777 /run/sonarr-temp
-
-# Set TMPDIR environment variable
-ENV TMPDIR /run/sonarr-temp
+    nasm && \
+    rm -rf /var/lib/apt/lists/*
 
 # Install ffnvcodec headers
 RUN git clone https://git.videolan.org/git/ffmpeg/nv-codec-headers.git && \
@@ -57,18 +43,6 @@ RUN wget https://ffmpeg.org/releases/ffmpeg-4.2.2.tar.bz2 && \
     rm -rf ffmpeg-4.2.2 ffmpeg-4.2.2.tar.bz2
 
 # Clean up
-RUN apk del build-base yasm \
-    x264-dev \
-    x265-dev \
-    libvpx-dev \
-    libass-dev \
-    libwebp-dev \
-    opus-dev \
-    freetype-dev \
-    frei0r-plugins-dev \
-    vidstab-dev \
-    libxcb-dev \
-    libvorbis-dev \
-    pkgconfig \
-    git \
-    nasm
+RUN apt-get remove -y build-essential yasm pkg-config git nasm && \
+    apt-get autoremove -y && \
+    rm -rf /var/lib/apt/lists/*
