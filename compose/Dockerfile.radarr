@@ -24,6 +24,9 @@ RUN apk update && apk add --no-cache wget build-base \
     vidstab \
     libxcb
 
+# Set TMPDIR environment variable
+ENV TMPDIR /tmp
+
 # Download and compile FFmpeg with NVIDIA support
 RUN wget https://ffmpeg.org/releases/ffmpeg-4.2.2.tar.bz2 && \
     tar xjf ffmpeg-4.2.2.tar.bz2 && \
@@ -41,3 +44,11 @@ RUN wget https://ffmpeg.org/releases/ffmpeg-4.2.2.tar.bz2 && \
 RUN apk del build-base yasm \
     x264-dev \
     x265-dev \
+    libvpx-dev \
+    libass-dev \
+    libwebp-dev \
+    opus-dev \
+    freetype-dev \
+    frei0r-plugins-dev \
+    vidstab-dev \
+    libxcb-dev
