@@ -338,7 +338,7 @@ services:
       - C1-mergerfs
 
   E5-sonarr:
-    image: mdhiggins/sonarr-sma
+    image: custom-sonarr-sma
     container_name: E5-sonarr
     restart: unless-stopped
     network_mode: host
@@ -347,6 +347,8 @@ services:
       - PGID=1001
       - TZ=America/Chicago
       - SMA_UPDATE=true
+      - NVIDIA_VISIBLE_DEVICES=all
+      - NVIDIA_DRIVER_CAPABILITIES=all
     volumes:
       - type: bind
         source: ${FastStorageArray}/config/sonarr
@@ -373,6 +375,7 @@ services:
         target: /usr/local/sma/config
         bind:
           propagation: rprivate
+    runtime: nvidia
      # ports:
      # - 8989:8989
     depends_on:
@@ -382,7 +385,7 @@ services:
       - D1-qbittorrent
 
   E6-radarr:
-    image: mdhiggins/radarr-sma
+    image: custom-radarr-sma
     container_name: E6-radarr
     restart: unless-stopped
     network_mode: host
@@ -391,6 +394,8 @@ services:
       - PGID=1001
       - TZ=America/Chicago
       - SMA_UPDATE=true
+      - NVIDIA_VISIBLE_DEVICES=all
+      - NVIDIA_DRIVER_CAPABILITIES=all
     volumes:
       - type: bind
         source: ${FastStorageArray}/tmpDATA/rclone-tmp/TEMP
@@ -417,11 +422,13 @@ services:
         target: /usr/local/sma/config
         bind:
           propagation: rprivate
+    runtime: nvidia
     depends_on:
       - B1-rclone
       - C1-mergerfs
       - D2-nzbget
       - D1-qbittorrent
+
   E7-autoscan:
     image: cloudb0x/autoscan:latest
     container_name: E7-autoscan
