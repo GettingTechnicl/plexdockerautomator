@@ -36,16 +36,20 @@ RUN apk update && apk add --no-cache \
     make \
     curl \
     bash \
-    linux-headers
+    linux-headers \
+    dpkg
+
+# Create and set permissions for the temporary directory
+RUN mkdir -p /run/sonarr-temp && chmod 777 /run/sonarr-temp
+
+# Set TMPDIR environment variable
+ENV TMPDIR /run/sonarr-temp
 
 # Install CUDA
 RUN wget https://developer.download.nvidia.com/compute/cuda/11.2.2/local_installers/cuda_11.2.2_460.32.03_linux.run && \
     chmod +x cuda_11.2.2_460.32.03_linux.run && \
-    sh cuda_11.2.2_460.32.03_linux.run --silent --toolkit && \
+    ./cuda_11.2.2_460.32.03_linux.run --silent --toolkit && \
     rm cuda_11.2.2_460.32.03_linux.run
-
-# Set TMPDIR environment variable
-ENV TMPDIR /run/sonarr-temp
 
 # Install ffnvcodec headers
 RUN git clone https://git.videolan.org/git/ffmpeg/nv-codec-headers.git && \
